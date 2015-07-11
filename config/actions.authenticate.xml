@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<action controller="Authenticate" method="index" >
+		<authenticate redirect="/login" />
+		<route pattern="\/" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+
+	</action>
+
+	<action controller="Authenticate" method="login" >
+		<authenticate incognito="true" session-redirect="/" />
+		<route pattern="\/login" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+
+	</action>
+
+	<action controller="Authenticate" method="loginRedirect" >
+		<authenticate incognito="true" session-redirect="/" />
+		<route pattern="\/login\/redirect" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+
+	</action>
+
+	<action controller="Authenticate" method="loginOAuth2Callback" >
+		<authenticate incognito="true" session-redirect="/" />
+		<route pattern="\/login\/oauth2callback" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+
+	</action>
+
+	<action controller="Authenticate" method="logout" >
+		<authenticate redirect="/login" />
+		<route pattern="\/logout" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+	</action>
+
+</content>

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="getDoctrine" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="getRepository" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="find" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="findOne" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="flush" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="persist" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="executeQuery" />
+    <snippet class="Arbor\Snippet\Mapper" method="cast" />
+
+</content>

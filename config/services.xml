@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <service name="doctrine" class="Library\Doctrine\Service\Doctrine" >
+    	<config enviorment="dev"
+    		driver="{database.driver}"
+    		host="{database.host}"
+    		user="{database.user}"
+    		password="{database.password}"
+    		dbname="{database.dbname}"
+    	 />
+        <config enviorment="prod"
+            driver="{database.driver}"
+            host="{database.host}"
+            user="{database.user}"
+            password="{database.password}"
+            dbname="{database.dbname}"
+         />
+
+    </service>
+    
+    <service name="validator" class="Arbor\Service\Validator" />
+    <service name="mapper" class="Arbor\Service\Mapper" />
+    <service name="form" class="Arbor\Service\Form" />
+    <service name="grid" class="Arbor\Service\Grid" />
+    <service name="form.helper" class="Service\FormHelper" />
+    <service name="google" class="Library\Google\Service\Google">
+        <config enviorment="dev"
+            clientId="{google.clientId}"
+            clientSecret="{google.clientSecret}"
+            redirectUri="{google.redirectUri}"
+         />
+        <config enviorment="prod"
+            clientId="{google.clientId}"
+            clientSecret="{google.clientSecret}"
+            redirectUri="{google.redirectUri}"
+         />
+
+    </service>
+	
+</content>
