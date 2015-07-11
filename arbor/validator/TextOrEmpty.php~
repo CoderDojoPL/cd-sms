@@ -1,0 +1,10 @@
+<?php
+
+namespace Validator;
+use Arbor\Core\Validator;
+
+class TextOrEmpty implements Validator{
+	
+	public function validate($value){
+	}
+}

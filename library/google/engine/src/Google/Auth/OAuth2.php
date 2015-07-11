@@ -574,16 +574,16 @@ class Google_Auth_OAuth2 extends Google_Auth_Abstract
     }
 
     $latest = $exp + self::CLOCK_SKEW_SECS;
-    if ($now < $earliest) {
-      throw new Google_Auth_Exception(
-          sprintf(
-              "Token used too early, %s < %s: %s",
-              $now,
-              $earliest,
-              $json_body
-          )
-      );
-    }
+//    if ($now < $earliest) {
+//      throw new Google_Auth_Exception(
+//          sprintf(
+//              "Token used too early, %s < %s: %s",
+//              $now,
+//              $earliest,
+//              $json_body
+//          )
+//      );
+//    }
     if ($now > $latest) {
       throw new Google_Auth_Exception(
           sprintf(

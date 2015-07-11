@@ -30,6 +30,12 @@ class User{
      **/
     protected $lastName;
 
+    /**
+     * @ManyToOne(targetEntity="Location")
+     * @JoinColumn(name="location_id", referencedColumnName="id")
+     **/
+    protected $location;
+
 	public function getId(){
 		return $this->id;
 	}
@@ -61,8 +67,21 @@ class User{
         return $this->lastName;
     }
 
-    public function __toString(){
-    	return $this->getName();
+    /**
+     * @return mixed
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param mixed $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+        return $this;
     }
 
 }

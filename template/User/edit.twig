@@ -6,22 +6,16 @@
                     <div class="col-lg-12">
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="/device">Devices</a>
+                                <i class="fa fa-dashboard"></i>  <a href="/user">Users</a>
                             </li>
                             <li class="active">
-                                <i class="fa fa-file"></i> Add
+                                <i class="fa fa-file"></i> Edit
                             </li>
                         </ol>
                     </div>
                 </div>
                 <DIV class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Serial number for device: {{data.name}}</div>
-                        <div class="panel-body">
-                            {{form|raw}}
-                        </div>
-                    </div>
-
+                    {{form|raw}}
                 </DIV>
                 <!-- /.row -->
 {%endblock%}

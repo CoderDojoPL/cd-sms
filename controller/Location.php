@@ -91,6 +91,7 @@ class Location extends Controller
         }
         return compact('form');
     }
+
     private function setEntity($entity, $data)
     {
         $entity->setName($data['name']);
@@ -112,14 +113,14 @@ class Location extends Controller
 
         $postal = $builder->getField('postal');
         $postal->setPattern('^[0-9]{2}\-[0-9]{3}$');//FIXME to config
-        $postal->setTag('placeholder','eg.: 00-000');
+        $postal->setTag('placeholder', 'eg.: 00-000');
         //        $dimensionsField=$builder->getField('dimensions');
         //        $dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');
         //        $dimensionsField->setTag('placeholder','{Width}x{Height}x{Depth}');
         // $dimensionsField->setValue('1x1x1');
-        if($entity){
-            $helper=$this->getService('form.helper');
-            $data=$helper->entityToArray($entity);
+        if ($entity) {
+            $helper = $this->getService('form.helper');
+            $data = $helper->entityToArray($entity);
             $builder->setData($data);
         }
         $builder->submit($this->getRequest());
@@ -128,17 +129,20 @@ class Location extends Controller
         return $builder;
     }
 
-    public function removeConfirm($entity){
+    public function removeConfirm($entity)
+    {
         return compact('entity');
     }
 
-    public function remove($entity){
+    public function remove($entity)
+    {
         $this->getDoctrine()->getEntityManager()->remove($entity);
         $this->flush();
 
-        $response=new Response();
+        $response = new Response();
         $response->redirect('/location');
         return $response;
 
     }
+
 }
