@@ -22,6 +22,10 @@ class BasicFormFormatter implements FormFormatter{
 			$groupClass.=' has-error';
 		}
 
+		if($field->isRequired()){
+			$groupClass.=' has-required';
+		}
+
 		$html='<div class="'.$groupClass.'">
 			<label class="col-sm-3 control-label" for="'.$field->getId().'">'.$field->getLabel().'</label>
 			<div class="col-sm-6">
@@ -76,7 +80,7 @@ class BasicFormFormatter implements FormFormatter{
 				$button.=$kTag.'="'.$tag.'" ';
 		}
 
-		$button.='>Zatwierdź</BUTTON>';
+		$button.='>Apply</BUTTON>';
 
 		return '<div class="form-group">
 					<div class="col-sm-offset-8 col-sm-1">
