@@ -28,6 +28,10 @@ class Device extends Controller{
 		if($form->isValid()){
 			$data=$form->getData();
 
+			if($data['photo']){//save uploaded photo to cache file
+				$data['tmpPhoto']=$this->saveTmpPhoto($data['photo']);
+			}
+
 			$this->getRequest()->getSession()->set('device.info',$data);
 
 			$response=new Response();
@@ -37,6 +41,13 @@ class Device extends Controller{
 
 		}
 		return compact('form');
+	}
+
+	private function saveTmpPhoto($photo){
+		$tmpName = basename(tempnam(sys_get_temp_dir(), "hms_"));
+		$photo->save(sys_get_temp_dir(),$tmpName);
+		return sys_get_temp_dir().'/'.$tmpName;
+
 	}
 
 	public function removeConfirm($entity){
@@ -84,6 +95,9 @@ class Device extends Controller{
 	}
 
 	private function saveEntities($data,$serialNumber){
+		$conn=$this->getDoctrine()->getEntityManager()->getConnection();
+		$conn->beginTransaction();
+
 		for($i=0; $i<$data['count']; $i++){
 			$deviceEntity=new \Entity\Device();
 			$this->saveEntity($deviceEntity,$data,$serialNumber[$i]);
@@ -91,6 +105,8 @@ class Device extends Controller{
 
 
 		$this->flush();
+
+		$conn->commit();
 
 	}
 
@@ -119,6 +135,18 @@ class Device extends Controller{
 			$entity->getTags()->add($tagEntity);
 		}
 
+		if($data['photo']){
+			$dir='uploaded/device/photo/';
+
+			$name='';
+			do{
+				$name=rand().'_'.$data['photo']->getName();
+
+			}while(file_exists($dir.$name));
+			copy($data['tmpPhoto'],$dir.$name);
+			$entity->setPhoto($name);
+		}
+
 	}
 
 	public function edit($device){
@@ -126,8 +154,16 @@ class Device extends Controller{
 
 		if($form->isValid()){
 			$data=$form->getData();
+			$conn=$this->getDoctrine()->getEntityManager()->getConnection();
+			$conn->beginTransaction();
+
+			if($data['photo']){//save uploaded photo to cache file
+				$data['tmpPhoto']=$this->saveTmpPhoto($data['photo']);
+			}
+
 			$this->saveEntity($device,$data,$data['serialNumber']);
 			$this->flush();
+			$conn->commit();
 
 			$response=new Response();
 			$response->redirect('/device');
@@ -157,8 +193,8 @@ class Device extends Controller{
 		$builder->addColumn('#','id');
 		$builder->addColumn('Name','name');
 		$builder->addColumn('Serial number','serialNumber');
-		$builder->addColumn('Typ','type');
-		$builder->addColumn('Akcja','id',new ActionColumnFormatter('device',array('edit','remove')));
+		$builder->addColumn('Type','type');
+		$builder->addColumn('Action','id',new ActionColumnFormatter('device',array('edit','remove')));
 		return $builder;
 	}
 
@@ -178,10 +214,12 @@ class Device extends Controller{
 		$builder->removeField('serialNumber');
 		$builder->removeField('updatedAt');
 		$builder->removeField('createdAt');
-		// $builder->addField(new FileField(array(
-		// 	'name'=>'photo'
-		// 	,'label'=>'Photo'
-		// 	)));
+
+		$builder->addField(new FileField(array(
+			'name'=>'photo'
+			,'label'=>'Photo'
+			,'accept'=>'image/*'
+			)));
 
 		$dimensionsField=$builder->getField('dimensions');
 		$dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');

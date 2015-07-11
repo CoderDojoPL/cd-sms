@@ -48,8 +48,8 @@ class Location extends Controller
         $builder->addColumn('Number', 'number');
 
 //        $builder->addColumn('Serial number','serialNumber');
-//        $builder->addColumn('Typ','type');
-        $builder->addColumn('Akcja', 'id', new ActionColumnFormatter('location', array('edit', 'remove')));
+//        $builder->addColumn('Type','type');
+        $builder->addColumn('Action', 'id', new ActionColumnFormatter('location', array('edit', 'remove')));
         return $builder;
     }
 
