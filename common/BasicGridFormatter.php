@@ -91,7 +91,7 @@ class BasicGridFormatter implements GridFormatter{
 						$html.='<tr>
 						  		<td colspan="'.$colspan.'">';
 
-						  		$html.='<a href="/'.$this->prefix.'/add" class="btn btn-primary">Dodaj</a>';
+						  		$html.='<a href="/'.$this->prefix.'/add" class="btn btn-primary">Add</a>';
 						  foreach($this->extendButtons as $button){
 						  		$html.='<a href="/'.$button['url'].'" class="btn btn-default">'.$button['label'].'</a></td>';
 						  }
