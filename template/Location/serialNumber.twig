@@ -1,0 +1,27 @@
+{% extends _request.isAjax ? "base_blank.twig" : "base_logged.twig" %}
+
+{%block body%}
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="/device">Devices</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Add
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <DIV class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Serial number for device: {{data.name}}</div>
+                        <div class="panel-body">
+                            {{form|raw}}
+                        </div>
+                    </div>
+
+                </DIV>
+                <!-- /.row -->
+{%endblock%}
