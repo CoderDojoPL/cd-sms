@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <action controller="Location" method="index">
+        <route pattern="\/location"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+
+    </action>
+
+    <action controller="Location" method="add">
+        <route pattern="\/location\/add"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+    </action>
+
+    <action controller="Location" method="edit">
+        <route pattern="^\/location\/edit\/([0-9]+)$"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <argument storage="url" name="id" pattern="^\/location\/edit\/([0-9]+)$" mapper="Mapper\Location"/>
+    </action>
+    
+    <action controller="Location" method="removeConfirm">
+        <route pattern="^\/location\/remove\/([0-9]+)$"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <argument storage="url" name="id" pattern="^\/location\/remove\/([0-9]+)$" mapper="Mapper\Location"/>
+    </action>
+
+    <action controller="Location" method="remove">
+        <route pattern="^\/location\/remove\/([0-9]+)\/yes$"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <argument storage="url" name="id" pattern="^\/location\/remove\/([0-9]+)\/yes$" mapper="Mapper\Location"/>
+    </action>
+
+</content>
