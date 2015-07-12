@@ -44,7 +44,7 @@ class User extends Controller
         $builder->addColumn('Email', 'email');
         $builder->addColumn('First Name', 'firstName');
         $builder->addColumn('Last Name', 'lastName');
-//        $builder->addColumn('Location', 'location');
+       $builder->addColumn('Location', 'location');
 //        $builder->render();
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('user', array('edit')));
         return $builder;
