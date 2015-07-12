@@ -29,8 +29,6 @@ class Authenticate extends Controller{
 		$query=$this->getRequest()->getQuery();
 		if (isset($query['code'])) {
 		  $client->authenticate($query['code']);
-			$client->refreshToken($client->getAccessToken());
-
 		  $session->set('access.token',$client->getAccessToken());
 
 		  $tokenData = $client->verifyIdToken()->getAttributes();
