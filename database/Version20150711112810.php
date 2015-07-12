@@ -26,6 +26,8 @@ class Version20150711112810{
 			INSERT INTO device_states (id, name) VALUES (1, 'Available')
 			INSERT INTO device_states (id, name) VALUES (2, 'Busy')
 			INSERT INTO device_states (id, name) VALUES (3, 'In service')
+			INSERT INTO order_states(id,name) values(1,'Open'),(2,'In progress'),(3,'Closed');
+
 			";
 
 	}

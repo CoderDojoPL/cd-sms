@@ -110,7 +110,7 @@ class Device extends Controller
 
 		for ($i = 0; $i < $data['count']; $i++) {
 			$deviceEntity = new \Entity\Device();
-			$this->saveEntity($deviceEntity, $data, $serialNumber[$i]);
+			$this->saveEntity($deviceEntity, $data, $serialNumber[$i],1);
 		}
 
 
@@ -120,13 +120,16 @@ class Device extends Controller
 
 	}
 
-	private function saveEntity($entity, $data, $serialNumber)
+	private function saveEntity($entity, $data, $serialNumber,$state=null)
 	{
 		$entity->setName($data['name']);
 		$entity->setDimensions($data['dimensions']);
 		$entity->setWeight($data['weight']);
 		$entity->setType($this->cast('Mapper\DeviceType', $data['type']));
 		$entity->setSerialNumber($serialNumber);
+		if($state)
+			$entity->setState($this->cast('Mapper\DeviceState',$state));
+
 		$this->persist($entity);
 
 		$tagsPart = explode(',', $data['tags']);
@@ -230,6 +233,8 @@ class Device extends Controller
 		$builder->removeField('serialNumber');
 		$builder->removeField('updatedAt');
 		$builder->removeField('createdAt');
+		$builder->removeField('state');
+
 		$builder->addField(new FileField(array(
 			'name' => 'photo'
 		, 'label' => 'Photo'
@@ -269,6 +274,7 @@ class Device extends Controller
 
 
 		} else {
+
 			$builder->addField(new NumberField(array(
 				'name' => 'count'
 			, 'label' => 'Count'

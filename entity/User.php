@@ -82,6 +82,12 @@ class User{
     {
         $this->location = $location;
         return $this;
+
     }
+
+    public function __toString(){
+        return $this->getEmail();
+    }
+
 
 }

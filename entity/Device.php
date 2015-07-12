@@ -75,7 +75,7 @@ class Device
 
 	/**
 	 * @ManyToOne(targetEntity="DeviceState")
-	 * @JoinColumn(name="state_id", referencedColumnName="id")
+	 * @JoinColumn(name="state_id", referencedColumnName="id",nullable=false)
 	 **/
 	protected $state;
 
@@ -220,7 +220,7 @@ class Device
 
 	public function __toString()
 	{
-		return $this->getName();
+		return $this->getName().' ('.$this->getSerialNumber().')';
 	}
 
 	/**
@@ -230,5 +230,4 @@ class Device
 	{
 		$this->setUpdatedAt(new \DateTime());
 	}
-
 }

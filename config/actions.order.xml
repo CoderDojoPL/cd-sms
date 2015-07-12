@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <action controller="Order" method="index">
+        <route pattern="\/order"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+
+    </action>
+
+    <action controller="Order" method="add">
+        <route pattern="\/order\/add"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+    </action>
+    
+</content>
