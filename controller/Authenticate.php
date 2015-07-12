@@ -56,6 +56,10 @@ class Authenticate extends Controller{
 	}
 
 	public function logout(){
+		$googleService=$this->getService('google');
+		$client=$googleService->getClient();
+
+		$client->revokeToken();
 		$this->getRequest()->getSession()->clear();
 
 		$response=new Response();
