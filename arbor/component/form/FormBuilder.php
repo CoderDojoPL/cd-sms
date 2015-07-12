@@ -8,8 +8,8 @@ use Arbor\Component\Form\Designer;
 use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
 use Arbor\Exception\FieldNotFoundException;
-
-/**1
+use Arbor\Exception\FileNotUploadedException;
+/**
  * @since 0.13.0
  */
 class FormBuilder{
@@ -323,7 +323,12 @@ class FormBuilder{
 				$field->setData($storage[$field->getName()]);
 			}
 			else if($field instanceof FileField){
-				$field->setData($request->getFile($field->getName()));
+				try{
+					$field->setData($request->getFile($field->getName()));
+				}
+				catch(FileNotUploadedException $e){
+					$field->setData('');					
+				}
 			}
 			else if(preg_match('/^(.*?)\[(.*)\]$/',$field->getName(),$result)){
 				if($result[2]==''){

@@ -7,6 +7,7 @@ use Arbor\Provider\Session;
 use Arbor\Core\RequestProvider;
 use Arbor\Exception\HeaderNotFoundException;
 use Arbor\Core\FileUploaded;
+use Arbor\Exception\FileNotUploadedException;
 
 class Request implements RequestProvider{
 
@@ -38,11 +39,15 @@ class Request implements RequestProvider{
 
 	/**
 	 * Get uploaded file
-	 * @param name - field name
+	 * @param string $name - field name
 	 * @return Arbor\Core\FileUploaded|array[Arbor\Core\FileUploaded]
 	 * @since 0.12.0
 	 */
 	public function getFile($name){
+		if(!isset($this->files[$name])){
+			throw new FileNotUploadedException($name);
+		}
+
 		return $this->files[$name];
 	}
 

@@ -40,7 +40,7 @@ class Argument extends Event{
 		if(isset($config['validator'])){
 			$validator=$this->getService('validator');
 
-			$error=$validator->validate($config['validator'],$value);
+			$error=$validator->validate(new $config['validator'](),$value);
 			if($error)
 				throw new InvalidArgumentException($position,$config['name'],$error);
 		}

@@ -6,7 +6,7 @@ use Arbor\Component\Form\FormFormatter;
 use Arbor\Component\Form\BasicFormFormatter;
 use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
-
+use Arbor\Validator\TextValidator;
 /**
  * @since 0.15.0
  */
@@ -19,7 +19,7 @@ class TextField extends InputField{
 		$options['type']='text';
 
 		if(!isset($options['validator'])){
-			$options['validator']='Arbor\Validator\Text'.(!isset($options['required']) || !$options['required']?'OrEmpty':'');
+			$this->setValidator(new TextValidator());
 		}
 
 		parent::__construct($options);

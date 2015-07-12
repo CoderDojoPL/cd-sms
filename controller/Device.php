@@ -214,7 +214,6 @@ class Device extends Controller{
 		$builder->removeField('serialNumber');
 		$builder->removeField('updatedAt');
 		$builder->removeField('createdAt');
-
 		$builder->addField(new FileField(array(
 			'name'=>'photo'
 			,'label'=>'Photo'
@@ -235,6 +234,7 @@ class Device extends Controller{
 			'name'=>'tags'
 			,'label'=>'Tags'
 			,'required'=>true
+			,'data-role'=>'tagsinput'
 			)));
 
 		//TODO set required for photo in global configuration

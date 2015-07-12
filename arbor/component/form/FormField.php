@@ -46,10 +46,12 @@ abstract class FormField{
 			,'id'=>null
 			,'class'=>''
 			,'required'=>false
-			,'pattern'=>null
 			);
 
 		$this->tags=$options;
+
+		$this->setRequired($this->isRequired());//invoke configure validator by execute seters
+
 	}
 
 	/**
@@ -91,7 +93,7 @@ abstract class FormField{
 
 	/**
 	 * set validator class rule
-	 * @param string validator - validator class name
+	 * @param Arbor\Core\Validator $validator - validator class
 	 * @since 0.15.0
 	 */
 	public function setValidator($validator=null){
@@ -100,8 +102,8 @@ abstract class FormField{
 
 
 	/**
-	 * get validator class name
-	 * @return string
+	 * get validator class
+	 * @return Arbor\Core\Validator 
 	 * @since 0.15.0
 	 */
 	public function getValidator(){
@@ -176,6 +178,9 @@ abstract class FormField{
 	 */
 	public function setRequired($flag){
 		$this->tags['required']=$flag;
+		if($this->validator){
+			$this->validator->setOption('empty',!$flag);
+		}
 	}
 
 	/**

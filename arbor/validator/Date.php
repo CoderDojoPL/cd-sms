@@ -2,8 +2,11 @@
 
 namespace Arbor\Validator;
 use Arbor\Core\Validator;
-	
-class Date implements Validator{
+
+/**
+ * @deprecated 0.18.0
+ */	
+class Date extends Validator{
 	
 	public function validate($date){
 

@@ -6,6 +6,7 @@ use Arbor\Component\Form\FormFormatter;
 use Arbor\Component\Form\BasicFormFormatter;
 use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
+use Arbor\Validator\EmailValidator;
 
 /**
  * @since 0.17.0
@@ -19,7 +20,7 @@ class EmailField extends InputField{
 		$options['type']='email';
 
 		if(!isset($options['validator'])){
-			$options['validator']='Arbor\Validator\Email'.(!isset($options['required']) || !$options['required']?'OrEmpty':'');
+			$this->setValidator(new EmailValidator());
 		}
 
 		parent::__construct($options);

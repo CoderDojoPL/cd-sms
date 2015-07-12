@@ -3,6 +3,7 @@
 namespace Arbor\Component\Form;
 
 use Arbor\Component\Form\InputField;
+use Arbor\Validator\TextValidator;
 
 /**
  * @since 0.17.0
@@ -16,7 +17,7 @@ class PasswordField extends InputField{
 		$options['type']='password';
 
 		if(!isset($options['validator'])){
-			$options['validator']='Arbor\Validator\Text'.(!isset($options['required']) || !$options['required']?'OrEmpty':'');
+			$this->setValidator(new TextValidator());
 		}
 
 		parent::__construct($options);

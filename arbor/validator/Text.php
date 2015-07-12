@@ -3,7 +3,10 @@
 namespace Arbor\Validator;
 use Arbor\Core\Validator;
 
-class Text implements Validator{
+/**
+ * @deprecated 0.18.0
+ */
+class Text extends Validator{
 	
 	public function validate($value){
 		if($value==null || $value=='')

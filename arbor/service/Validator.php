@@ -13,15 +13,10 @@ class Validator implements ValidatorService{
 	}
 
 	/**
-	 * validate once value
-	 * @arg validator - class validator rule
-	 * @arg value - valut to validation
-	 * @return null if success or message error if fail
-	 * @since 0.13.0
+	 * {@inheritdoc}
 	 */
-	public function validate($validator,$value){
-		$validObject=new $validator();
-		return $validObject->validate($value);
+	public function validate($validator,$value){	
+		return $validator->validate($value);
 	}
 
 	/**

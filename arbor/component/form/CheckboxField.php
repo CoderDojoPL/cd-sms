@@ -6,6 +6,7 @@ use Arbor\Component\Form\FormFormatter;
 use Arbor\Component\Form\BasicFormFormatter;
 use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
+use Arbor\Validator\BooleanValidator;
 
 /**
  * @since 0.15.0
@@ -23,7 +24,7 @@ class CheckboxField extends InputField{
 		$options['type']='checkbox';
 
 		if(!isset($options['validator'])){
-			$options['validator']='Arbor\Validator\Boolean'.(isset($options['required']) && $options['required']?'OrEmpty':'');
+			$this->setValidator(new BooleanValidator());
 		}
 
 		parent::__construct($options);

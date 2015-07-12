@@ -6,8 +6,8 @@ interface ValidatorService{
 
 	/**
 	 * validate once value
-	 * @arg validator - class validator rule
-	 * @arg value - valut to validation
+	 * @param Arbor\Core\Validator $validator - class validator rule
+	 * @param mixed $value - valut to validation
 	 * @return null if success or message error if fail
 	 * @since 0.13.0
 	 */

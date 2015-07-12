@@ -26,6 +26,9 @@ abstract class InputField extends FormField{
 	 */
 	public function setPattern($pattern){
 		$this->setTag('pattern',$pattern);
+		if($this->getValidator()){
+			$this->getValidator()->setOption('pattern',$pattern);
+		}
 	}
 
 	/**

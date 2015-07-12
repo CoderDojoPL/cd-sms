@@ -6,6 +6,7 @@ use Arbor\Component\Form\FormFormatter;
 use Arbor\Component\Form\BasicFormFormatter;
 use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
+use Arbor\Validator\FileValidator;
 
 /**
  * @since 0.15.0
@@ -25,7 +26,12 @@ class FileField extends InputField{
 		$options['type']='file';
 
 		if(!isset($options['validator'])){
-			$options['validator']='Arbor\Validator\Text'.(!isset($options['required']) || !$options['required']?'OrEmpty':'');
+			$this->setValidator(new FileValidator());
+		}
+
+		if(isset($options['accept'])){
+			$this->setAccept($options['accept']);
+			unset($options['accept']);
 		}
 
 		parent::__construct($options);
@@ -57,6 +63,9 @@ class FileField extends InputField{
 	 */
 	public function setAccept($accept){
 		$this->setTag('accept',$accept);
+		if($this->getValidator()){
+			$this->getValidator()->setOption('accept',$accept);
+		}
 	}
 
 	/**
