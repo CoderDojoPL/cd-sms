@@ -110,7 +110,7 @@ class Device extends Controller
 
 		for ($i = 0; $i < $data['count']; $i++) {
 			$deviceEntity = new \Entity\Device();
-			$this->saveEntity($deviceEntity, $data, $serialNumber[$i],1);
+			$this->saveEntity($deviceEntity, $data, $serialNumber[$i], 1);
 		}
 
 
@@ -120,16 +120,18 @@ class Device extends Controller
 
 	}
 
-	private function saveEntity($entity, $data, $serialNumber,$state=null)
+	private function saveEntity($entity, $data, $serialNumber, $state = null)
 	{
 		$entity->setName($data['name']);
 		$entity->setDimensions($data['dimensions']);
 		$entity->setWeight($data['weight']);
 		$entity->setType($this->cast('Mapper\DeviceType', $data['type']));
 		$entity->setSerialNumber($serialNumber);
-		if($state)
-			$entity->setState($this->cast('Mapper\DeviceState',$state));
-
+		if ($state)
+			$entity->setState($this->cast('Mapper\DeviceState', $state));
+		if ($data['location']){
+			$entity->setLocation($this->cast('Mapper\Location', $data['location']));
+		}
 		$this->persist($entity);
 
 		$tagsPart = explode(',', $data['tags']);
@@ -211,6 +213,7 @@ class Device extends Controller
 		$builder->addColumn('Name', 'name');
 		$builder->addColumn('Serial number', 'serialNumber');
 		$builder->addColumn('Type', 'type');
+		$builder->addColumn('Location', 'location');
 		$builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
 		return $builder;
 	}
@@ -237,9 +240,9 @@ class Device extends Controller
 
 		$builder->addField(new FileField(array(
 			'name' => 'photo'
-			,'label' => 'Photo'
-			,'accept' => 'image/*'
-			,'maxSize'=> 1048576
+		, 'label' => 'Photo'
+		, 'accept' => 'image/*'
+		, 'maxSize' => 1048576
 		)));
 
 		$dimensionsField = $builder->getField('dimensions');
@@ -262,6 +265,7 @@ class Device extends Controller
 		//TODO set required for photo in global configuration
 
 		if ($entity) {
+			$builder->removeField('location');
 			$builder->addField(new TextField(array(
 				'name' => 'serialNumber'
 			, 'label' => 'Serial number'

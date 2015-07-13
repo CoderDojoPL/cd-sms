@@ -101,6 +101,9 @@ class Order extends Controller
 		$entity->setState($this->cast('Mapper\OrderState',3));
 		$entity->setClosedAt(new \DateTime());
 
+		//set new location on device
+		$entity->getDevice()->setLocation($this->getUser()->getLocation());
+
 		$this->flush();
 
 		return $this->redirect('/order/show/'.$entity->getId());

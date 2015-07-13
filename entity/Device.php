@@ -80,6 +80,12 @@ class Device
 	protected $state;
 
 	/**
+	 * @ManyToOne(targetEntity="Location")
+	 * @JoinColumn(name="location_id", referencedColumnName="id",nullable=false)
+	 **/
+	protected $location;
+
+	/**
 	 * @return mixed
 	 */
 	public function getState()
@@ -127,11 +133,11 @@ class Device
 
 	public function getPhoto()
 	{
-		$prefix='';
-		if($this->photo){
-			$prefix='/uploaded/device/photo/';
+		$prefix = '';
+		if ($this->photo) {
+			$prefix = '/uploaded/device/photo/';
 		}
-		return $prefix.$this->photo;
+		return $prefix . $this->photo;
 	}
 
 	public function setTags($tags)
@@ -222,9 +228,25 @@ class Device
 		return $this->updatedAt;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getLocation()
+	{
+		return $this->location;
+	}
+
+	/**
+	 * @param mixed $location
+	 */
+	public function setLocation($location)
+	{
+		$this->location = $location;
+	}
+
 	public function __toString()
 	{
-		return $this->getName().' ('.$this->getSerialNumber().')';
+		return $this->getName() . ' (' . $this->getSerialNumber() . ')';
 	}
 
 	/**
