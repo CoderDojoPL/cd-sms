@@ -142,7 +142,7 @@ class DoctrineDesigner implements Designer{
 	}
 
 	private function createFieldDecimal($metaData,$fieldName){
-		$formField=new NumberField(array());
+		$formField=new NumberField(array('step'=>'any'));
 		return $formField;
 	}
 
