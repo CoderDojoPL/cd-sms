@@ -1,6 +1,5 @@
 body > .container{
     padding-top: 65px;
-    overflow: auto;
 }
 
 
@@ -14,6 +13,6 @@ body > .container{
 	vertical-align: middle;
 }
 
-.thumbnail img{
+.timeline-label img{
 	max-width: 100%;
 }
