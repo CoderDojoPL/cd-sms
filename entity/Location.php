@@ -15,146 +15,188 @@ namespace Entity;
  **/
 class Location
 {
-    /**
-     * @Id
-     * @Column(type="integer")
-     * @GeneratedValue
-     **/
-    protected $id;
-    /**
-     * @Column(type="string")
-     **/
-    protected $name;
-    /**
-     * @Column(type="string")
-     **/
-    protected $city;
-    /**
-     * @Column(type="string")
-     **/
-    protected $street;
-    /**
-     * @Column(type="string")
-     **/
-    protected $number;
-    /**
-     * @Column(type="string",nullable=true)
-     **/
-    protected $apartment;
-    /**
-     * @Column(type="string")
-     **/
-    protected $postal;
+	/**
+	 * @Id
+	 * @Column(type="integer")
+	 * @GeneratedValue
+	 **/
+	protected $id;
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $name;
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $city;
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $street;
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $number;
+	/**
+	 * @Column(type="string",nullable=true)
+	 **/
+	protected $apartment;
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $postal;
 
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $phone;
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+	/**
+	 * @Column(type="string")
+	 **/
+	protected $email;
 
-    /**
-     * @return mixed
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
 
-    /**
-     * @param mixed $city
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-    }
+	/**
+	 * @param mixed $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getStreet()
-    {
-        return $this->street;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getCity()
+	{
+		return $this->city;
+	}
 
-    /**
-     * @param mixed $street
-     */
-    public function setStreet($street)
-    {
-        $this->street = $street;
-    }
+	/**
+	 * @param mixed $city
+	 */
+	public function setCity($city)
+	{
+		$this->city = $city;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getNumber()
-    {
-        return $this->number;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getStreet()
+	{
+		return $this->street;
+	}
 
-    /**
-     * @param mixed $number
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-    }
+	/**
+	 * @param mixed $street
+	 */
+	public function setStreet($street)
+	{
+		$this->street = $street;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getApartment()
-    {
-        return $this->apartment;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getNumber()
+	{
+		return $this->number;
+	}
 
-    /**
-     * @param mixed $apartment
-     */
-    public function setApartment($apartment)
-    {
-        $this->apartment = $apartment;
-    }
+	/**
+	 * @param mixed $number
+	 */
+	public function setNumber($number)
+	{
+		$this->number = $number;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getPostal()
-    {
-        return $this->postal;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getApartment()
+	{
+		return $this->apartment;
+	}
 
-    /**
-     * @param mixed $postal
-     */
-    public function setPostal($postal)
-    {
-        $this->postal = $postal;
-    }
+	/**
+	 * @param mixed $apartment
+	 */
+	public function setApartment($apartment)
+	{
+		$this->apartment = $apartment;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getPostal()
+	{
+		return $this->postal;
+	}
+
+	/**
+	 * @param mixed $postal
+	 */
+	public function setPostal($postal)
+	{
+		$this->postal = $postal;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPhone()
+	{
+		return $this->phone;
+	}
+
+	/**
+	 * @param mixed $phone
+	 */
+	public function setPhone($phone)
+	{
+		$this->phone = $phone;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+	/**
+	 * @param mixed $email
+	 */
+	public function setEmail($email)
+	{
+		$this->email = $email;
+	}
 
 
-    public function __toString()
-    {
-        return $this->getName();
-    }
+	public function __toString()
+	{
+		return $this->getName();
+	}
 
 
 }

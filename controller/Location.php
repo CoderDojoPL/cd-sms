@@ -92,6 +92,10 @@ class Location extends Controller
         return compact('form');
     }
 
+    /**
+     * @param \Entity\Location $entity
+     * @param $data
+     */
     private function setEntity($entity, $data)
     {
         $entity->setName($data['name']);
@@ -100,6 +104,8 @@ class Location extends Controller
         $entity->setNumber($data['number']);
         $entity->setPostal($data['postal']);
         $entity->setStreet($data['street']);
+        $entity->setPhone($data['phone']);
+        $entity->setEmail($data['email']);
         $this->persist($entity);
     }
 
@@ -110,7 +116,7 @@ class Location extends Controller
         $builder->setFormatter(new BasicFormFormatter());
         $builder->setSubmitTags(array('cancel' => true));
         $builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Location'));
-
+        //FIXME pattern for phone and email
         $postal = $builder->getField('postal');
         $postal->setPattern('^[0-9]{2}\-[0-9]{3}$');//FIXME to config
         $postal->setTag('placeholder', 'eg.: 00-000');

@@ -86,6 +86,21 @@ class Device
 	protected $location;
 
 	/**
+	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
+	 **/
+	protected $warrantyExpirationDate;
+
+	/**
+	 * @Column(name="price",type="decimal",scale=2,nullable=true)
+	 **/
+	protected $price;
+
+	/**
+	 * @Column(name="note",type="text",nullable=true)
+	 **/
+	protected $note;
+
+	/**
 	 * @return mixed
 	 */
 	public function getState()
@@ -243,6 +258,56 @@ class Device
 	{
 		$this->location = $location;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getWarrantyExpirationDate()
+	{
+		return $this->warrantyExpirationDate;
+	}
+
+	/**
+	 * @param mixed $warrantyExpirationDate
+	 */
+	public function setWarrantyExpirationDate($warrantyExpirationDate)
+	{
+		$this->warrantyExpirationDate = $warrantyExpirationDate;
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function getPrice()
+	{
+		return $this->price;
+	}
+
+	/**
+	 * @param mixed $price
+	 */
+	public function setPrice($price)
+	{
+		$this->price = $price;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getNote()
+	{
+		return $this->note;
+	}
+
+	/**
+	 * @param mixed $note
+	 */
+	public function setNote($note)
+	{
+		$this->note = $note;
+	}
+
 
 	public function __toString()
 	{

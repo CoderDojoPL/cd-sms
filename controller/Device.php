@@ -120,6 +120,12 @@ class Device extends Controller
 
 	}
 
+	/**
+	 * @param \Entity\Device $entity
+	 * @param $data
+	 * @param $serialNumber
+	 * @param null $state
+	 */
 	private function saveEntity($entity, $data, $serialNumber, $state = null)
 	{
 		$entity->setName($data['name']);
@@ -127,9 +133,14 @@ class Device extends Controller
 		$entity->setWeight($data['weight']);
 		$entity->setType($this->cast('Mapper\DeviceType', $data['type']));
 		$entity->setSerialNumber($serialNumber);
+		$entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
+		$entity->setNote($data['note']);
+//		$entity->setPrice($data['price'] ? $data['price'] : NULL);//FIXME nie dziala
+
 		if ($state)
 			$entity->setState($this->cast('Mapper\DeviceState', $state));
-		if ($data['location']){
+
+		if (isset($data['location'])) {
 			$entity->setLocation($this->cast('Mapper\Location', $data['location']));
 		}
 		$this->persist($entity);
