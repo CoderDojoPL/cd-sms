@@ -67,6 +67,9 @@ class DoctrineDesigner implements Designer{
 			case 'datetime':
 				$formField=$this->createFieldDateTime($metaData,$fieldName);
 			break;
+			case 'decimal':
+				$formField=$this->createFieldDecimal($metaData,$fieldName);
+			break;
 			default:
 				throw new DoctrineTypeNotSupportedException($type);
 		}
@@ -135,6 +138,11 @@ class DoctrineDesigner implements Designer{
 
 	private function createFieldBoolean($metaData,$fieldName){
 		$formField=new CheckboxField(array());
+		return $formField;
+	}
+
+	private function createFieldDecimal($metaData,$fieldName){
+		$formField=new NumberField(array());
 		return $formField;
 	}
 
