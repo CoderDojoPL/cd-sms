@@ -71,7 +71,7 @@ abstract class InputField extends FormField{
      * {@inheritdoc}
      */
 	public function labelRender(){
-		return '<label for="'.$this->getId().'">'.$this->getLabel().'</label>';
+		return '<label for="'.$this->getId().'">'.htmlspecialchars($this->getLabel()).'</label>';
 	}
 
     /**
@@ -81,7 +81,7 @@ abstract class InputField extends FormField{
 		$template='<input ';
 		foreach($this->getTags() as $kTag=>$tag){
 			if($tag!='')
-				$template.=$kTag.'="'.$tag.'" ';
+				$template.=$kTag.'="'.htmlspecialchars($tag).'" ';
 		}
 		$template.=' />';
 		return $template;

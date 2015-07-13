@@ -96,7 +96,7 @@ class SelectField extends FormField{
      * {@inheritdoc}
      */
 	public function labelRender(){
-		return '<label for="'.$this->getId().'">'.$this->getLabel().'</label>';
+		return '<label for="'.$this->getId().'">'.htmlspecialchars($this->getLabel()).'</label>';
 	}
 
     /**
@@ -132,7 +132,7 @@ class SelectField extends FormField{
 					$tag.='[]';
 				}
 
-				$template.=$kTag.'="'.$tag.'" ';
+				$template.=$kTag.'="'.htmlspecialchars($tag).'" ';
 
 			}
 		}
@@ -140,7 +140,7 @@ class SelectField extends FormField{
 		$template.='>';
 		$values=(is_array($this->getData())?$this->getData():array($this->getData()));
 		foreach($this->collection as $option){
-			$template.='<option value="'.$option['value'].'" '.(in_array($option['value'], $values)?'selected':'').'>'.$option['label'].'</option>';
+			$template.='<option value="'.htmlspecialchars($option['value']).'" '.(in_array($option['value'], $values)?'selected':'').'>'.htmlspecialchars($option['label']).'</option>';
 		}
 
 		$template.='</select>';

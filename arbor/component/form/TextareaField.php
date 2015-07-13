@@ -44,7 +44,7 @@ class TextareaField extends FormField{
      * {@inheritdoc}
      */
 	public function labelRender(){
-		return '<label for="'.$this->getId().'">'.$this->getLabel().'</label>';
+		return '<label for="'.$this->getId().'">'.htmlspecialchars($this->getLabel()).'</label>';
 	}
 
     /**
@@ -75,10 +75,10 @@ class TextareaField extends FormField{
 		$template='<textarea ';
 		foreach($this->getTags() as $kTag=>$tag){
 			if($tag!='')
-				$template.=$kTag.'="'.$tag.'" ';
+				$template.=$kTag.'="'.htmlspecialchars($tag).'" ';
 		}
 
-		$template.='>'.$this->getData().'</textarea>';
+		$template.='>'.htmlspecialchars($this->getData()).'</textarea>';
 
 		return $template;
 	}

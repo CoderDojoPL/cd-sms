@@ -7,6 +7,7 @@ use Arbor\Component\Form\BasicFormFormatter;
 use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
 use Arbor\Validator\FileValidator;
+use Arbor\Exception\FileMaxSizeException;
 
 /**
  * @since 0.15.0
@@ -14,6 +15,8 @@ use Arbor\Validator\FileValidator;
 class FileField extends InputField{
 
 	private $data;
+	private $maxSize;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -32,6 +35,14 @@ class FileField extends InputField{
 		if(isset($options['accept'])){
 			$this->setAccept($options['accept']);
 			unset($options['accept']);
+		}
+
+		if(isset($options['maxSize'])){
+			$this->setMaxSize($options['maxSize']);
+			unset($options['maxSize']);
+		}
+		else{
+			$this->setMaxSize($this->getServerMaxSize());
 		}
 
 		parent::__construct($options);
@@ -70,11 +81,36 @@ class FileField extends InputField{
 
 	/**
 	 * get html tag accept
-	 * @return string $accept
+	 * @return string
 	 * @since 0.18.0
 	 */
 	public function getAccept(){
 		return $this->accept;
+	}
+
+	/**
+	 * set max size file
+	 * @param long $maxSize - size in bytes
+	 * @since 0.18.0
+	 */
+	public function setMaxSize($maxSize){
+		$serverMaxSize=$this->getServerMaxSize();
+		if($maxSize>$serverMaxSize){
+			throw new FileMaxSizeException($serverMaxSize);
+		}
+		$this->maxSize=$maxSize;
+		if($this->getValidator()){
+			$this->getValidator()->setOption('maxSize',$maxSize);
+		}
+	}
+
+	/**
+	 * get max size file
+	 * @return long - file size in bytes
+	 * @since 0.18.0
+	 */
+	public function getMaxSize(){
+		return $this->maxSize;
 	}
 
 	/**
@@ -106,12 +142,39 @@ class FileField extends InputField{
 				if($kTag=='name' && $this->isMultiple()){
 					$tag.='[]';
 				}				
-				$template.=$kTag.'="'.$tag.'" ';
+				$template.=$kTag.'="'.htmlspecialchars($tag).'" ';
 			}
 		}
 		$template.=' />';
 		return $template;
 
+	}
+
+
+	private function getServerMaxSize(){
+		return min($this->phpSizeToBytes(ini_get('post_max_size')),$this->phpSizeToBytes(ini_get('upload_max_filesize')));  
+	}
+
+	private function phpSizeToBytes($size){  
+		if (is_numeric( $size)){
+			return $size;
+		}
+		$suffix = substr($size, -1);
+		$value = substr($size, 0, -1);
+		switch(strtolower($suffix)){
+			case 'p':
+				$value *= 1024;
+			case 't':
+				$value *= 1024;
+			case 'g':
+				$value *= 1024;
+			case 'm':
+				$value *= 1024;
+			case 'k':
+				$value *= 1024;
+				break;
+		}
+		return $value;  
 	}
 
 }

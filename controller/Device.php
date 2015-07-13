@@ -237,8 +237,9 @@ class Device extends Controller
 
 		$builder->addField(new FileField(array(
 			'name' => 'photo'
-		, 'label' => 'Photo'
-		, 'accept' => 'image/*'
+			,'label' => 'Photo'
+			,'accept' => 'image/*'
+			,'maxSize'=> 1048576
 		)));
 
 		$dimensionsField = $builder->getField('dimensions');

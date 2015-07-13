@@ -159,6 +159,38 @@ class Request implements RequestProvider{
 		return $this->clientIp;
 	}
 
+	/**
+	 * Detect for uploaded big post data on server. If return false then propably file and other post data not uploaded.
+	 * @return boolean
+	 * @since 0.18.0 
+	 */
+	public function isFullUploadedData(){
+		return !(isset($_SERVER['CONTENT_LENGTH']) 
+			&& (int) $_SERVER['CONTENT_LENGTH'] > $this->phpSizeToBytes(ini_get('post_max_size')));
+	}
+
+	private function phpSizeToBytes($size){  
+		if (is_numeric( $size)){
+			return $size;
+		}
+		$suffix = substr($size, -1);
+		$value = substr($size, 0, -1);
+		switch(strtolower($suffix)){
+			case 'p':
+				$value *= 1024;
+			case 't':
+				$value *= 1024;
+			case 'g':
+				$value *= 1024;
+			case 'm':
+				$value *= 1024;
+			case 'k':
+				$value *= 1024;
+				break;
+		}
+		return $value;  
+	}
+
 	private function prepare(){
 		$this->data=$_POST;
 		$this->query=$_GET;
