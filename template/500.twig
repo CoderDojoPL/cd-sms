@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+{%block body%}
+    <style>
+        .error-template {padding: 40px 15px;text-align: center;}
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="error-template">
+                    <h1>
+                        Oops!</h1>
+                    <h2>
+                        500. It's our fault, not yours</h2>
+                    <div class="error-details">
+                        Sorry, we are experiencing on internal server problem. Please try again later or contact administrator.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
