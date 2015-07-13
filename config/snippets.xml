@@ -11,5 +11,6 @@
     <snippet class="Library\Doctrine\Snippet\Doctrine" method="executeQuery" />
     <snippet class="Arbor\Snippet\Mapper" method="cast" />
     <snippet class="Snippet\User" method="getUser" />
+    <snippet class="Snippet\Route" method="redirect" />
 
 </content>

@@ -1,5 +1,6 @@
 body > .container{
     padding-top: 65px;
+    overflow: auto;
 }
 
 
@@ -11,4 +12,8 @@ body > .container{
 
 .table>tbody>tr>td{
 	vertical-align: middle;
+}
+
+.thumbnail img{
+	max-width: 100%;
 }

@@ -127,7 +127,11 @@ class Device
 
 	public function getPhoto()
 	{
-		return '/uploaded/device/photo/' . $this->photo;
+		$prefix='';
+		if($this->photo){
+			$prefix='/uploaded/device/photo/';
+		}
+		return $prefix.$this->photo;
 	}
 
 	public function setTags($tags)

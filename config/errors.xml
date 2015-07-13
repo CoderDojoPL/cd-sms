@@ -2,6 +2,6 @@
 
 <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <error pattern=".*" presenter="Library\Twig\Presenter\Twig" />
+	<error pattern=".*" presenter="Library\Twig\Presenter\Twig" />
 
 </content>

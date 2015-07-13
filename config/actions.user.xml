@@ -2,16 +2,18 @@
 
 <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <action controller="User" method="index">
-        <route pattern="\/user"/>
-        <presenter class="Library\Twig\Presenter\Twig"/>
+	<action controller="User" method="index">
+		<route pattern="\/user"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
 
-    </action>
+	</action>
 
-    <action controller="User" method="edit">
-        <route pattern="^\/user\/edit\/([0-9]+)$"/>
-        <presenter class="Library\Twig\Presenter\Twig"/>
-        <argument storage="url" name="id" pattern="^\/user\/edit\/([0-9]+)$" mapper="Mapper\User"/>
-    </action>
+	<action controller="User" method="edit">
+		<route pattern="^\/user\/edit\/([0-9]+)$"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
+		<argument storage="url" name="id" pattern="^\/user\/edit\/([0-9]+)$" mapper="Mapper\User"/>
+	</action>
 
 </content>

@@ -1,0 +1,104 @@
+{% extends _request.isAjax ? "base_blank.twig" : "base_logged.twig" %}
+
+{%block body%}
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="/order">Orders</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Show 
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <DIV class="row">
+
+
+
+
+
+
+    <div class="timeline-centered">
+    
+    <article class="timeline-entry">
+        
+        <div class="timeline-entry-inner">
+            <time class="timeline-time" datetime="{{entity.createdAt|date("Y-m-dTH:i:s")}}"><span>{{entity.createdAt|date("H:i:s")}}</span> <span>{{entity.createdAt|date("Y-m-d")}}</span></time>
+            
+            <div class="timeline-icon bg-success">
+                <i class="entypo-feather"></i>
+            </div>
+            
+            <div class="timeline-label">
+                <h2>{{entity.owner}} <span>created order</span></h2>
+                    <blockquote>{{entity.device}}</blockquote>
+
+                    {%if entity.device.photo %}
+                    <div class="text-center">
+                      <img src="{{entity.device.photo}}" alt="{{entity.device.name}}" />
+                  </div>
+                      {%endif%}
+                    {%if entity.state.id==1 %}
+                        <p><a href="/order/fetch/{{entity.id}}" class="btn btn-primary" role="button">Fetch</a></p>
+                    {%endif%}
+            </div>
+        </div>
+        
+    </article>
+    
+    {%if entity.state.id>1%}
+        <article class="timeline-entry left-aligned">
+            
+            <div class="timeline-entry-inner">
+                <time class="timeline-time" datetime="{{entity.fetchedAt|date("Y-m-dTH:i:s")}}"><span>{{entity.fetchedAt|date("H:i:s")}}</span> <span>{{entity.fetchedAt|date("Y-m-d")}}</span></time>
+                
+                <div class="timeline-icon bg-secondary">
+                    <i class="entypo-suitcase"></i>
+                </div>
+                
+                <div class="timeline-label">
+                    <h2>{{entity.performer}} <span>fetched order</span></h2>
+                    {%if entity.state.id==2 and isOwner %}
+                        <p><a href="/order/close/{{entity.id}}" class="btn btn-primary" role="button">Close</a></p>
+                    {%endif%}
+
+                </div>
+            </div>
+            
+        </article>
+    {%endif%}
+    
+    
+    {%if entity.state.id>2%}
+        <article class="timeline-entry">
+            
+            <div class="timeline-entry-inner">
+                <time class="timeline-time" datetime="{{entity.closedAt|date("Y-m-dTH:i:s")}}"><span>{{entity.closedAt|date("H:i:s")}}</span> <span>{{entity.closedAt|date("Y-m-d")}}</span></time>
+                
+                <div class="timeline-icon bg-info">
+                    <i class="entypo-location"></i>
+                </div>
+                
+                <div class="timeline-label">
+                    <h2>{{entity.owner}} <span>closed order</span></h2>
+                </div>
+            </div>
+            
+        </article>
+    {%endif%}
+    
+
+    
+
+    
+</div>
+
+
+
+
+                </DIV>
+                <!-- /.row -->
+{%endblock%}

@@ -2,15 +2,38 @@
 
 <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <action controller="Order" method="index">
-        <route pattern="\/order"/>
-        <presenter class="Library\Twig\Presenter\Twig"/>
+	<action controller="Order" method="index">
+		<route pattern="\/order"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
 
-    </action>
+	</action>
 
-    <action controller="Order" method="add">
-        <route pattern="\/order\/add"/>
-        <presenter class="Library\Twig\Presenter\Twig"/>
-    </action>
-    
+	<action controller="Order" method="add">
+		<route pattern="\/order\/add"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
+	</action>
+
+	<action controller="Order" method="show">
+		<route pattern="^\/order\/show\/([0-9]+)$"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
+		<argument storage="url" name="id" pattern="^\/order\/show\/([0-9]+)$" mapper="Mapper\Order"/>
+	</action>
+
+	<action controller="Order" method="fetch">
+		<route pattern="^\/order\/fetch\/([0-9]+)$"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
+		<argument storage="url" name="id" pattern="^\/order\/fetch\/([0-9]+)$" mapper="Mapper\Order"/>
+	</action>
+
+	<action controller="Order" method="close">
+		<route pattern="^\/order\/close\/([0-9]+)$"/>
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig"/>
+		<argument storage="url" name="id" pattern="^\/order\/close\/([0-9]+)$" mapper="Mapper\Order"/>
+	</action>
+	
 </content>
