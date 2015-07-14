@@ -11,7 +11,7 @@ class Authenticate extends Controller
 	public function index()
 	{
 		$name = $this->getUser();
-		return  compact('name');
+		return compact('name');
 	}
 
 	public function login()
@@ -41,6 +41,7 @@ class Authenticate extends Controller
 			$tokenData = $client->verifyIdToken()->getAttributes();
 			$userInfoData = $googleService->getAddInfo()->userinfo->get();
 			/* @var $userInfoData \Google_Service_Oauth2_Userinfoplus */
+
 			$email = $tokenData['payload']['email'];
 			if (!preg_match('/^.*?@coderdojo.org.pl$/', $email)) {
 				$session->clear();
