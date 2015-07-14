@@ -12,12 +12,12 @@ namespace Controller;
 
 use Arbor\Core\Controller;
 use Arbor\Provider\Response;
-use Arbor\Service\Form;
 use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
-use Library\Doctrine\Form\DoctrineDesigner;
+use Entity\Device;
+use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
 
@@ -101,17 +101,23 @@ class Order extends Controller
 	 *
 	 * @return Response|array
 	 */
-	public function addApply(){
+	public function addApply()
+	{
 		$data = $this->getRequest()->getSession()->get('order.info');
 
 		$device = $this->cast('Mapper\Device', $data['device']);
 		/* @var $device Device */
 		$location = $device->getLocation();
-		/* @var $location Location*/
+		/* @var $location Location */
 
 		$form = $this->createApplyForm();
 
 		if ($form->isValid()) {
+
+			if ($device->getLocation() == $this->getUser()->getLocation()){
+				throw new OrderWrongLocationException();
+			}
+
 			$entity = new \Entity\Order();
 			$entity->setOwner($this->getUser());
 			$entity->setDevice($device);
@@ -126,7 +132,7 @@ class Order extends Controller
 			$this->getRequest()->getSession()->remove('order.info');
 			return $response;
 		}
-		return compact('form','device', 'location');
+		return compact('form', 'device', 'location');
 	}
 
 
@@ -216,7 +222,8 @@ class Order extends Controller
 	 * @param null $entity
 	 * @return mixed
 	 */
-	private function createApplyForm($entity = null){
+	private function createApplyForm($entity = null)
+	{
 		$builder = $this->createFormBuilder();
 
 		$builder->submit($this->getRequest());
@@ -236,17 +243,18 @@ class Order extends Controller
 		$builder = $this->createFormBuilder();
 		$helper = $this->getService('form.helper');
 		/* @var $helper \Service\FormHelper */
+
+		$query = $this->getDoctrine()->getEntityManager()->createQuery('SELECT d FROM Entity\Device d WHERE d.state = 1 and d.location != :id');
+		$query->setParameter('id',$this->getUser()->getLocation());
+
+		$devices = $query->getResult();
+
 		$builder->addField(new SelectField(array(
 				'name' => 'device'
 			, 'label' => 'Device'
 			, 'required' => true
 			, 'collection' => $helper->entityToCollection(
-					$this->find('Device', array(
-							'state' => $this->findOne('DeviceState', array(
-								'id' => 1
-							)))
-					)
-					, array(array('', 'Select...'))
+					$devices, array(array('', 'Select...'))
 				))
 		));
 
