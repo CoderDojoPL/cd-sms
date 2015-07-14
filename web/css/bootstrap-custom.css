@@ -1,18 +1,17 @@
-body > .container{
+body > .container {
     padding-top: 65px;
 }
 
-
-.has-required label:after{
-	content: '*';
-	color: red;
-	padding-left: 5px;
+.has-required label:after {
+    content: '*';
+    color: red;
+    padding-left: 5px;
 }
 
-.table>tbody>tr>td{
-	vertical-align: middle;
+.table > tbody > tr > td {
+    vertical-align: middle;
 }
 
-.timeline-label img{
-	max-width: 100%;
+.timeline-label img {
+    max-width: 100%;
 }
