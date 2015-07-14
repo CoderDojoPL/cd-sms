@@ -10,6 +10,8 @@ class Authenticate extends Controller
 
 	public function index()
 	{
+		$name = $this->getUser();
+		return  compact('name');
 	}
 
 	public function login()
