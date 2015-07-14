@@ -84,6 +84,10 @@ class Order extends Controller
 		return compact('form');
 	}
 
+	/**
+	 * Form with contact data to current owner
+	 * @return Response|array
+	 */
 	public function addApply(){
 		$data = $this->getRequest()->getSession()->get('order.info');
 
@@ -175,7 +179,11 @@ class Order extends Controller
 		return compact('entity', 'isOwner');
 	}
 
-
+	/**
+	 * Form builed
+	 * @return mixed
+	 * @throws \Arbor\Exception\ServiceNotFoundException
+	 */
 	private function createFormBuilder()
 	{
 		$builder = $this->getService('form')->create();
@@ -185,6 +193,11 @@ class Order extends Controller
 		return $builder;
 	}
 
+	/**
+	 * Creates apply form
+	 * @param null $entity
+	 * @return mixed
+	 */
 	private function createApplyForm($entity = null){
 		$builder = $this->createFormBuilder();
 
@@ -195,7 +208,7 @@ class Order extends Controller
 	}
 
 	/**
-	 * Create form helper
+	 * Create choose device form
 	 * @param null| \Entity\Order $entity
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
