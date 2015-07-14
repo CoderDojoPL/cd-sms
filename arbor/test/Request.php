@@ -7,10 +7,12 @@ use Arbor\Core\RequestProvider;
 use Arbor\Exception\HeaderNotFoundException;
 use Arbor\Core\Enviorment;
 use Arbor\Root;
+use Arbor\Core\FileUploaded;
+use Arbor\Exception\FileNotUploadedException;
+
 class Request implements RequestProvider{
 
 	private $url;
-	private $root;
 	private $data=array();
 	private $query=array();
 	private $session;
@@ -29,11 +31,14 @@ class Request implements RequestProvider{
 	private $ssl=false;
 	private $config;
 	private $enviorment;
-	public function __construct($url,$root,Enviorment $enviorment){
+	private $ajax;
+	private $clientIp;
+
+	public function __construct($url,Enviorment $enviorment){
 		$this->url=$url;
-		$this->root=$root;
 		$this->session=new Session($enviorment);
 		$this->enviorment=$enviorment;
+		$this->clientIp='127.0.0.1';
 	}
 
 	public function setConfig($config){
@@ -45,6 +50,11 @@ class Request implements RequestProvider{
 		$this->presenter=$this->config->getPresenter();
 
 	}
+
+	public function getConfig(){
+		return $this->config;
+	}
+
 
 	public function execute(){
 		$root=new Root($this->enviorment->isDebug(),$this->enviorment->isSilent(),$this->enviorment->getName()); //FIXME wygląda że trzeba będzie tak wywoływać testy funkcjonalne
@@ -82,8 +92,8 @@ class Request implements RequestProvider{
 		return $this->body;
 	}
 
-	public function addArgument($value){
-		$this->arguments[]=$value;
+	public function setArgument($name,$value){
+		$this->arguments[$name]=$value;
 	}
 
 	public function getArguments(){
@@ -91,12 +101,7 @@ class Request implements RequestProvider{
 	}
 
 	public function removeArgument($index){
-		$arguments=$this->arguments;
-		$this->arguments=array();
-		for($i=0; $i < count($arguments); $i++){
-			if($i!==$index)
-				$this->addArgument($arguments[$i]);
-		}
+		unset($this->arguments[$index]);
 	}
 
 	public function getRoute(){
@@ -153,5 +158,44 @@ class Request implements RequestProvider{
 
 	public function isSSL(){
 		return $this->ssl;
+	}
+
+	public function getFile($name){
+		if(!isset($this->files[$name])){
+			throw new FileNotUploadedException($name);
+		}
+
+		return $this->files[$name];
+	}
+
+	public function addFile($name,$size,$error=null){
+		$this->files[$name]=new FileUploaded();
+	}
+
+
+	public function isAjax(){
+		try{
+			return $this->ajax || strtolower($this->getHeader('x-requested-with'))=='xmlhttprequest';
+		}
+		catch(HeaderNotFoundException $e){
+			return false;
+		}
+
+	}
+
+	public function setAjax($flag){
+		$this->ajax=$flag;
+	}
+
+	public function getClientIp(){
+		return $this->clientIp;
+	}
+
+	public function setClientIp($ip){
+		return $this->clientIp=$ip;
+	}
+
+	public function isFullUploadedData(){
+		return true;
 	}
 }

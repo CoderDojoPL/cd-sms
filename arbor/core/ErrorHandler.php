@@ -12,6 +12,7 @@ use Arbor\Contener\RequestConfig;
 use Arbor\Presenter\HTML;
 use Arbor\Event\ExecutePresenterEvent;
 use Arbor\Provider\Request;
+use Arbor\Test\Request as RequestTest;
 use Arbor\Provider\Session;
 
 class ErrorHandler{
@@ -87,8 +88,15 @@ class ErrorHandler{
 						,'class'=>''
 						));
 
-			$session=new Session($this->root->getEnviorment());
-			$request=new Request($requestConfig,$this->root->getUrl(),$session);
+			if($this->root->getEnviorment()->isSilent()){
+				$request=new RequestTest($this->root->getUrl(),$this->root->getEnviorment());
+				$request->setConfig($requestConfig);
+			}
+			else{
+				$session=new Session($this->root->getEnviorment());
+				$request=new Request($requestConfig,$this->root->getUrl(),$session);
+
+			}
 			$this->root->registerRequest($request);
 		}
 

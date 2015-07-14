@@ -9,6 +9,9 @@ use Arbor\Core\Enviorment;
 require __DIR__.'/../Root.php';
 
 abstract class WebTestCase extends \PHPUnit_Framework_TestCase{
+	
+	private $root;
+
 	public function __construct(){
 		$this->root=new Root(true,true,'test');
 	}
@@ -27,7 +30,7 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase{
 
 	protected function createRequest($url){
 
-		return new Request($url,$this->root,new Enviorment(true,true,'test'));
+		return new Request($url,new Enviorment(true,true,'test'));
 	}
 
 }

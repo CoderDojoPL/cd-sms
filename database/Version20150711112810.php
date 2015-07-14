@@ -23,9 +23,9 @@ class Version20150711112810{
 			ALTER TABLE device_tag ADD CONSTRAINT FK_E9776D1A94A4C7D4 FOREIGN KEY (device_id) REFERENCES devices (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 			ALTER TABLE device_tag ADD CONSTRAINT FK_E9776D1ABAD26311 FOREIGN KEY (tag_id) REFERENCES device_tags (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 			INSERT INTO device_types (id,name) VALUES(1,'Refill'),(2,'Hardware');
-			INSERT INTO device_states (id, name) VALUES (1, 'Available')
-			INSERT INTO device_states (id, name) VALUES (2, 'Busy')
-			INSERT INTO device_states (id, name) VALUES (3, 'In service')
+			INSERT INTO device_states (id, name) VALUES (1, 'Available');
+			INSERT INTO device_states (id, name) VALUES (2, 'Busy');
+			INSERT INTO device_states (id, name) VALUES (3, 'In service');
 			INSERT INTO order_states(id,name) values(1,'Open'),(2,'In progress'),(3,'Closed');
 
 			";

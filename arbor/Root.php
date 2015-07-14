@@ -89,6 +89,7 @@ class Root{
 		ob_start();
 		try{
 			$dispatcher=$this->router->createHttpTestDispatcher($this->executeResources->getEnviorment(),$this->executeResources->getGlobalConfig(),$this->executeResources->getUrl());
+			$dispatcher->setRequest($request);
 			$dispatcher->execute($this->executeResources,$this->eventManager);
 
 		}
@@ -101,6 +102,14 @@ class Root{
 		$this->executeResources->getResponse()->setContent($content);
 		return $this->executeResources->getResponse();
 
+	}
+
+	public function getService($name){
+		$services=$this->executeResources->getServices();
+		if(!isset($services[$name]))
+			throw new ServiceNotFoundException($name);
+
+		return $services[$name];
 	}
 
 	private function registerEvents(ExecuteResources $executeResources){

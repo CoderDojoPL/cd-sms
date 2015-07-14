@@ -60,4 +60,7 @@ interface RequestProvider{
 	public function isAjax();
 
 	public function getClientIp();
+
+	public function isFullUploadedData();
+
 }

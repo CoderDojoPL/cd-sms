@@ -5,7 +5,7 @@ namespace Arbor\Component\Form;
 use Arbor\Component\Form\FormFormatter;
 use Arbor\Component\Form\BasicFormFormatter;
 use Arbor\Component\Form\Designer;
-use Arbor\Provider\Request;
+use Arbor\Core\RequestProvider;
 use Arbor\Core\ValidatorService;
 use Arbor\Exception\FieldNotFoundException;
 use Arbor\Exception\FileNotUploadedException;
@@ -291,10 +291,10 @@ class FormBuilder{
 
 	/**
 	 * submit form. Check http confirm and validate fields
-	 * @param Arbor\Provider\Request $request
+	 * @param Arbor\Core\RequestProvider $request
 	 * @since 0.17.0
 	 */
-	public function submit(Request $request){
+	public function submit(RequestProvider $request){
 		$this->isConfirmed=false;
 
 		if($this->formTags['method']=='post' && $request->getType()=='POST'){

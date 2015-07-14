@@ -5,7 +5,7 @@ use Arbor\Contener\GlobalConfig;
 use Arbor\Core\Presenter;
 use Arbor\Contener\RequestConfig;
 use Arbor\Provider\Response;
-use Arbor\Provider\Request;
+use Arbor\Core\RequestProvider;
 use Arbor\Exception\ResourcesNotRegisteredException;
 
 class ExecuteResources{
@@ -55,7 +55,7 @@ class ExecuteResources{
 		return $this->enviorment;
 	}
 
-	public function registerRequest(Request $request){
+	public function registerRequest(RequestProvider $request){
 		$this->request=$request;
 	}
 

@@ -4,18 +4,25 @@
 
 	<service name="doctrine" class="Library\Doctrine\Service\Doctrine" >
 		<config enviorment="dev"
-			driver="{database.driver}"
-			host="{database.host}"
-			user="{database.user}"
-			password="{database.password}"
-			dbname="{database.dbname}"
+			driver="{prod.database.driver}"
+			host="{prod.database.host}"
+			user="{prod.database.user}"
+			password="{prod.database.password}"
+			dbname="{prod.database.dbname}"
 		 />
 		<config enviorment="prod"
-			driver="{database.driver}"
-			host="{database.host}"
-			user="{database.user}"
-			password="{database.password}"
-			dbname="{database.dbname}"
+			driver="{prod.database.driver}"
+			host="{prod.database.host}"
+			user="{prod.database.user}"
+			password="{prod.database.password}"
+			dbname="{prod.database.dbname}"
+		 />
+		<config enviorment="test"
+			driver="{test.database.driver}"
+			host="{test.database.host}"
+			user="{test.database.user}"
+			password="{test.database.password}"
+			dbname="{test.database.dbname}"
 		 />
 
 	</service>
@@ -27,14 +34,19 @@
 	<service name="form.helper" class="Service\FormHelper" />
 	<service name="google" class="Library\Google\Service\Google">
 		<config enviorment="dev"
-			clientId="{google.clientId}"
-			clientSecret="{google.clientSecret}"
-			redirectUri="{google.redirectUri}"
+			clientId="{prod.google.clientId}"
+			clientSecret="{prod.google.clientSecret}"
+			redirectUri="{prod.google.redirectUri}"
 		 />
 		<config enviorment="prod"
-			clientId="{google.clientId}"
-			clientSecret="{google.clientSecret}"
-			redirectUri="{google.redirectUri}"
+			clientId="{prod.google.clientId}"
+			clientSecret="{prod.google.clientSecret}"
+			redirectUri="{prod.google.redirectUri}"
+		 />
+		<config enviorment="test"
+			clientId="{test.google.clientId}"
+			clientSecret="{test.google.clientSecret}"
+			redirectUri="{test.google.redirectUri}"
 		 />
 
 	</service>
