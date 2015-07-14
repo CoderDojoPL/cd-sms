@@ -42,8 +42,6 @@ class Order extends Controller
 		$builder->addColumn('State', 'state');
 		$builder->addColumn('Date', 'createdAt');
 
-//        $builder->addColumn('Serial number','serialNumber');
-//        $builder->addColumn('Type','type');
 		$builder->addColumn('Action', 'id', new ActionColumnFormatter('order', array('show')));
 		return $builder;
 	}
@@ -103,6 +101,7 @@ class Order extends Controller
 
 		//set new location on device
 		$entity->getDevice()->setLocation($this->getUser()->getLocation());
+		$entity->getDevice()->setState($this->cast('Mapper\DeviceState',1));
 
 		$this->flush();
 

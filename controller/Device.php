@@ -135,7 +135,7 @@ class Device extends Controller
 		$entity->setSerialNumber($serialNumber);
 		$entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
 		$entity->setNote($data['note']);
-//		$entity->setPrice($data['price'] ? $data['price'] : NULL);//FIXME nie dziala
+		$entity->setPrice($data['price'] ? $data['price'] : NULL);
 
 		if ($state)
 			$entity->setState($this->cast('Mapper\DeviceState', $state));
