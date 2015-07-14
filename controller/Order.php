@@ -4,10 +4,13 @@ namespace Controller;
 
 use Arbor\Core\Controller;
 use Arbor\Provider\Response;
+use Arbor\Service\Form;
 use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
+use Entity\Device;
+use Entity\Location;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
@@ -70,7 +73,28 @@ class Order extends Controller
 
 		if ($form->isValid()) {
 			$data = $form->getData();
-			$device = $this->cast('Mapper\Device', $data['device']);
+			$this->getRequest()->getSession()->set('order.info', $data);
+
+			$response = new Response();
+			$response->redirect('/order/add/addapply');
+
+			return $response;
+
+		}
+		return compact('form');
+	}
+
+	public function addApply(){
+		$data = $this->getRequest()->getSession()->get('order.info');
+
+		$device = $this->cast('Mapper\Device', $data['device']);
+		/* @var $device Device */
+		$location = $device->getLocation();
+		/* @var $location Location*/
+
+		$form = $this->createApplyForm();
+
+		if ($form->isValid()) {
 			$entity = new \Entity\Order();
 			$entity->setOwner($this->getUser());
 			$entity->setDevice($device);
@@ -82,12 +106,12 @@ class Order extends Controller
 
 			$response = new Response();
 			$response->redirect('/order');
-
+			$this->getRequest()->getSession()->remove('order.info');
 			return $response;
-
 		}
-		return compact('form');
+		return compact('form','device', 'location');
 	}
+
 
 	/**
 	 * Method for fetch order to realization
@@ -151,6 +175,25 @@ class Order extends Controller
 		return compact('entity', 'isOwner');
 	}
 
+
+	private function createFormBuilder()
+	{
+		$builder = $this->getService('form')->create();
+		$builder->setValidatorService($this->getService('validator'));
+		$builder->setFormatter(new BasicFormFormatter());
+		$builder->setSubmitTags(array('cancel' => true));
+		return $builder;
+	}
+
+	private function createApplyForm($entity = null){
+		$builder = $this->createFormBuilder();
+
+		$builder->submit($this->getRequest());
+		$builder->render();
+
+		return $builder;
+	}
+
 	/**
 	 * Create form helper
 	 * @param null| \Entity\Order $entity
@@ -159,11 +202,9 @@ class Order extends Controller
 	 */
 	private function createForm($entity = null)
 	{
-		$builder = $this->getService('form')->create();
+		$builder = $this->createFormBuilder();
 		$helper = $this->getService('form.helper');
-		$builder->setValidatorService($this->getService('validator'));
-		$builder->setFormatter(new BasicFormFormatter());
-		$builder->setSubmitTags(array('cancel' => true));
+		/* @var $helper \Service\FormHelper */
 		$builder->addField(new SelectField(array(
 				'name' => 'device'
 			, 'label' => 'Device'

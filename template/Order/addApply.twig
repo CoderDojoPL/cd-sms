@@ -1,0 +1,54 @@
+{% extends _request.isAjax ? "base_blank.twig" : "base_logged.twig" %}
+
+{% block body %}
+<!-- Page Heading -->
+<div class="row" xmlns="http://www.w3.org/1999/html">
+    <div class="col-lg-12">
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="/order">Orders</a>
+            </li>
+            <li class="active">
+                <i class="fa fa-file"></i> Add
+            </li>
+        </ol>
+    </div>
+</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="nav nav-pills nav-justified thumbnail">
+                    <li class=""><a href="/order/add">
+                            <h4 class="list-group-item-heading">Step 1</h4>
+
+                            <p class="list-group-item-text">Select device</p>
+                        </a></li>
+                    <li class="active"><a href="#">
+                            <h4 class="list-group-item-heading">Step 2</h4>
+
+                            <p class="list-group-item-text">Contact with current owner</p>
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ device.name }} ({{ device.serialNumber }})</h3>
+        </div>
+        <div class="panel-body">
+            Device already is in <strong>{{ location.name }} ({{ location.city }})</strong>.
+            You have to contact to this location to proceed the order.</br>
+            Click apply after success contact
+            </br></br>
+            Phone number: {{ locacation.phone }}</br>
+            email: <a href="mailto:{{ location.email }}?Subject=Order of {{ device.name }}">{{ location.email }}</a>
+        </div>
+    </div>
+
+    <DIV class="row">
+        {{ form|raw }}
+    </DIV>
+    <!-- /.row -->
+{% endblock %}
