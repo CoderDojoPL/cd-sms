@@ -1,6 +1,6 @@
 <?php
 
-namespace Arbor\core;
+namespace Arbor\Core;
 
 
 class Autoloader{
@@ -20,7 +20,7 @@ class Autoloader{
 	private function getPath($class){
 		$parts=explode('\\' , $class);
 
-		$path="../";
+		$path=__DIR__.'/../../';
 
 		for($i=0; $i < count($parts);$i++){
 			$part=$parts[$i];

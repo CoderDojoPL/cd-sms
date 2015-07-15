@@ -10,7 +10,7 @@ use Arbor\Contener\ServiceConfig;
 use Doctrine\DBAL\Event\Listeners\MysqlSessionInit;
 use Arbor\Core\EventManager;
 
-require_once '../library/google/engine/src/Google/autoload.php';
+require_once __DIR__.'/../engine/src/Google/autoload.php';
 
 class Google{
 	

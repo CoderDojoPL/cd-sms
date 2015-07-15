@@ -34,9 +34,9 @@ class Request implements RequestProvider{
 	private $ajax;
 	private $clientIp;
 
-	public function __construct($url,Enviorment $enviorment){
+	public function __construct($url,Enviorment $enviorment,Session $session=null){
 		$this->url=$url;
-		$this->session=new Session($enviorment);
+		$this->session=($session?$session:new Session($enviorment));
 		$this->enviorment=$enviorment;
 		$this->clientIp='127.0.0.1';
 	}

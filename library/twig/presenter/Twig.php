@@ -1,7 +1,7 @@
 <?php
 
 namespace Library\Twig\Presenter;
-require_once '../library/twig/engine/Twig/Autoloader.php';
+require_once __DIR__.'/../engine/Twig/Autoloader.php';
 
 use Arbor\Core\Presenter;
 use Arbor\Provider\Response;
@@ -39,7 +39,7 @@ class Twig implements Presenter{
 	private function displaySuccess(Response $response){
 		$presenterConfig=$this->config->getPresenter();
 		\Twig_Autoloader::register();
-		$loader = new \Twig_Loader_Filesystem('../template'); //TODO przekazywać do presentera config
+		$loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../template'); //TODO przekazywać do presentera config
 		$twig = new \Twig_Environment($loader);
 
 		$data=$response->getContent();
@@ -61,7 +61,7 @@ class Twig implements Presenter{
 	private function displayError(Response $response){
 		$presenterConfig=$this->config->getPresenter();
 		\Twig_Autoloader::register();
-		$loader = new \Twig_Loader_Filesystem('../template'); //TODO przekazywać do presentera config
+		$loader = new \Twig_Loader_Filesystem(__DIR__.'/../../../template'); //TODO przekazywać do presentera config
 		$twig = new \Twig_Environment($loader);
 		$exception=$response->getContent();
 

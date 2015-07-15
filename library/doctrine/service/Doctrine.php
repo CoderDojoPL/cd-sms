@@ -10,7 +10,7 @@ use Arbor\Contener\ServiceConfig;
 use Doctrine\DBAL\Event\Listeners\MysqlSessionInit;
 use Arbor\Core\EventManager;
 
-require_once "../library/doctrine/autoloader.php";
+require_once __DIR__.'/../autoloader.php';
 
 
 class Doctrine{

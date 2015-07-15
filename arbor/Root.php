@@ -1,10 +1,10 @@
 <?php
 /**
-* @Version 0.17.0
+* @Version 0.19.0
 */
 namespace Arbor;
 
-require '../arbor/core/Autoloader.php';
+require __DIR__.'/core/Autoloader.php';
 
 use Arbor\Core\Autoloader;
 use Arbor\Contener\GlobalConfig;
@@ -27,6 +27,7 @@ use Arbor\Core\ExecuteResources;
 use Arbor\Core\Enviorment;
 use Arbor\Test\Request as RequestTest;
 use Arbor\Core\Router;
+use Arbor\Exception\ServiceNotFoundException;
 
 class Root{
 	
@@ -45,7 +46,7 @@ class Root{
 		$this->eventManager=new EventManager($this->executeResources);
 		$this->errorHandler=new ErrorHandler($this->executeResources,$this->eventManager);
 
-		$this->executeResources->registerGlobalConfig(new GlobalConfig('../config',$enviorment));
+		$this->executeResources->registerGlobalConfig(new GlobalConfig(__DIR__.'/../config',$enviorment));
 		$this->registerServices($this->executeResources);
 		$this->registerEvents($this->executeResources);
 		$this->registerSnippets($this->executeResources);
