@@ -9,11 +9,13 @@ use Arbor\Test\FormElement;
 use Arbor\Test\InputElement;
 use Arbor\Test\TextareaElement;
 use Arbor\Test\SelectElement;
+use Arbor\Exception\ElementNotFoundException;
 
 class HTMLElement{
 	protected $browser;
 	protected $node;
-	
+	protected static $cache=array();
+
 	public function __construct(BrowserEmulator $browser,$node){
 		$this->browser=$browser;
 		$this->node=$node;
@@ -73,28 +75,9 @@ class HTMLElement{
 				continue;
 			}
 
-			$htmlElement=null;
-			switch($node->tagName){
-				case 'a':
-					$htmlElement=new AnchorElement($this->browser,$node);
-				break;
-				case 'form':
-					$htmlElement=new FormElement($this->browser,$node);
-				break;
-				case 'input':
-					$htmlElement=new InputElement($this->browser,$node);
-				break;
-				case 'textarea':
-					$htmlElement=new TextareaElement($this->browser,$node);
-				break;
-				case 'select':
-					$htmlElement=new SelectElement($this->browser,$node);
-				break;
-				default:
-					$htmlElement=new HTMLElement($this->browser,$node);
-				break;
+			$htmlElement=$this->createElement($node);
 
-			}
+
 			$nodes[]=$htmlElement;
 
 		}
@@ -115,5 +98,52 @@ class HTMLElement{
 		} 
 
 		return $innerHTML; 
+	}
+
+	public function getParent(){
+		return $this->createElement($this->node->parentNode);
+	}
+
+	public function hasElement($query){
+		try{
+
+			$this->getElement($query);
+			return true;
+		}
+		catch(ElementNotFoundException $e){
+			return false;
+		}
+	}
+
+	private function createElement($node){
+
+		if(isset(static::$cache[spl_object_hash($node)])){
+			return static::$cache[spl_object_hash($node)];
+		}
+
+		switch($node->tagName){
+			case 'a':
+				$htmlElement=new AnchorElement($this->browser,$node);
+			break;
+			case 'form':
+				$htmlElement=new FormElement($this->browser,$node);
+			break;
+			case 'input':
+				$htmlElement=new InputElement($this->browser,$node);
+			break;
+			case 'textarea':
+				$htmlElement=new TextareaElement($this->browser,$node);
+			break;
+			case 'select':
+				$htmlElement=new SelectElement($this->browser,$node);
+			break;
+			default:
+				$htmlElement=new HTMLElement($this->browser,$node);
+			break;
+		}
+
+		static::$cache[spl_object_hash($node)]=$htmlElement;
+
+		return $htmlElement;		
 	}
 }
