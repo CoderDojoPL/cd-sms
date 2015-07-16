@@ -1,6 +1,6 @@
 <?php
 namespace Test;
-require __DIR__.'/../arbor/core/WebTestCase.php';
+require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
 use Arbor\Core\WebTestCase;
 use Entity\Location;
@@ -19,6 +19,10 @@ class DeviceTest extends WebTestCase{
 		}
 
 		foreach($em->getRepository('Entity\DeviceTag')->findAll() as $entity){
+			$em->remove($entity);
+		}
+
+		foreach($em->getRepository('Entity\User')->findAll() as $entity){
 			$em->remove($entity);
 		}
 
@@ -179,7 +183,6 @@ class DeviceTest extends WebTestCase{
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
 		$em->persist($location);
-
 
 
 		$deviceTag=new DeviceTag();
@@ -352,8 +355,8 @@ class DeviceTest extends WebTestCase{
 			$tags=$devices[$i]->getTags();
 			$this->assertCount(2,$tags,'Invalid count device tags');
 
-			$this->assertEquals('tag 1',$tags[0]->getName(),'Invalid device tag 1 name');
-			$this->assertEquals('tag 2',$tags[1]->getName(),'Invalid device tag 2 name');
+			$this->assertTrue(in_array('tag 1',array($tags[0]->getName(),$tags[1]->getName())),'Invalid device tag 1 name');
+			$this->assertTrue(in_array('tag 2',array($tags[0]->getName(),$tags[1]->getName())),'Invalid device tag 2 name');
 
 		}
 
@@ -535,8 +538,9 @@ class DeviceTest extends WebTestCase{
 		$tags=$device->getTags();
 		$this->assertCount(2,$tags,'Invalid count device tags');
 
-		$this->assertEquals('tag 1',$tags[0]->getName(),'Invalid device tag 1 name');
-		$this->assertEquals('tag 2',$tags[1]->getName(),'Invalid device tag 2 name');
+		$this->assertTrue(in_array('tag 1',array($tags[0]->getName(),$tags[1]->getName())),'Invalid device tag 1 name');
+		$this->assertTrue(in_array('tag 2',array($tags[0]->getName(),$tags[1]->getName())),'Invalid device tag 2 name');
+
 
 		$this->assertEquals('serial number',$device->getSerialNumber(),'Invalid device serial number');
 

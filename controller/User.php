@@ -77,6 +77,9 @@ class User extends Controller
         $builder->setSubmitTags(array('cancel' => true));
         $builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\User'));
 
+        $emailField=$builder->getField('email');
+        $emailField->setTag('readonly',true);
+        $emailField->setRequired(false);
 
         if ($entity) {
             $helper = $this->getService('form.helper');
