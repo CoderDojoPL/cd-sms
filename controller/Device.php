@@ -17,15 +17,27 @@ use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\BasicDataManager;
 
+/**
+ * Class Device
+ * @package Controller
+ */
 class Device extends Controller
 {
 
+	/**
+	 * Prepare data for Index view
+	 * @return array
+	 */
 	public function index()
 	{
 		$grid = $this->createGrid();
 		return compact('grid');
 	}
 
+	/**
+	 * Save new device to database
+	 * @return Response|array
+	 */
 	public function add()
 	{
 		$form = $this->createForm();
@@ -48,6 +60,11 @@ class Device extends Controller
 		return compact('form');
 	}
 
+	/**
+	 * Saving uploaded phtot to cache file
+	 * @param $photo
+	 * @return string file path
+	 */
 	private function saveTmpPhoto($photo)
 	{
 		$tmpName = basename(tempnam(sys_get_temp_dir(), "hms_"));
@@ -56,11 +73,21 @@ class Device extends Controller
 
 	}
 
+	/**
+	 * Method for create PHP confirm remove screen
+	 * @param \Entity\Device $entity
+	 * @return array
+	 */
 	public function removeConfirm($entity)
 	{
 		return compact('entity');
 	}
 
+	/**
+	 * Removing device from database
+	 * @param \Entity\Device $entity
+	 * @return Response
+	 */
 	public function remove($entity)
 	{
 		$this->getDoctrine()->getEntityManager()->remove($entity);
@@ -72,6 +99,10 @@ class Device extends Controller
 
 	}
 
+	/**
+	 * Preparing form for input serial numbers
+	 * @return Response|array
+	 */
 	public function serialNumber()
 	{
 		$data = $this->getRequest()->getSession()->get('device.info');
@@ -94,6 +125,7 @@ class Device extends Controller
 
 			$response = new Response();
 			$response->redirect('/device');
+			$this->getRequest()->getSession()->remove('device.info');
 
 			return $response;
 
@@ -103,6 +135,11 @@ class Device extends Controller
 
 	}
 
+	/**
+	 * Helper for saving Devices
+	 * @param $data
+	 * @param $serialNumber
+	 */
 	private function saveEntities($data, $serialNumber)
 	{
 		$conn = $this->getDoctrine()->getEntityManager()->getConnection();
@@ -121,6 +158,7 @@ class Device extends Controller
 	}
 
 	/**
+	 * Save device to database
 	 * @param \Entity\Device $entity
 	 * @param $data
 	 * @param $serialNumber
@@ -176,6 +214,11 @@ class Device extends Controller
 
 	}
 
+	/**
+	 * Save changes on device after edit
+	 * @param \Entity\Device $device
+	 * @return Response|array
+	 */
 	public function edit($device)
 	{
 		$form = $this->createForm($device);
@@ -203,6 +246,11 @@ class Device extends Controller
 		return compact('form');
 	}
 
+	/**
+	 * Creates grid for display devices list
+	 * @return mixed
+	 * @throws \Arbor\Exception\ServiceNotFoundException
+	 */
 	private function createGrid()
 	{
 		$builder = $this->getService('grid')->create();
@@ -238,6 +286,12 @@ class Device extends Controller
 		return $builder;
 	}
 
+	/**
+	 * Creates form for Add / Edit Device
+	 * @param null|\Entity\Device $entity
+	 * @return mixed
+	 * @throws \Arbor\Exception\ServiceNotFoundException
+	 */
 	private function createForm($entity = null)
 	{
 		$builder = $this->createFormBuilder();
@@ -308,6 +362,7 @@ class Device extends Controller
 
 	}
 
+	//TODO: what is this?
 	public function preview($entity)
 	{
 		$builder = $this->createFormBuilder();

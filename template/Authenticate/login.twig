@@ -60,10 +60,21 @@
             margin: 10px 0 0;
             min-height: 1em;
         }
+
+        .topspace {
+            margin-top: 10px;
+        }
     </style>
+
     <div class="container">
+        {% if error != '' %}
+            <div class="alert alert-warning topspace" role="alert">User not authorized: <strong>{{ error }}</strong></div>
+        {% endif %}
         <div class="card card-container text-center">
-            <div class="alert alert-info" role="alert">HMS Login<span text-left><img id="profile-img" class="profile-img-card" src="/img/cd_logo.png"/></span></div>
+            <div class="alert alert-info" role="alert">HMS Login<span text-left><img id="profile-img"
+                                                                                     class="profile-img-card"
+                                                                                     src="/img/cd_logo.png"/></span>
+            </div>
 
             <p id="profile-name" class="profile-name-card"></p>
 

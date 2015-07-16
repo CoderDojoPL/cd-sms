@@ -327,7 +327,7 @@ class DeviceTest extends WebTestCase{
 
 		$fields[0]->setData('serial 1');
 		$form->submit();
-
+		
 		$form=$client->getElement('form');
 		$fields=$form->getFields();
 
