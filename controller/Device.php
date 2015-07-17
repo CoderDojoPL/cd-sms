@@ -297,7 +297,6 @@ class Device extends Controller
 		$builder = $this->createFormBuilder();
 		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Device'));
 		$builder->removeField('photo');
-		$builder->removeField('deviceFiles');
 		$builder->removeField('serialNumber');
 		$builder->removeField('updatedAt');
 		$builder->removeField('createdAt');

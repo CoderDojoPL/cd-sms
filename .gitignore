@@ -1,3 +1,4 @@
 /dev
 /config/variables.xml
+/config/migrate.*.txt
 /web/uploaded/device/photo/*

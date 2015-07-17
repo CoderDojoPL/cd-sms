@@ -37,12 +37,6 @@ class Device
 	private $tags;
 
 	/**
-	 * @ManyToMany(targetEntity="File")
-	 * @JoinColumn(name="file_id", referencedColumnName="id")
-	 **/
-	private $deviceFiles;
-
-	/**
 	 * @ManyToOne(targetEntity="DeviceType")
 	 * @JoinColumn(name="type_id", referencedColumnName="id")
 	 **/
@@ -164,17 +158,6 @@ class Device
 	public function getTags()
 	{
 		return $this->tags;
-	}
-
-	public function setDeviceFiles($deviceFiles)
-	{
-		$this->deviceFiles = $deviceFiles;
-		return $this;
-	}
-
-	public function getDeviceFiles()
-	{
-		return $this->deviceFiles;
 	}
 
 	public function setType($type)

@@ -11,7 +11,6 @@ class OrderState{
 	/** 
 	 * @Id
 	 * @Column(type="integer") 
-	 * @GeneratedValue
 	 **/
 	protected $id;
 
@@ -19,6 +18,10 @@ class OrderState{
      * @Column(type="string") 
      **/
     protected $name;
+
+    public function __construct($id){
+        $this->id=$id;
+    }
 
 	public function getId(){
 		return $this->id;

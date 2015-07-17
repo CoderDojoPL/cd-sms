@@ -55,7 +55,6 @@ class Root{
 
 	public function executeCommand($command){
 		try{
-
 			$this->executeResources->registerUrl($command[0]);
 			array_shift($command);
 			$dispatcher=$this->router->createCommandDispatcher($this->executeResources->getEnviorment(),$this->executeResources->getGlobalConfig(),$this->executeResources->getUrl(),$command);

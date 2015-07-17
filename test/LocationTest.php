@@ -7,32 +7,10 @@ use Entity\Location;
 
 class LocationTest extends WebTestCase{	
 
-	protected function setUp(){//FIXME configure migrate and execute command
-		$em=$this->getService('doctrine')->getEntityManager();
-
-		foreach($em->getRepository('Entity\Order')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\Device')->findAll() as $entity){
-			$entity->getTags()->clear();
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\DeviceTag')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\User')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\Location')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		$em->flush();
-    }
+	protected function setUp(){
+		$this->executeCommand('migrate:downgrade');
+		$this->executeCommand('migrate:update');
+	}
 
 	public function testIndexUnautheticate(){
 
@@ -222,7 +200,7 @@ class LocationTest extends WebTestCase{
 		$this->assertFalse($fields[4]->getParent()->hasElement('label'),'Redundant error message for apartment');
 		$this->assertEquals('Value can not empty',$fields[5]->getParent()->getElement('label')->getText(),'Invalid error message for postal');
 		$this->assertEquals('Value can not empty',$fields[6]->getParent()->getElement('label')->getText(),'Invalid error message for phone');
-		$this->assertEquals('Value can not empty',$fields[7]->getParent()->getElement('label')->getText(),'Invalid error message for email');
+		$this->assertEquals('Invalid email format.',$fields[7]->getParent()->getElement('label')->getText(),'Invalid error message for email');
 
 		$fields[0]->setData('name');
 		$fields[1]->setData('city');
@@ -341,7 +319,7 @@ class LocationTest extends WebTestCase{
 		$this->assertFalse($fields[4]->getParent()->hasElement('label'),'Redundant error message for apartment');
 		$this->assertEquals('Value can not empty',$fields[5]->getParent()->getElement('label')->getText(),'Invalid error message for postal');
 		$this->assertEquals('Value can not empty',$fields[6]->getParent()->getElement('label')->getText(),'Invalid error message for phone');
-		$this->assertEquals('Value can not empty',$fields[7]->getParent()->getElement('label')->getText(),'Invalid error message for email');
+		$this->assertEquals('Invalid email format.',$fields[7]->getParent()->getElement('label')->getText(),'Invalid error message for email');
 
 		$fields[0]->setData('name edit');
 		$fields[1]->setData('city edit');

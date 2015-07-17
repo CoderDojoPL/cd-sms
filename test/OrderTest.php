@@ -12,32 +12,10 @@ use Entity\Order;
 
 class OrderTest extends WebTestCase{	
 
-	protected function setUp(){//FIXME configure migrate and execute command
-		$em=$this->getService('doctrine')->getEntityManager();
-
-		foreach($em->getRepository('Entity\Order')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\Device')->findAll() as $entity){
-			$entity->getTags()->clear();
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\DeviceTag')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\User')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		foreach($em->getRepository('Entity\Location')->findAll() as $entity){
-			$em->remove($entity);
-		}
-
-		$em->flush();
-    }
+	protected function setUp(){
+		$this->executeCommand('migrate:downgrade');
+		$this->executeCommand('migrate:update');
+	}
 
 	public function testIndexUnautheticate(){
 

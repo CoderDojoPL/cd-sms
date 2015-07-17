@@ -16,7 +16,7 @@ use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
-
+use Arbor\Component\Form\EmailField;
 /**
  * Class Location
  * @package Controller
@@ -145,6 +145,16 @@ class Location extends Controller
 		$builder->setFormatter(new BasicFormFormatter());
 		$builder->setSubmitTags(array('cancel' => true));
 		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Location'));
+
+		$builder->removeField('updatedAt');
+		$builder->removeField('createdAt');
+		$builder->removeField('email');
+		$builder->addField(new EmailField(array(
+			'name'=>'email'
+			,'label'=>'Email'
+			,'required'=>true
+		)));
+
 		//FIXME pattern for phone and email
 		$postal = $builder->getField('postal');
 		$postal->setPattern('^[0-9]{2}\-[0-9]{3}$');//FIXME to config

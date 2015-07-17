@@ -17,7 +17,6 @@ class DeviceState
     /**
      * @Id
      * @Column(type="integer")
-     * @GeneratedValue
      **/
     protected $id;
 
@@ -25,6 +24,10 @@ class DeviceState
      * @Column(type="string")
      **/
     protected $name;
+
+    public function __construct($id){
+        $this->id=$id;
+    }
 
     /**
      * @return mixed

@@ -57,6 +57,21 @@ class Location
 	protected $email;
 
 	/**
+	 * @Column(name="created_at",type="datetime")
+	 **/
+	protected $createdAt;
+
+	/**
+	 * @Column(name="updated_at",type="datetime")
+	 **/
+	protected $updatedAt;
+
+	public function __construct(){
+		$this->setCreatedAt(new \DateTime());
+		$this->setUpdatedAt(new \DateTime());
+
+	}
+	/**
 	 * @return mixed
 	 */
 	public function getName()
@@ -198,5 +213,34 @@ class Location
 		return $this->getName();
 	}
 
+	public function setCreatedAt($createdAt)
+	{
+		$this->createdAt = $createdAt;
+		return $this;
+	}
+
+	public function getCreatedAt()
+	{
+		return $this->createdAt;
+	}
+
+	public function setUpdatedAt($updatedAt)
+	{
+		$this->updatedAt = $updatedAt;
+		return $this;
+	}
+
+	public function getUpdatedAt()
+	{
+		return $this->updatedAt;
+	}
+
+	/**
+	 * @PreUpdate
+	 */
+	public function postUpdate()
+	{
+		$this->setUpdatedAt(new \DateTime());
+	}
 
 }
