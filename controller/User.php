@@ -14,7 +14,6 @@ use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
-use Entity\Order;
 use Library\Doctrine\Form\DoctrineDesigner;
 
 /**
@@ -68,7 +67,7 @@ class User extends Controller
 
 	/**
 	 * Saves user entity to database after edit
-	 * @param Order $entity
+	 * @param User $entity
 	 * @return Response|array
 	 */
 	public function edit($entity)
@@ -92,7 +91,7 @@ class User extends Controller
 
 	/**
 	 * Create form for edit user
-	 * @param null|Order $entity
+	 * @param null|User $entity
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */

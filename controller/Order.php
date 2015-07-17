@@ -10,6 +10,7 @@ use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Component\Form\SelectField;
+use Arbor\Exception\OrderNotFetchedException;
 
 /**
  * Class Order
@@ -102,7 +103,7 @@ class Order extends Controller
 
 		$entity->setPerformer($this->getUser());
 		$entity->setState($this->cast('Mapper\OrderState', 2));
-		$entity->setFeatchedAt(new \DateTime());
+		$entity->setFetchedAt(new \DateTime());
 
 		$this->flush();
 
@@ -113,13 +114,13 @@ class Order extends Controller
 	 * Close order workflow
 	 * @param \Entity\Order $entity
 	 * @return mixed
-	 * @throws OrderNotFeatchedException
+	 * @throws OrderNotFetchedException
 	 * @throws YouAreNotOwnerException
 	 */
 	public function close($entity)
 	{
 		if ($entity->getState()->getId() != 2) {
-			throw new OrderNotFeatchedException();
+			throw new OrderNotFetchedException();
 		}
 
 		if ($entity->getOwner()->getId() != $this->getUser()->getId()) {

@@ -10,6 +10,10 @@ class LocationTest extends WebTestCase{
 	protected function setUp(){//FIXME configure migrate and execute command
 		$em=$this->getService('doctrine')->getEntityManager();
 
+		foreach($em->getRepository('Entity\Order')->findAll() as $entity){
+			$em->remove($entity);
+		}
+
 		foreach($em->getRepository('Entity\Device')->findAll() as $entity){
 			$entity->getTags()->clear();
 			$em->remove($entity);
@@ -247,6 +251,7 @@ class LocationTest extends WebTestCase{
 		$this->assertEquals('test@coderdojo.org.pl',$location->getEmail(),'Invalid location email');
 
 	}
+
 	public function testEditUnautheticate(){
 
 		$em=$this->getService('doctrine')->getEntityManager();

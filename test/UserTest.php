@@ -11,6 +11,10 @@ class UserTest extends WebTestCase{
 	protected function setUp(){//FIXME configure migrate and execute command
 		$em=$this->getService('doctrine')->getEntityManager();
 
+		foreach($em->getRepository('Entity\Order')->findAll() as $entity){
+			$em->remove($entity);
+		}
+
 		foreach($em->getRepository('Entity\Device')->findAll() as $entity){
 			$entity->getTags()->clear();
 			$em->remove($entity);

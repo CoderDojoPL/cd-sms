@@ -13,6 +13,10 @@ class DeviceTest extends WebTestCase{
 	protected function setUp(){//FIXME configure migrate and execute command
 		$em=$this->getService('doctrine')->getEntityManager();
 
+		foreach($em->getRepository('Entity\Order')->findAll() as $entity){
+			$em->remove($entity);
+		}
+
 		foreach($em->getRepository('Entity\Device')->findAll() as $entity){
 			$entity->getTags()->clear();
 			$em->remove($entity);
@@ -360,8 +364,8 @@ class DeviceTest extends WebTestCase{
 
 		}
 
-		$this->assertEquals('serial 2',$devices[0]->getSerialNumber(),'Invalid device serial number 2');
-		$this->assertEquals('serial 1',$devices[1]->getSerialNumber(),'Invalid device serial number 1');
+		$this->assertTrue(in_array('serial 1',array($devices[0]->getSerialNumber(),$devices[1]->getSerialNumber())),'Invalid device serial number 1');
+		$this->assertTrue(in_array('serial 2',array($devices[0]->getSerialNumber(),$devices[1]->getSerialNumber())),'Invalid device serial number tag 2');
 
 	}
 

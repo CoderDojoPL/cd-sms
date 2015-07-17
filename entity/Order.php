@@ -41,9 +41,9 @@ class Order{
 	private $performer;
 
 	/** 
-	 * @Column(name="featched_at",type="datetime",nullable=true)
+	 * @Column(name="fetched_at",type="datetime",nullable=true)
 	 **/
-	protected $featchedAt;
+	protected $fetchedAt;
 
 	/** 
 	 * @Column(name="closed_at",type="datetime",nullable=true)
@@ -106,13 +106,13 @@ class Order{
 		return $this->performer;
 	}
 
-	public function setFeatchedAt($featchedAt){
-		$this->featchedAt=$featchedAt;
+	public function setFetchedAt($fetchedAt){
+		$this->fetchedAt=$fetchedAt;
 		return $this;
 	}
 
-	public function getFeatchedAt(){
-		return $this->featchedAt;
+	public function getFetchedAt(){
+		return $this->fetchedAt;
 	}
 
 	public function setClosedAt($closedAt){
