@@ -18,13 +18,13 @@ class Order{
 
 	/**
 	 * @ManyToOne(targetEntity="User")
-	 * @JoinColumn(name="owner_id", referencedColumnName="id",nullable=false)
+	 * @JoinColumn(name="owner_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
 	 **/
 	protected $owner;
 
 	/**
 	 * @ManyToOne(targetEntity="Device")
-	 * @JoinColumn(name="device_id", referencedColumnName="id",nullable=false)
+	 * @JoinColumn(name="device_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
 	 **/
 	protected $device;
 
@@ -36,7 +36,7 @@ class Order{
 
 	/**
 	 * @ManyToOne(targetEntity="User")
-	 * @JoinColumn(name="performer_id", referencedColumnName="id")
+	 * @JoinColumn(name="performer_id", referencedColumnName="id",onDelete="CASCADE")
 	 **/
 	private $performer;
 

@@ -95,16 +95,16 @@ class Version20150711112810 extends MigrateHelper{
 		$locations->addColumn('updated_at','datetime');
 		$locations->setPrimaryKey(array('id'));
 
-		$orders->addUnnamedForeignKeyConstraint($users, array('owner_id'),array('id'));
-		$orders->addUnnamedForeignKeyConstraint($devices, array('device_id'),array('id'));
-		$orders->addUnnamedForeignKeyConstraint($orderStates, array('state_id'),array('id'));
-		$orders->addUnnamedForeignKeyConstraint($users, array('performer_id'),array('id'));
-		$users->addUnnamedForeignKeyConstraint($locations, array('location_id'),array('id'));
-		$devices->addUnnamedForeignKeyConstraint($deviceTypes, array('type_id'),array('id'));
-		$devices->addUnnamedForeignKeyConstraint($deviceStates, array('state_id'),array('id'));
-		$devices->addUnnamedForeignKeyConstraint($locations, array('location_id'),array('id'));
-		$devicesTags->addUnnamedForeignKeyConstraint($devices, array('device_id'),array('id'));
-		$devicesTags->addUnnamedForeignKeyConstraint($deviceTags, array('tag_id'),array('id'));
+		$orders->addNamedForeignKeyConstraint('FK_E52FFDEE7E3C61F9',$users, array('owner_id'),array('id'));
+		$orders->addNamedForeignKeyConstraint('FK_E52FFDEE94A4C7D4',$devices, array('device_id'),array('id'));
+		$orders->addNamedForeignKeyConstraint('FK_E52FFDEE5D83CC1',$orderStates, array('state_id'),array('id'));
+		$orders->addNamedForeignKeyConstraint('FK_E52FFDEE6C6B33F3',$users, array('performer_id'),array('id'));
+		$users->addNamedForeignKeyConstraint('FK_1483A5E964D218E',$locations, array('location_id'),array('id'));
+		$devices->addNamedForeignKeyConstraint('FK_11074E9AC54C8C93',$deviceTypes, array('type_id'),array('id'));
+		$devices->addNamedForeignKeyConstraint('FK_11074E9A5D83CC1',$deviceStates, array('state_id'),array('id'));
+		$devices->addNamedForeignKeyConstraint('FK_11074E9A64D218E',$locations, array('location_id'),array('id'));
+		$devicesTags->addNamedForeignKeyConstraint('FK_8472C11794A4C7D4',$devices, array('device_id'),array('id'));
+		$devicesTags->addNamedForeignKeyConstraint('FK_8472C117BAD26311',$deviceTags, array('tag_id'),array('id'));
 
 		$this->updateSchema($schema);
 

@@ -32,7 +32,7 @@ class User{
 
     /**
      * @ManyToOne(targetEntity="Location")
-     * @JoinColumn(name="location_id", referencedColumnName="id")
+     * @JoinColumn(name="location_id", referencedColumnName="id",onDelete="SET NULL")
      **/
     protected $location;
 

@@ -7,6 +7,8 @@ use Entity\Location;
 use Entity\Device;
 use Entity\DeviceTag;
 use Entity\DeviceState;
+use Entity\User;
+use Entity\Order;
 
 class DeviceTest extends WebTestCase{	
 
@@ -183,6 +185,21 @@ class DeviceTest extends WebTestCase{
 		$device->setLocation($location);
 
 		$em->persist($device);
+
+		$user=new User();
+		$user->setEmail('owner@coderdojo.org.pl');
+		$user->setFirstName('first name');
+		$user->setLastName('last name');
+		$user->setLocation($location);
+
+		$em->persist($user);
+
+		$order=new Order();
+		$order->setOwner($user);
+		$order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
+		$order->setDevice($device);
+
+		$em->persist($order);
 
 
 		$em->flush();

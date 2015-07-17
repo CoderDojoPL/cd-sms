@@ -75,7 +75,7 @@ class Device
 
 	/**
 	 * @ManyToOne(targetEntity="Location")
-	 * @JoinColumn(name="location_id", referencedColumnName="id",nullable=false)
+	 * @JoinColumn(name="location_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
 	 **/
 	protected $location;
 

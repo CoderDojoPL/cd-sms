@@ -5,7 +5,7 @@ require_once __DIR__.'/../arbor/Root.php';
 array_shift($argv);
 $env='prod';
 $debug=false;
-if(file_exists('../dev')){
+if(file_exists(__DIR__.'/../dev')){
 	$env='dev';
 	$debug=true;
 }
