@@ -36,4 +36,10 @@
 		<presenter class="Library\Twig\Presenter\Twig" />
 	</action>
 
+	<action controller="Authenticate" method="setLocation" >
+		<authenticate redirect="/login" />
+		<route pattern="\/login\/location" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+	</action>
+
 </content>

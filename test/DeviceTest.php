@@ -12,9 +12,23 @@ use Entity\Order;
 
 class DeviceTest extends WebTestCase{	
 
+	private $user;
+
 	protected function setUp(){
 		$this->executeCommand('migrate:downgrade');
 		$this->executeCommand('migrate:update');
+		$em=$this->getService('doctrine')->getEntityManager();
+
+		$user=new User();
+		$user->setEmail('test@coderdojo.org.pl');
+		$user->setFirstName('first name');
+		$user->setLastName('last name');
+		$user->setLocation($em->getRepository('Entity\Location')->findOneBy(array()));
+		$em->persist($user);
+		$em->flush();
+
+		$this->user=$user;
+
 	}
 
 	public function testIndexUnautheticate(){
@@ -65,7 +79,7 @@ class DeviceTest extends WebTestCase{
 		$em->flush();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/device');
@@ -205,7 +219,7 @@ class DeviceTest extends WebTestCase{
 		$em->flush();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/device/remove/'.$device->getId());
@@ -265,7 +279,7 @@ class DeviceTest extends WebTestCase{
 		$em->flush();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/device/add');
@@ -451,7 +465,7 @@ class DeviceTest extends WebTestCase{
 
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/device/edit/'.$device->getId());

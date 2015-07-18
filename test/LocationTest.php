@@ -4,12 +4,26 @@ require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
 use Arbor\Core\WebTestCase;
 use Entity\Location;
+use Entity\User;
 
 class LocationTest extends WebTestCase{	
-
+	private $user;
 	protected function setUp(){
 		$this->executeCommand('migrate:downgrade');
 		$this->executeCommand('migrate:update');
+
+		$em=$this->getService('doctrine')->getEntityManager();
+
+		$user=new User();
+		$user->setEmail('test@coderdojo.org.pl');
+		$user->setFirstName('first name');
+		$user->setLastName('last name');
+		$user->setLocation($em->getRepository('Entity\Location')->findOneBy(array()));
+		$em->persist($user);
+		$em->flush();
+
+		$this->user=$user;
+
 	}
 
 	public function testIndexUnautheticate(){
@@ -40,7 +54,7 @@ class LocationTest extends WebTestCase{
 		$em->flush();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/location');
@@ -48,9 +62,9 @@ class LocationTest extends WebTestCase{
 		$this->assertEquals(200,$client->getResponse()->getStatusCode(),'Invalid status code.');
 
 		$tr=$client->getElement('table')->getElement('tbody')->findElements('tr');
-		$this->assertCount(1,$tr,'Invalid number records in grid');
+		$this->assertCount(2,$tr,'Invalid number records in grid');
 
-		$td=$tr[0]->findElements('td');
+		$td=$tr[1]->findElements('td');
 
 		$this->assertCount(6,$td,'Invalid number columns in grid');
 		$this->assertEquals($location->getId(),$td[0]->getText(),'Invalid data columns id');
@@ -124,7 +138,7 @@ class LocationTest extends WebTestCase{
 		$em->flush();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/location/remove/'.$location->getId());
@@ -152,7 +166,7 @@ class LocationTest extends WebTestCase{
 
 
 		//check removed in database
-		$this->assertCount(0,$em->getRepository('Entity\Location')->findAll());
+		$this->assertCount(1,$em->getRepository('Entity\Location')->findAll());
 	}
 
 
@@ -171,7 +185,7 @@ class LocationTest extends WebTestCase{
 		$em=$this->getService('doctrine')->getEntityManager();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$this->user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/location/add');
@@ -216,9 +230,9 @@ class LocationTest extends WebTestCase{
 
 		$this->assertEquals('/location',$client->getUrl(),'Invalid url form after submited location');
 
-		$locations=$em->getRepository('Entity\Location')->findAll();
-		$this->assertCount(1,$locations, 'Invalid number locations');
-		$location=$locations[0];
+		$locations=$em->getRepository('Entity\Location')->findAll(array(),array('id'=>'asc'));
+		$this->assertCount(2,$locations, 'Invalid number locations');
+		$location=$locations[1];
 		$this->assertEquals('name',$location->getName(),'Invalid location name');
 		$this->assertEquals('city',$location->getCity(),'Invalid location city');
 		$this->assertEquals('street',$location->getStreet(),'Invalid location street');
@@ -259,6 +273,9 @@ class LocationTest extends WebTestCase{
 
 		$em=$this->getService('doctrine')->getEntityManager();
 
+		$location=$em->getRepository('Entity\Location')->findOneBy(array());
+		$em->remove($location);
+
 		$location=new Location();
 		$location->setName('Location name');
 		$location->setCity('Location city');
@@ -270,11 +287,18 @@ class LocationTest extends WebTestCase{
 		$location->setEmail('email@email.pl');
 		$em->persist($location);
 
+		$user=new User();
+		$user->setEmail('test@coderdojo.org.pl');
+		$user->setFirstName('first name');
+		$user->setLastName('last name');
+		$user->setLocation($location);
+		$em->persist($user);
+
 		$em->flush();
 
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/location/edit/'.$location->getId());

@@ -143,7 +143,6 @@ class Location extends Controller
 		$builder = $this->getService('form')->create();
 		$builder->setValidatorService($this->getService('validator'));
 		$builder->setFormatter(new BasicFormFormatter());
-		$builder->setSubmitTags(array('cancel' => true));
 		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Location'));
 
 		$builder->removeField('updatedAt');

@@ -5,6 +5,8 @@ namespace Controller;
 use Arbor\Core\Controller;
 use Arbor\Exception\ValueNotFoundException;
 use Arbor\Provider\Response;
+use Common\BasicFormFormatter;
+use Library\Doctrine\Form\DoctrineDesigner;
 
 /**
  * Authenticate user with Google OAuth2 API
@@ -14,6 +16,35 @@ use Arbor\Provider\Response;
 class Authenticate extends Controller
 {
 
+
+	/**
+	 * Set location for user
+	 * @return array
+	 * @throws \Arbor\Exception\UserNotFoundException
+	 * @throws \Arbor\Exception\ValueNotFoundException
+	 */
+	public function setLocation()
+	{
+		$form=$this->createForm();
+
+		if($form->isValid()){
+			$data=$form->getData();
+
+			$this->getUser()->setLocation($this->cast('Mapper\Location',$data['location']));
+			$this->flush();
+			$response=new Response();
+			$response->redirect('/');
+			return $response;
+		}
+		return compact('form');
+	}
+
+	/**
+	 * Main page after logged
+	 * @return array
+	 * @throws \Arbor\Exception\UserNotFoundException
+	 * @throws \Arbor\Exception\ValueNotFoundException
+	 */
 	public function index()
 	{
 		$name = $this->getUser();
@@ -123,6 +154,24 @@ class Authenticate extends Controller
 		$this->flush();
 
 		return $userEntity;
+	}
+
+	/**
+	 * Create form helper for set location
+	 * @return mixed
+	 * @throws \Arbor\Exception\ServiceNotFoundException
+	 */
+	private function createForm()
+	{
+		$builder = $this->getService('form')->create();
+		$builder->setValidatorService($this->getService('validator'));
+		$builder->setFormatter(new BasicFormFormatter());
+		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\User',array('location')));
+
+		$builder->submit($this->getRequest());
+		$builder->render();
+
+		return $builder;
 	}
 
 

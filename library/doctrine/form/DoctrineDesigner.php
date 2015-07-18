@@ -23,9 +23,10 @@ class DoctrineDesigner implements Designer{
 	 * @param string $entityName
 	 * @since 0.18.0
 	 */
-	public function __construct($doctrineService,$entityName){
+	public function __construct($doctrineService,$entityName,$filter=null){
 		$this->entityName=$entityName;
 		$this->doctrineService=$doctrineService;
+		$this->filter=$filter;
 	}
 
     /**
@@ -35,13 +36,13 @@ class DoctrineDesigner implements Designer{
 		$metaData=$this->doctrineService->getEntityManager()->getClassMetadata($this->entityName);
 
 		foreach($metaData->getFieldNames() as $fieldName){
-			if(!$metaData->isIdentifier($fieldName)){
+			if(!$metaData->isIdentifier($fieldName) && (!$this->filter || in_array($fieldName, $this->filter))){
 				$this->createField($form,$metaData,$fieldName);
 			}
 		}
 
 		foreach($metaData->getAssociationNames() as $fieldName){
-			if(!$metaData->isIdentifier($fieldName)){
+			if(!$metaData->isIdentifier($fieldName) && (!$this->filter || in_array($fieldName, $this->filter))){
 				$this->createAssociationField($form,$metaData,$fieldName);
 			}
 		}

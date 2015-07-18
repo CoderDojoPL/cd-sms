@@ -48,7 +48,7 @@ class UserTest extends WebTestCase{
 		$em->flush();
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/user');
@@ -148,7 +148,7 @@ class UserTest extends WebTestCase{
 
 
 		$session=$this->createSession();
-		$session->set('user.id',1);
+		$session->set('user.id',$user->getId());
 
 		$client=$this->createClient($session);
 		$client->loadPage('/user/edit/'.$user->getId());

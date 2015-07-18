@@ -4,5 +4,6 @@
 
     <event bind="executeAction" class="Arbor\Event\Argument" method="onExecuteAction" />
     <event bind="executeAction" class="Library\Google\Event\Authenticate" method="onExecuteAction" />
+    <event bind="executeAction" class="Event\SetLocation" method="onExecuteAction" />
 
 </content>
