@@ -9,8 +9,6 @@ use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
-use Entity\Device;
-use Entity\Location;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
@@ -202,7 +200,6 @@ class Order extends Controller
 		$builder = $this->createFormBuilder();
 
 		$builder->submit($this->getRequest());
-		$builder->render();
 
 		return $builder;
 	}

@@ -1,6 +1,5 @@
 <?php
 namespace Test;
-require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
 use Arbor\Core\WebTestCase;
 use Entity\Location;
@@ -9,6 +8,8 @@ use Entity\DeviceTag;
 use Entity\DeviceState;
 use Entity\User;
 use Entity\Order;
+
+require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
 class OrderTest extends WebTestCase{	
 
@@ -197,7 +198,23 @@ class OrderTest extends WebTestCase{
 
 		$form->submit();
 
-		$this->assertEquals('/order',$client->getUrl(),'Invalid url form after submited location');
+		$this->assertEquals('/order/add/addapply',$client->getUrl(),'Invalid url form after submited');
+
+		$panelBody=$client->getElement('.panel-body');
+		$locationLabel=$panelBody->getElement('strong');
+
+		$this->assertEquals($location->getName().' ('.$location->getCity().')',$locationLabel->getHtml(),'Invalid location label');
+
+		$aContacts=$panelBody->findElements('a');
+
+		$this->assertCount(2,$aContacts,'Invalid button contact info');
+		
+		$this->assertEquals($location->getPhone(),$aContacts[0]->getHtml(),'Invalid phone button');
+
+		$this->assertEquals($location->getEmail(),$aContacts[1]->getHtml(),'Invalid email button');
+
+		$client->getElement('form')->submit();
+		$this->assertEquals('/order',$client->getUrl(),'Invalid url form after submited');
 
 		$em->clear();
 		$orders=$em->getRepository('Entity\Order')->findAll();
