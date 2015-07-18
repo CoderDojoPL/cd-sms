@@ -1,16 +1,40 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Service;
 
 use Arbor\Contener\ServiceConfig;
 
-
+/**
+ * Helper for FormBuilder
+ *
+ * @package Service
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class FormHelper{
 	
 
+	/**
+	 * @param \Arbor\Contener\ServiceConfig $serviceConfig
+	 */
 	public function __construct(ServiceConfig $serviceConfig){		
 	}
 
+	/**
+	 * Transform entity to FormBuilder collection
+	 *
+	 * @param array $storage - records list
+	 * @param array $appendRows - extra records on top collection
+	 * @param string $labelMethod - method name to create label string
+	 */
 	public function entityToCollection($storage,$appendRows=array(),$labelMethod='__toString'){
 		$values=array();
 		foreach($appendRows as $record){
@@ -25,6 +49,14 @@ class FormHelper{
 		return $values;
 	}
 
+	/**
+	 * Transform array to FormBuilder collection
+	 *
+	 * @param array $storage - records list
+	 * @param array $appendRows - extra records on top collection
+	 * @param string $labelMethod - method name to create label string
+	 * @param string $valueField - array index name to get record id
+	 */
 	public function arrayToCollection($storage,$appendRows=array(),$labelField='name',$valueField='id'){
 		$values=array();
 		foreach($appendRows as $record){
@@ -39,6 +71,12 @@ class FormHelper{
 		return $values;
 	}
 
+	/**
+	 * Transform entity to array
+	 *
+	 * @param array $entity
+	 * @param array $mapped - array with method name to create label string for entity field
+	 */
 	public function entityToArray($entity,$mapped=array()){
 		$values=array();
 		foreach(get_class_methods($entity) as $method){

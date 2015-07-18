@@ -1,11 +1,28 @@
 <?php 
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Migrate;
 
 use Arbor\Core\Container;
 use Common\MigrateHelper;
 
+/**
+ * @package Migrate
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class Version20150717214510 extends MigrateHelper{
 	
+	/**
+	 * {@inheritdoc}
+	 */
 	public function update(Container $container){
 		$schema=$this->createSchema();
 		$users=$schema->getTable('users');
@@ -33,6 +50,9 @@ class Version20150717214510 extends MigrateHelper{
 	}
 
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function downgrade(Container $container){
 		$schema=$this->createSchema();
 

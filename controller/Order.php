@@ -1,6 +1,14 @@
 <?php
 namespace Controller;
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 use Arbor\Core\Controller;
 use Arbor\Provider\Response;
@@ -15,12 +23,16 @@ use Arbor\Exception\OrderNotFetchedException;
 
 /**
  * Class Order
+ *
  * @package Controller
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class Order extends Controller
 {
 	/**
 	 * Preparing data for index view
+	 *
 	 * @return array
 	 */
 	public function index()
@@ -32,6 +44,7 @@ class Order extends Controller
 
 	/**
 	 * Creates grid view
+	 *
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -63,6 +76,7 @@ class Order extends Controller
 
 	/**
 	 * Save new order to database
+	 *
 	 * @return Response|array
 	 */
 	public function add()
@@ -84,6 +98,7 @@ class Order extends Controller
 
 	/**
 	 * Form with contact data to current owner
+	 *
 	 * @return Response|array
 	 */
 	public function addApply(){
@@ -117,6 +132,7 @@ class Order extends Controller
 
 	/**
 	 * Method for fetch order to realization
+	 *
 	 * @param \Entity\Order $entity
 	 * @return mixed
 	 * @throws OrderAllreadyFetchedException
@@ -138,6 +154,7 @@ class Order extends Controller
 
 	/**
 	 * Close order workflow
+	 *
 	 * @param \Entity\Order $entity
 	 * @return mixed
 	 * @throws OrderNotFetchedException
@@ -167,6 +184,7 @@ class Order extends Controller
 
 	/**
 	 * Shows order details
+	 *
 	 * @param \Entity\Order $entity
 	 * @return array
 	 */
@@ -179,6 +197,7 @@ class Order extends Controller
 
 	/**
 	 * Form builed
+	 *
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -193,6 +212,7 @@ class Order extends Controller
 
 	/**
 	 * Creates apply form
+	 *
 	 * @param null $entity
 	 * @return mixed
 	 */
@@ -206,6 +226,7 @@ class Order extends Controller
 
 	/**
 	 * Create choose device form
+	 *
 	 * @param null| \Entity\Order $entity
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException

@@ -1,4 +1,14 @@
 <?php
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Test;
 require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
@@ -10,6 +20,10 @@ use Entity\DeviceState;
 use Entity\User;
 use Entity\Order;
 
+/**
+ * @package Test
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class DeviceTest extends WebTestCase{	
 
 	private $user;

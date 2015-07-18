@@ -27,13 +27,6 @@
 		<argument storage="url" name="id" pattern="^\/device\/edit\/([0-9]+)$" mapper="Mapper\Device" />
 	</action>
 
-	<action controller="Device" method="preview" >
-		<route pattern="^\/device\/preview\/([0-9]+)$" />
-		<authenticate redirect="/login" />
-		<presenter class="Library\Twig\Presenter\Twig" />
-		<argument storage="url" name="id" pattern="^\/device\/preview\/([0-9]+)$" mapper="Mapper\Device" />
-	</action>
-
 	<action controller="Device" method="removeConfirm" >
 		<route pattern="^\/device\/remove\/([0-9]+)$" />
 		<authenticate redirect="/login" />

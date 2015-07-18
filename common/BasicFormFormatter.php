@@ -1,10 +1,25 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Common;
 
 use Arbor\Component\Form\FormFormatter;
 use Arbor\Component\Form\FormField;
 
+
+/**
+ * Formatter for form.
+ * @package Common
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class BasicFormFormatter implements FormFormatter{
 
 	/**

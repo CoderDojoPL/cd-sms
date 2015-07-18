@@ -1,9 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DrafFter
- * Date: 2015-07-11
- * Time: 15:59
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Entity;
@@ -12,6 +15,8 @@ namespace Entity;
  * @Entity()
  * @Table(name="locations")
  * @HasLifecycleCallbacks
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
 class Location
 {

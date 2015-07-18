@@ -1,9 +1,23 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Common;
 
 use Arbor\Component\Grid\GridFormatter;
 
+/**
+ * Formatter for grid.
+ * @package Common
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class BasicGridFormatter implements GridFormatter{
 
 	private $prefix;
@@ -27,6 +41,12 @@ class BasicGridFormatter implements GridFormatter{
 		return $html;
 	}
 
+	/**
+	 * Generate head grid in html tags
+	 *
+	 * @param array $columns to display in grid
+	 * @return string
+	 */
 	private function renderHead($columns){
 		$html='<table class="table">
 					<thead>
@@ -40,6 +60,13 @@ class BasicGridFormatter implements GridFormatter{
 		return $html;
 	}
 
+	/**
+	 * Generate body grid in html tags
+	 *
+	 * @param array $records to display in grid
+	 * @param array $columns to display in grid
+	 * @return string
+	 */
 	private function renderBody($records,$columns){
 
 		$html='<tbody>';
@@ -56,6 +83,15 @@ class BasicGridFormatter implements GridFormatter{
 		return $html;
 	}
 
+	/**
+	 * Generate foot grid in html tags
+	 *
+	 * @param int $count records
+	 * @param int $limit records on one page
+	 * @param int $page - current page number
+	 * @param int $colspan for html tags
+	 * @return string
+	 */
 	private function renderFoot($count,$limit,$page,$colspan){
 		$html='<tfoot>
 					<tr>

@@ -1,4 +1,14 @@
 <?php
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Test;
 
 use Arbor\Core\WebTestCase;
@@ -11,6 +21,10 @@ use Entity\Order;
 
 require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
+/**
+ * @package Test
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class OrderTest extends WebTestCase{	
 
 	protected function setUp(){

@@ -1,13 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DrafFter
- * Date: 2015-07-11
- * Time: 16:04
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Controller;
-
 
 use Arbor\Core\Controller;
 use Arbor\Provider\Response;
@@ -17,14 +19,19 @@ use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Component\Form\EmailField;
+
 /**
  * Class Location
+ *
  * @package Controller
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class Location extends Controller
 {
 	/**
 	 * Prepare data for index view
+	 *
 	 * @return array
 	 */
 	public function index()
@@ -35,6 +42,7 @@ class Location extends Controller
 
 	/**
 	 * Creates grid for locations list
+	 *
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -68,6 +76,7 @@ class Location extends Controller
 
 	/**
 	 * Save new location to database
+	 *
 	 * @return Response|array
 	 */
 	public function add()
@@ -92,6 +101,7 @@ class Location extends Controller
 
 	/**
 	 * Save change to location after edit
+	 *
 	 * @param \Entity\Location $entity
 	 * @return Response|array
 	 */
@@ -116,6 +126,7 @@ class Location extends Controller
 
 	/**
 	 * Setting entity from form data
+	 *
 	 * @param \Entity\Location $entity
 	 * @param $data
 	 */
@@ -134,6 +145,7 @@ class Location extends Controller
 
 	/**
 	 * Create form helper for add/edit location
+	 *
 	 * @param null|\Entity\Location $entity
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
@@ -158,10 +170,6 @@ class Location extends Controller
 		$postal = $builder->getField('postal');
 		$postal->setPattern('^[0-9]{2}\-[0-9]{3}$');//FIXME to config
 		$postal->setTag('placeholder', 'eg.: 00-000');
-		//        $dimensionsField=$builder->getField('dimensions');
-		//        $dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');
-		//        $dimensionsField->setTag('placeholder','{Width}x{Height}x{Depth}');
-		// $dimensionsField->setValue('1x1x1');
 		if ($entity) {
 			$helper = $this->getService('form.helper');
 			$data = $helper->entityToArray($entity);
@@ -175,6 +183,7 @@ class Location extends Controller
 
 	/**
 	 * Method for create PHP confirm remove screen
+	 *
 	 * @param $entity
 	 * @return array
 	 */
@@ -185,6 +194,7 @@ class Location extends Controller
 
 	/**
 	 * Removes location entity
+	 *
 	 * @param \Entity\Location $entity
 	 * @return Response
 	 */

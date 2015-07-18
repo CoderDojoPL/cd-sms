@@ -1,9 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DrafFter
- * Date: 2015-07-12
- * Time: 17:01
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Exception;
@@ -11,6 +14,11 @@ namespace Exception;
 
 use Arbor\Core\Exception;
 
+/**
+ * @package Exception
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class UserNotFoundException extends Exception
 {
 

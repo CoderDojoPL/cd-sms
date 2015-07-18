@@ -1,13 +1,31 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Event;
 use Arbor\Core\Event;
 use Arbor\Exception\ValueNotFoundException;
 use Arbor\Event\ExecuteActionEvent;
 use Arbor\Provider\Response;
 
+/**
+ * Event to inspect update location for new user
+ *
+ * @package Event
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
+ */
 class SetLocation extends Event{
 	
+	/**
+	 * {@inheritdoc}
+	 */
 	public function onExecuteAction(ExecuteActionEvent $event,$eventConfig){
 		$request=$event->getRequest();
 

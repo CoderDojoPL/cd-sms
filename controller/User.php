@@ -1,9 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DrafFter
- * Date: 2015-07-12
- * Time: 16:53
+
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Controller;
@@ -18,13 +21,17 @@ use Library\Doctrine\Form\DoctrineDesigner;
 
 /**
  * Class User
+ *
  * @package Controller
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class User extends Controller
 {
 
 	/**
 	 * Shows list of users
+	 *
 	 * @return array
 	 */
 	public function index()
@@ -35,6 +42,7 @@ class User extends Controller
 
 	/**
 	 * Helper for creating grid with users
+	 *
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -67,6 +75,7 @@ class User extends Controller
 
 	/**
 	 * Saves user entity to database after edit
+	 *
 	 * @param User $entity
 	 * @return Response|array
 	 */
@@ -91,6 +100,7 @@ class User extends Controller
 
 	/**
 	 * Create form for edit user
+	 *
 	 * @param null|User $entity
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
@@ -120,6 +130,7 @@ class User extends Controller
 
 	/**
 	 * Setting entity from form data
+	 *
 	 * @param \Entity\User $entity
 	 * @param $data
 	 */

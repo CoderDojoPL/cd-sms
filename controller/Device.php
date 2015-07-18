@@ -1,11 +1,19 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Controller;
 
 use Arbor\Core\Controller;
 use Common\BasicGridFormatter;
 use Common\ActionColumnFormatter;
-use Common\EmptyDataManager;
 use Common\BasicFormFormatter;
 use Arbor\Component\Form\TextField;
 use Arbor\Component\Form\NumberField;
@@ -19,13 +27,17 @@ use Common\BasicDataManager;
 
 /**
  * Class Device
+ *
  * @package Controller
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class Device extends Controller
 {
 
 	/**
 	 * Prepare data for Index view
+	 *
 	 * @return array
 	 */
 	public function index()
@@ -36,6 +48,7 @@ class Device extends Controller
 
 	/**
 	 * Save new device to database
+	 *
 	 * @return Response|array
 	 */
 	public function add()
@@ -61,7 +74,8 @@ class Device extends Controller
 	}
 
 	/**
-	 * Saving uploaded phtot to cache file
+	 * Saving uploaded photo to cache file
+	 *
 	 * @param $photo
 	 * @return string file path
 	 */
@@ -75,6 +89,7 @@ class Device extends Controller
 
 	/**
 	 * Method for create PHP confirm remove screen
+	 *
 	 * @param \Entity\Device $entity
 	 * @return array
 	 */
@@ -85,6 +100,7 @@ class Device extends Controller
 
 	/**
 	 * Removing device from database
+	 *
 	 * @param \Entity\Device $entity
 	 * @return Response
 	 */
@@ -101,6 +117,7 @@ class Device extends Controller
 
 	/**
 	 * Preparing form for input serial numbers
+	 *
 	 * @return Response|array
 	 */
 	public function serialNumber()
@@ -137,6 +154,7 @@ class Device extends Controller
 
 	/**
 	 * Helper for saving Devices
+	 *
 	 * @param $data
 	 * @param $serialNumber
 	 */
@@ -159,6 +177,7 @@ class Device extends Controller
 
 	/**
 	 * Save device to database
+	 *
 	 * @param \Entity\Device $entity
 	 * @param $data
 	 * @param $serialNumber
@@ -216,6 +235,7 @@ class Device extends Controller
 
 	/**
 	 * Save changes on device after edit
+	 *
 	 * @param \Entity\Device $device
 	 * @return Response|array
 	 */
@@ -248,6 +268,7 @@ class Device extends Controller
 
 	/**
 	 * Creates grid for display devices list
+	 *
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -277,6 +298,12 @@ class Device extends Controller
 		return $builder;
 	}
 
+	/**
+	 * Create and configure FormBuilder
+	 *
+	 * @return \Arbor\Component\Form\FormBuilder
+	 * @throws \Arbor\Exception\ServiceNotFoundException
+	 */
 	private function createFormBuilder()
 	{
 		$builder = $this->getService('form')->create();
@@ -288,8 +315,9 @@ class Device extends Controller
 
 	/**
 	 * Creates form for Add / Edit Device
+	 *
 	 * @param null|\Entity\Device $entity
-	 * @return mixed
+	 * @return \Arbor\Component\Form\FormBuilder
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
 	private function createForm($entity = null)
@@ -355,17 +383,9 @@ class Device extends Controller
 
 
 		$builder->submit($this->getRequest());
-		$builder->render();
 
 		return $builder;
 
 	}
 
-	//TODO: what is this?
-	public function preview($entity)
-	{
-		$builder = $this->createFormBuilder();
-		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Device'));
-
-	}
 }

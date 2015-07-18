@@ -1,43 +1,31 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Common;
 
 use Arbor\Component\Grid\ColumnFormatter;
 
+/**
+ * Formatter for image column in grid
+ * @package Common
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ */
 class ImageColumnFormatter implements ColumnFormatter
 {
-
-	public function __construct()
-	{
-	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function render($data)
 	{
-//		var_dump($data); die;
-//		$html='';
-//		$action='';
-//		$icon='';
-//		foreach($this->buttons as $button){
-//			$action=$button;
-//			$href='href=""';
-//			switch($button){
-//				case 'show':
-//					$href='href="/'.$this->prefix.'/'.$action.'/'.$data.'"';
-//				break;
-//				case 'edit':
-//					$href='href="/'.$this->prefix.'/'.$action.'/'.$data.'"';
-//				break;
-//				case 'remove':
-//					$href='href="/'.$this->prefix.'/'.$action.'/'.$data.'"';
-//				break;
-//			}
-//
-//			$html.='<a type="button" '.$href.' class="btn btn-default btn-xs">'.ucfirst($action).'</a>';
-//
-//		}
 		$html = "";
 		if (is_file(ltrim($data, '/'))) {
 			$html = '<a href="' . $data . '" target="_blank" data-toggle="lightbox"><img src="' . $data . '" width="50" /></a>';

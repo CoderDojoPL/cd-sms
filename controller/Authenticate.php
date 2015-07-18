@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the HMS project.
+ *
+ * (c) CoderDojo Polska Foundation
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Controller;
 
 use Arbor\Core\Controller;
@@ -12,6 +21,8 @@ use Library\Doctrine\Form\DoctrineDesigner;
  * Authenticate user with Google OAuth2 API
  * Class Authenticate
  * @package Controller
+ * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class Authenticate extends Controller
 {
@@ -19,6 +30,7 @@ class Authenticate extends Controller
 
 	/**
 	 * Set location for user
+	 *
 	 * @return array
 	 * @throws \Arbor\Exception\UserNotFoundException
 	 * @throws \Arbor\Exception\ValueNotFoundException
@@ -41,6 +53,7 @@ class Authenticate extends Controller
 
 	/**
 	 * Main page after logged
+	 *
 	 * @return array
 	 * @throws \Arbor\Exception\UserNotFoundException
 	 * @throws \Arbor\Exception\ValueNotFoundException
@@ -51,6 +64,11 @@ class Authenticate extends Controller
 		return compact('name');
 	}
 
+	/**
+	 * Page with button to sign in with Google
+	 *
+	 * @return array
+	 */
 	public function login()
 	{
 
@@ -63,6 +81,11 @@ class Authenticate extends Controller
 		}
 	}
 
+	/**
+	 * Redirect on google authenticate page
+	 *
+	 * @return \Arbor\Provider\Response
+	 */
 	public function loginRedirect()
 	{
 		$googleService = $this->getService('google');
@@ -74,7 +97,8 @@ class Authenticate extends Controller
 
 	/**
 	 * Callback method for OAuth login
-	 * @return Response
+	 *
+	 * @return \Arbor\Provider\Response
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
 	public function loginOAuth2Callback()
@@ -120,6 +144,7 @@ class Authenticate extends Controller
 
 	/**
 	 * Logout method
+	 *
 	 * @return Response
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -139,6 +164,7 @@ class Authenticate extends Controller
 
 	/**
 	 * Creates new user in database from Google response data
+	 *
 	 * @param $data
 	 * @param \Google_Service_Oauth2_Userinfoplus $userData
 	 * @return \Entity\User
@@ -158,7 +184,8 @@ class Authenticate extends Controller
 
 	/**
 	 * Create form helper for set location
-	 * @return mixed
+	 *
+	 * @return \Arbor\Component\Form\FormBuilder
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
 	private function createForm()
@@ -169,7 +196,6 @@ class Authenticate extends Controller
 		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\User',array('location')));
 
 		$builder->submit($this->getRequest());
-		$builder->render();
 
 		return $builder;
 	}
