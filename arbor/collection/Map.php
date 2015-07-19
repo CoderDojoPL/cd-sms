@@ -25,9 +25,17 @@ use \ArrayAccess;
  * @since 0.1.0
  */
 class Map implements ArrayAccess{
+
+	/**
+	 * Array with records.
+	 *
+	 * @var array $data
+	 */
 	private $data=array();
 
 	/**
+	 * Constructor.
+	 *
 	 * @param array $arrays
 	 * @since 0.1.0
 	 */
@@ -49,7 +57,11 @@ class Map implements ArrayAccess{
 	}
 
 	/**
+	 * Get element.
+	 *
 	 * @param string $key
+	 * @return mixed
+	 * @throws \Arbor\Exception\ValueNotFound
 	 * @since 0.1.0
 	 */
 	public function get($key){
@@ -61,7 +73,10 @@ class Map implements ArrayAccess{
 	}
 
 	/**
+	 * Check exist index.
+	 *
 	 * @param int $offset
+	 * @return boolean
 	 * @since 0.1.0
 	 */
 	public function offsetExists($offset) {
@@ -69,6 +84,8 @@ class Map implements ArrayAccess{
 	}
 
 	/**
+	 * Remove index.
+	 *
 	 * @param int $offset
 	 * @since 0.1.0
 	 */
@@ -77,7 +94,10 @@ class Map implements ArrayAccess{
 	}
 
 	/**
+	 * Get index data.
+	 *
 	 * @param int $offset
+	 * @return mixed|null
 	 * @since 0.1.0
 	 */
 	public function offsetGet($offset) {
@@ -85,6 +105,8 @@ class Map implements ArrayAccess{
 	}
 
 	/**
+	 * Set index data.
+	 *
 	 * @param int $offset
 	 * @param mixed $value
 	 * @since 0.1.0

@@ -23,11 +23,21 @@ namespace Arbor\Core;
  */
 class Autoloader{
 	
+	/**
+	 * Constructor.
+	 * @since 0.1.0
+	 */
 	public function __construct(){
 		spl_autoload_register(array($this,'execute'));
    
 	}
 
+	/**
+	 * Search class file and included file.
+	 *
+	 * @param string $class class with namespace name
+	 * @since 0.1.0
+	 */
 	public function execute($class){
 		$path=$this->getPath($class);
 		if(file_exists($path)){//TODO stworzyć listę autoloaderów?
@@ -35,6 +45,12 @@ class Autoloader{
 		}
 	}
 
+	/**
+	 * Get path to class file
+	 *
+	 * @param string $class class with namespace name
+	 * @since 0.1.0
+	 */
 	private function getPath($class){
 		$parts=explode('\\' , $class);
 

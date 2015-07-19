@@ -25,11 +25,30 @@ use Arbor\Contener\GlobalConfig;
  */
 class CommandConfig{
 	
+	/**
+	 * Command name.
+	 *
+	 * @var string $command
+	 */
 	private $command;
+
+	/**
+	 * Method name.
+	 *
+	 * @var string $method
+	 */
 	private $method;
+
+	/**
+	 * Class name.
+	 *
+	 * @var string $class
+	 */
 	private $class;
 
 	/**
+	 * Constructor.
+	 *
 	 * @param string $command command name
 	 * @param string $class class name
 	 * @param string $method method name
@@ -44,6 +63,8 @@ class CommandConfig{
 	}
 
 	/**
+	 * Get command name.
+	 *
 	 * @return string command name
 	 * @since 0.1.0
 	 */
@@ -52,6 +73,8 @@ class CommandConfig{
 	}
 
 	/**
+	 * Get method name.
+	 *
 	 * @return string method name
 	 * @since 0.1.0
 	 */
@@ -60,6 +83,8 @@ class CommandConfig{
 	}
 
 	/**
+	 * Get class name.
+	 *
 	 * @return string class name
 	 * @since 0.1.0
 	 */

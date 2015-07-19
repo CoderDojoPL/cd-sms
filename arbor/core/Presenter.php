@@ -27,6 +27,13 @@ use Arbor\Contener\RequestConfig;
  */
 interface Presenter{
 	
+	/**
+	 * Method with render rules.
+	 *
+	 * @param \Arbor\Contener\RequestConfig $config
+	 * @param \Arbor\Provider\Response $response
+	 * @since 0.1.0
+	 */
 	public function render(RequestConfig $config , Response $response);
 
 }

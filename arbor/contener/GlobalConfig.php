@@ -28,11 +28,30 @@ use Arbor\Core\Enviorment;
  */
 class GlobalConfig{
 	
+	/**
+	 * Path to configuration files.
+	 *
+	 * @var string $dir
+	 */
 	private $dir;
+
+	/**
+	 * Array with parsed configuration.
+	 *
+	 * @var array $data
+	 */
 	private $data;
+
+	/**
+	 * Enviorment.
+	 *
+	 * @var \Arbor\Core\Enviorment $dir
+	 */
 	private $enviorment;
 
 	/**
+	 * Constructor.
+	 *
 	 * @param string $dir path to config files
 	 * @param \Arbor\Core\Enviorment $enviorment
 	 * @since 0.1.0
@@ -54,6 +73,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get resources data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -62,6 +83,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get methods data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -70,6 +93,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get commands data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -78,6 +103,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get errors data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -86,6 +113,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get services data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -94,6 +123,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get events data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -102,6 +133,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get snippets data
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -545,6 +578,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get variable value
+	 *
 	 * @param string $value
 	 * @return mixed
 	 * @since 0.1.0
@@ -557,6 +592,8 @@ class GlobalConfig{
 	}
 
 	/**
+	 * Get arguments data
+	 *
 	 * @param \Arbor\Parser\XML $dataXML
 	 * @param array $requires
 	 * @param boolean $encodeVariables

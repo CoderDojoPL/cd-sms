@@ -27,6 +27,12 @@ use Arbor\Exception\HeaderNotFoundException;
  */
 class Resource extends Controller{
 
+	/**
+	 * Download resource files by browser.
+	 *
+	 * @return \Arbor\Provider\Response
+	 * @since 0.1.0
+	 */
 	public function download(){
 		$request=$this->getRequest();
 
@@ -101,6 +107,13 @@ class Resource extends Controller{
 		return $response;
 	}
 
+	/**
+	 * Get expired file
+	 *
+	 * @param array $extras data from config
+	 * @return long
+	 * @since 0.1.0
+	 */
 	private function getExpire($extras){
 		foreach($extras as $extra){
 			foreach($extra as $key=>$value){
@@ -112,6 +125,13 @@ class Resource extends Controller{
 		return 0;
 	}
 
+	/**
+	 * Set headers for range data support.
+	 *
+	 * @param \Arbor\Provider\Response $response
+	 * @param long $fileSize
+	 * @since 0.1.0
+	 */
 	private function rangeSupport($response,$fileSize){
 		try{
 			$request=$this->getRequest();

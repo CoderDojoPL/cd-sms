@@ -17,7 +17,7 @@ namespace Arbor\Collection;
 
 use \ArrayAccess;
 use \Iterator;
-
+use Arbor\Exception\ValueNotFound;
 /**
  * Wrapper of array
  *
@@ -27,9 +27,16 @@ use \Iterator;
  */
 class ArrayList implements ArrayAccess,Iterator{
 
+	/**
+	 * Array with records.
+	 *
+	 * @var array $data
+	 */
 	private $data=array();
 
 	/**
+	 * Constructor.
+	 *
 	 * @param array $arrays
 	 * @since 0.1.0
 	 */
@@ -51,7 +58,11 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Get element.
+	 *
 	 * @param string $key
+	 * @return mixed
+	 * @throws \Arbor\Exception\ValueNotFound
 	 * @since 0.1.0
 	 */
 	public function get($key){
@@ -63,7 +74,10 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Check exist index.
+	 *
 	 * @param int $offset
+	 * @return boolean
 	 * @since 0.1.0
 	 */
 	public function offsetExists($offset) {
@@ -71,6 +85,8 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Remove index.
+	 *
 	 * @param int $offset
 	 * @since 0.1.0
 	 */
@@ -79,7 +95,10 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Get index data.
+	 *
 	 * @param int $offset
+	 * @return mixed|null
 	 * @since 0.1.0
 	 */
 	public function offsetGet($offset) {
@@ -87,6 +106,8 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Set index data.
+	 *
 	 * @param int $offset
 	 * @param mixed $value
 	 * @since 0.1.0
@@ -100,6 +121,8 @@ class ArrayList implements ArrayAccess,Iterator{
 	}    
 
 	/**
+	 * Reset index.
+	 *
 	 * @since 0.1.0
 	 */
 	public function rewind(){
@@ -107,6 +130,9 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Get current index data.
+	 *
+	 * @return mixed
 	 * @since 0.1.0
 	 */
 	public function current(){
@@ -114,6 +140,9 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Get current index.
+	 *
+	 * @return int
 	 * @since 0.1.0
 	 */
 	public function key(){
@@ -121,6 +150,9 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Shift index and get next value.
+	 *
+	 * @return mixed
 	 * @since 0.1.0
 	 */
 	public function next(){
@@ -128,6 +160,9 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Get index data.
+	 *
+	 * @return boolean
 	 * @since 0.1.0
 	 */
 	public function valid(){
@@ -137,6 +172,9 @@ class ArrayList implements ArrayAccess,Iterator{
 	}
 
 	/**
+	 * Generate json string.
+	 *
+	 * @return string
 	 * @since 0.1.0
 	 */
 	public function __toString(){
@@ -147,6 +185,7 @@ class ArrayList implements ArrayAccess,Iterator{
 	 * Check array type.
 	 *
 	 * @param array $arr
+	 * @return boolean
 	 * @since 0.1.0
 	 */
 	private function isAssoc($arr){

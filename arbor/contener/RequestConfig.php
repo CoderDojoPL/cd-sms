@@ -25,16 +25,59 @@ use Arbor\Core\Enviorment;
  * @since 0.1.0
  */
 class RequestConfig{
-	
+
+	/**
+	 * Route.
+	 *
+	 * @var string $route
+	 */	
 	private $route;
+
+	/**
+	 * Presenter name.
+	 *
+	 * @var string $presenter
+	 */	
 	private $presenter;
+
+	/**
+	 * Controller name.
+	 *
+	 * @var string $controller
+	 */	
 	private $controller;
+
+	/**
+	 * Method name.
+	 *
+	 * @var string $method
+	 */	
 	private $method;
+
+	/**
+	 * Extra data.
+	 *
+	 * @var array $extra
+	 */	
 	private $extra;
+
+	/**
+	 * Class name.
+	 *
+	 * @var string $class
+	 */
 	private $class;
+
+	/**
+	 * Enviorment.
+	 *
+	 * @var \Arbor\Core\Enviorment $enviorment
+	 */	
 	private $enviorment;
 
 	/**
+	 * Constructor.
+	 *
 	 * @param string $controller
 	 * @param string $method
 	 * @param \Arbor\Core\Enviorment $enviorment
@@ -54,6 +97,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get route.
+	 *
 	 * @return string
 	 * @since 0.1.0
 	 */
@@ -62,6 +107,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get class name.
+	 *
 	 * @return string
 	 * @since 0.1.0
 	 */
@@ -70,6 +117,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get presenter name.
+	 *
 	 * @return string
 	 * @since 0.1.0
 	 */
@@ -78,6 +127,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get controller name.
+	 *
 	 * @return string
 	 * @since 0.1.0
 	 */
@@ -86,6 +137,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get method name.
+	 *
 	 * @return string
 	 * @since 0.1.0
 	 */
@@ -94,6 +147,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get extra data.
+	 *
 	 * @return array
 	 * @since 0.1.0
 	 */
@@ -102,6 +157,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Check is debug.
+	 *
 	 * @return boolean
 	 * @since 0.1.0
 	 */
@@ -110,6 +167,8 @@ class RequestConfig{
 	}
 
 	/**
+	 * Get is silent (for test and command).
+	 *
 	 * @return boolean
 	 * @since 0.1.0
 	 */

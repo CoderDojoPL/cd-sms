@@ -25,19 +25,27 @@ use Arbor\Exception\ValueNotFoundException;
  */
 abstract class Validator{
 
+	/**
+	 * Array with config options.
+	 *
+	 * @var array $options
+	 */
 	private $options=array();
 	
 	/**
-	 * Implement method to validate value
+	 * Implement method to validate value.
+	 *
 	 * @param mixed $value - value to parse
 	 * @return string|null - error message
 	 */
 	abstract public function validate($value);
 
 	/**
-	 * Set extra options
-	 * @param mixed $value - value to parse
-	 * @return string|null - error message
+	 * Set extra options.
+	 *
+	 * @param string $name
+	 * @param mixed $value
+	 * @return string|null error message
 	 * @since 0.18.0
 	 */
 	final public function setOption($name,$value){
@@ -45,7 +53,8 @@ abstract class Validator{
 	}
 
 	/**
-	 * Get extra option
+	 * Get extra option.
+	 *
 	 * @param string $name - name of option
 	 * @return mixed - option
 	 * @throws Arbor\Exception\ValueNotFoundException

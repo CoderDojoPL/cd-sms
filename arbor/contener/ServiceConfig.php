@@ -23,9 +23,15 @@ namespace Arbor\Contener;
  */
 class ServiceConfig{
 	
+	/**
+	 * Config data.
+	 *
+	 * @var array $class
+	 */
 	private $config;
 
 	/**
+	 * Constructor.
 	 * @param array $config
 	 * @since 0.1.0
 	 */
@@ -34,6 +40,8 @@ class ServiceConfig{
 	}
 
 	/**
+	 * Get config value.
+	 *
 	 * @param string $key
 	 * @return mixed
 	 * @since 0.1.0

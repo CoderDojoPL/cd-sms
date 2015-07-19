@@ -16,16 +16,44 @@
 namespace Arbor\Core;
 
 /**
- * Provider for session
+ * Provider for session.
  *
  * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.1.0
  */
 interface SessionProvider{
 
+	/**
+	 * Get session value.
+	 *
+	 * @param string $key
+	 * @return mixed
+	 * @since 0.1.0
+	 */
 	public function get($key);
+
+	/**
+	 * Set session value.
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 * @since 0.1.0
+	 */
 	public function set($key,$value);
+
+	/**
+	 * Remove session value.
+	 *
+	 * @param string $key
+	 * @since 0.1.0
+	 */
 	public function remove($key);
+
+	/**
+	 * Remove all session values.
+	 *
+	 * @since 0.1.0
+	 */
 	public function clear();
 
 }

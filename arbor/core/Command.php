@@ -31,10 +31,22 @@ use Arbor\Core\ExecuteResources;
  */
 abstract class Command extends Container{
 
+	/**
+	 * Write data to console output and break line.
+	 *
+	 * @param string $data
+	 * @since 0.1.0
+	 */
     public function writeLn($data){
     	echo $data."\n\r";
     }
 
+	/**
+	 * Write data to console output
+	 *
+	 * @param string $data
+	 * @since 0.1.0
+	 */
     public function write($data){
     	echo $data;
     }

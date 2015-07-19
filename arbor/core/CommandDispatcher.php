@@ -33,15 +33,47 @@ use Arbor\Contener\CommandConfig;
  * @since 0.1.0
  */
 class CommandDispatcher  implements Dispatcher {
+
+	/**
+	 * Request
+	 *
+	 * @var \Arbor\Provider\Request $request
+	 */
 	private $request;
+
+	/**
+	 * ExecuteResources
+	 *
+	 * @var \Arbor\Core\ExecuteResources $resources
+	 */
 	private $resources;
+
+	/**
+	 * CommandCOnfig
+	 *
+	 * @var \Arbor\Contener\CommandConfig $config
+	 */
 	private $config;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Contener\CommandConfig $config
+	 * @param array $arguments command arguments
+	 * @since 0.1.0
+	 */
 	public function __construct(CommandConfig $config,$arguments){
 		$this->config=$config;
 		$this->arguments=$arguments;
 	}
 
+	/**
+	 * Execute command
+	 *
+	 * @param \Arbor\Core\ExecuteResources $resource
+	 * @param \Arbor\Core\EventManager $eventManager
+	 * @since 0.1.0
+	 */
 	public function execute(ExecuteResources $resources,EventManager $eventManager){
 		$commandName=$this->config->getClass();
 		$command=new $commandName($resources);

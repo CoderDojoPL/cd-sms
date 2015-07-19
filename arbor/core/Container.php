@@ -27,17 +27,48 @@ use Arbor\Core\ExecuteResources;
  */
 abstract class Container{
 
+	/**
+	 * Services.
+	 *
+	 * @var array $services
+	 */
 	private $services=array();
+
+	/**
+	 * Snippets.
+	 *
+	 * @var array $snippets
+	 */
 	private $snippets=array();	
 
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Core\ExecuteResources $executeResources
+	 * @since 0.1.0
+	 */
 	public function __construct(ExecuteResources $executeResources){
 		$this->executeResources=$executeResources;
 	}
 
+	/**
+	 * Get enviorment
+	 *
+	 * @return \Arbor\Core\Enviorment
+	 * @since 0.1.0
+	 */
 	public function getEnviorment(){
 		return $this->executeResources->getEnviorment();
 	}
 
+	/**
+	 * Get service
+	 *
+	 * @param string $name service name
+	 * @return object
+	 * @throws \Arbor\Exception\ServiceNotFoundException
+	 * @since 0.1.0
+	 */
 	public function getService($name){
 		$services=$this->executeResources->getServices();
 		if(!isset($services[$name]))
@@ -46,6 +77,15 @@ abstract class Container{
 		return $services[$name];
 	}
 
+	/**
+	 * Execute snipper method.
+	 *
+	 * @param string $method
+	 * @param array $args
+	 * @return mixed
+	 * @throws \Arbor\Exception\MethodNotFoundException
+	 * @since 0.1.0
+	 */
 	public function __call($method, $args){
 		$snippets=$this->executeResources->getSnippets();
 		if(isset($snippets[$method])){

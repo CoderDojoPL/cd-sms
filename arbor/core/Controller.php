@@ -31,21 +31,63 @@ use Arbor\Core\ExecuteResources;
  */
 abstract class Controller extends Container{
 
+	/**
+	 * RequestProvider
+	 *
+	 * @var \Arbor\Core\RequestProvider $request
+	 */
 	private $request;
+
+	/**
+	 * SessionProvider
+	 *
+	 * @var \Arbor\Core\SessionProvider $session
+	 */
 	private $session;
+
+	/**
+	 * Services
+	 *
+	 * @var array $services
+	 */
 	private $services=array();
+
+	/**
+	 * Snippets
+	 *
+	 * @var array $snippets
+	 */
 	private $snippets=array();	
 
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Core\RequestProvider $request
+	 * @param \Arbor\Core\ExecuteResources $executeResources
+	 * @since 0.1.0
+	 */
 	public function __construct(RequestProvider $request, ExecuteResources $executeResources){
 		$this->request=$request;
 		$this->session=$request->getSession();
 		parent::__construct($executeResources);
 	}
 
+	/**
+	 * Get request provider object
+	 *
+	 * @return \Arbor\Core\RequestProvider
+	 * @since 0.1.0
+	 */
 	public function getRequest(){
 		return $this->request;
 	}
 
+	/**
+	 * Get session provider object.
+	 *
+	 * @return \Arbor\Core\SessionProvider
+	 * @since 0.1.0
+	 */
 	public function getSession(){
 		return $this->session;
 	}
