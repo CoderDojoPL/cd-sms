@@ -28,6 +28,7 @@ use Arbor\Event\ExecutePresenterEvent;
 use Arbor\Provider\Request;
 use Arbor\Test\Request as RequestTest;
 use Arbor\Provider\Session;
+use Arbor\Core\EventManager;
 
 /**
  * Handler for errors.
@@ -36,13 +37,44 @@ use Arbor\Provider\Session;
  * @since 0.1.0
  */
 class ErrorHandler{
-	
-	private $root;
+
+	/**
+	 * ExecuteResources.
+	 *
+	 * @var \Arbor\Core\ExecuteResources $resources
+	 */	
+	private $resources;
+
+	/**
+	 * Flag block propagation error events
+	 *
+	 * @var boolean $isStopPropagation
+	 */	
 	private $isStopPropagation;
+
+	/**
+	 * Runtime path
+	 *
+	 * @var string $runtimePath
+	 */	
 	private $runtimePath;
+
+	/**
+	 * Event manager
+	 *
+	 * @var \Arbor\Core\EventManager $eventManager
+	 */	
 	private $eventManager;
-	public function __construct(ExecuteResources $root,$eventManager){
-		$this->root=$root;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Core\ExecuteResources $resource
+	 * @param \Arbor\Core\EventManager $eventManager
+	 * @since 0.1.0
+	 */	
+	public function __construct(ExecuteResources $resources,EventManager $eventManager){
+		$this->resources=$resources;
 		$this->eventManager=$eventManager;
 		$this->isStopPropagation=false;
 		$this->runtimePath=getcwd();
@@ -53,6 +85,11 @@ class ErrorHandler{
 		set_exception_handler(array($this,'exception'));
 	}
 
+	/**
+	 * Shutdown callback
+	 *
+	 * @since 0.1.0
+	 */	
 	public function shutdown(){
 		if($this->isStopPropagation)
 			return;
@@ -69,6 +106,13 @@ class ErrorHandler{
 		}
 	}
 
+	/**
+	 * Exception callback.
+	 *
+	 * @param \Exception $exception
+	 * @return boolean
+	 * @since 0.1.0
+	 */	
 	public function exception($exception){
 		if($this->isStopPropagation)
 			return;
@@ -78,60 +122,82 @@ class ErrorHandler{
 		return false;
 	}
 		
+	/**
+	 * Error callback.
+	 *
+	 * @param int $errno
+	 * @param string $errstr
+	 * @param string $errfile
+	 * @param int $errline
+	 * @throws \Arbor\Exception\RuntimeException
+	 * @since 0.1.0
+	 */	
 	public function error($errno, $errstr, $errfile, $errline){
 		throw new RuntimeException($errfile,$errline,$errstr);
 	}
 
+	/**
+	 * Parse view for exception.
+	 *
+	 * @param \Exception $exception
+	 * @since 0.1.0
+	 */	
 	private function parseView($exception){
 		error_log($exception->getMessage()." ".$exception->getFile()."(".$exception->getLine().")");
 		$response=new Response();
 		$response->setStatusCode(500);
 		$response->setContent($exception);
-		$this->root->registerResponse($response);
+		$this->resources->registerResponse($response);
 		$presenter=null;
 
 		try{
-			$presenter=$this->root->getPresenter();
+			$presenter=$this->resources->getPresenter();
 		}
 		catch(ResourcesNotRegisteredException $e){
 			$presenter=$this->findPresenter();
 		}
 
 		try{
-			$request=$this->root->getRequest();
+			$request=$this->resources->getRequest();
 		}
 		catch(ResourcesNotRegisteredException $e){
-			$requestConfig=new RequestConfig('','',$this->root->getEnviorment(),
+			$requestConfig=new RequestConfig('','',$this->resources->getEnviorment(),
 					array(
 						'route'=>''
 						,'presenter'=>array('class' =>'')
 						,'class'=>''
 						));
 
-			if($this->root->getEnviorment()->isSilent()){
-				$request=new RequestTest($this->root->getUrl(),$this->root->getEnviorment());
+			if($this->resources->getEnviorment()->isSilent()){
+				$request=new RequestTest($this->resources->getUrl(),$this->resources->getEnviorment());
 				$request->setConfig($requestConfig);
 			}
 			else{
-				$session=new Session($this->root->getEnviorment());
-				$request=new Request($requestConfig,$this->root->getUrl(),$session);
+				$session=new Session($this->resources->getEnviorment());
+				$request=new Request($requestConfig,$this->resources->getUrl(),$session);
 
 			}
-			$this->root->registerRequest($request);
+			$this->resources->registerRequest($request);
 		}
 
 		if($presenter){
-			$event=new ExecutePresenterEvent($this->root->getRequest(),$response);
+			$event=new ExecutePresenterEvent($this->resources->getRequest(),$response);
 			$this->eventManager->fire('executePresenter',$event);
 			$presenter->render($request->getConfig() , $response);
 		}
 
 	}
 
+	/**
+	 * Find presenter for error action.
+	 *
+	 * @return \Arbor\Core\Presenter
+	 * @since 0.1.0
+	 */	
 	private function findPresenter(){
-		$url=$this->root->getUrl();
-		if($this->root->getGlobalConfig()){
-			foreach($this->root->getGlobalConfig()->getErrors() as $pattern=>$presenterName){
+		$url=$this->resources->getUrl();
+		if($this->resources->getGlobalConfig()){
+			foreach($this->resources->getGlobalConfig()->getErrors() as $pattern=>$presenterName){
 				if(preg_match('/^'.$pattern.'$/',$url)){
 					return new $presenterName();
 				}

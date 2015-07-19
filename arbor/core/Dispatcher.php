@@ -26,5 +26,12 @@ use Arbor\Core\EventManager;
  */
 interface Dispatcher {
 
+	/**
+	 * Execute dispatcher
+	 *
+	 * @param \Arbor\Core\ExecuteResources $resources
+	 * @param \Arbor\Core\EventManager $eventManager
+	 * @since 0.1.0
+	 */
 	public function execute(ExecuteResources $resources,EventManager $eventManager);
 }

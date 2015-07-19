@@ -23,6 +23,16 @@ namespace Arbor\Core;
  */
 class Exception extends \Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param int $code error code
+	 * @param string $message error message
+	 * @param string $safeMessage message show in production mode
+	 * @param string $file file when throwed exception
+	 * @param int $line line when throwed exception
+	 * @since 0.1.0
+	 */	
 	public function __construct($code,$message , $safeMessage=null,$file=null,$line=null){
 		$this->code=$code;
 		$this->message=$message;
@@ -33,6 +43,12 @@ class Exception extends \Exception{
 			$this->line=$line;
 	}
 
+	/**
+	 * Get message for production mode.
+	 *
+	 * @return string
+	 * @since 0.1.0
+	 */	
 	public function getSafeMessage(){
 		if($this->safeMessage)
 			return $this->safeMessage;
