@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Component\Form;
 
 use Arbor\Component\Form\FormFormatter;
@@ -8,6 +21,9 @@ use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
 
 /**
+ * FormBuilder field
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.15.0
  */
 abstract class FormField{
@@ -17,7 +33,7 @@ abstract class FormField{
 	private $error;
 
 	/**
-	 * @param options - array with configura data. All field is optional eg:
+	 * @param array $options - array with configura data. All field is optional eg:
 	 * array(
 	 * 	'name'=>'{text}' //tag name
 	 * 	,'validator'=>'{text}' //validator class name
@@ -55,8 +71,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * set html tag name
-	 * @param name - value of tag name:
+	 * Set html tag name
+	 *
+	 * @param string $name - value of tag name:
 	 * @since 0.15.0
 	 */
 	public function setName($name){
@@ -65,7 +82,8 @@ abstract class FormField{
 
 
 	/**
-	 * get value of html tag name
+	 * Get value of html tag name
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */
@@ -74,8 +92,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * set html tag id
-	 * @param id - value of tag id:
+	 * Set html tag id
+	 *
+	 * @param string $id - value of tag id:
 	 * @since 0.15.0
 	 */
 	public function setId($id){
@@ -83,7 +102,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * get value of html tag id
+	 * Get value of html tag id
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */
@@ -92,8 +112,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * set validator class rule
-	 * @param Arbor\Core\Validator $validator - validator class
+	 * Set validator class rule
+	 *
+	 * @param \Arbor\Core\Validator $validator - validator class
 	 * @since 0.15.0
 	 */
 	public function setValidator($validator=null){
@@ -102,8 +123,9 @@ abstract class FormField{
 
 
 	/**
-	 * get validator class
-	 * @return Arbor\Core\Validator 
+	 * Get validator class
+	 *
+	 * @return \Arbor\Core\Validator 
 	 * @since 0.15.0
 	 */
 	public function getValidator(){
@@ -111,8 +133,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * add part html tag class
-	 * @param string name - class name:
+	 * Add part html tag class
+	 *
+	 * @param string $name - class name:
 	 * @since 0.15.0
 	 */
 	public function addClass($name){
@@ -127,8 +150,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * remove part html tag class
-	 * @param string name - class name:
+	 * Remove part html tag class
+	 *
+	 * @param string $name - class name:
 	 * @since 0.15.0
 	 */
 	public function removeClass($name){
@@ -145,7 +169,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * get value of html tag class
+	 * Get value of html tag class
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */
@@ -154,8 +179,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * set label name for field
-	 * @param string label - label name
+	 * Set label name for field
+	 *
+	 * @param string $label
 	 * @since 0.15.0
 	 */
 	public function setLabel($label){
@@ -163,7 +189,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * get value of label field
+	 * Get value of label field
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */
@@ -172,8 +199,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * set html tag required
-	 * @param boolean flag - if true then required else optional
+	 * Set html tag required
+	 *
+	 * @param boolean $flag - if true then required else optional
 	 * @since 0.15.0
 	 */
 	public function setRequired($flag){
@@ -184,7 +212,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * get value of html tag required
+	 * Get value of html tag required
+	 *
 	 * @return boolean
 	 * @since 0.15.0
 	 */
@@ -193,9 +222,10 @@ abstract class FormField{
 	}
 
 	/**
-	 * set html tag
-	 * @param string name - tag name
-	 * @param mixed value - value of tag
+	 * Set html tag
+	 *
+	 * @param string $name - tag name
+	 * @param mixed $value - value of tag
 	 * @since 0.15.0
 	 */
 	public function setTag($name,$value){
@@ -203,8 +233,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * get html tag
-	 * @param string name - tag name
+	 * Get html tag
+	 *
+	 * @param string $name - tag name
 	 * @return string|array
 	 * @since 0.15.0
 	 */
@@ -213,7 +244,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * get all html tags
+	 * Get all html tags
+	 *
 	 * @return array
 	 * @since 0.15.0
 	 */
@@ -222,8 +254,9 @@ abstract class FormField{
 	}
 
 	/**
-	 * check valid field
-	 * @return bool
+	 * Check valid field
+	 *
+	 * @return boolean
 	 * @since 0.17.0
 	 */
 	public function isValid(){
@@ -231,7 +264,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * get error message
+	 * Get error message
+	 *
 	 * @return string
 	 * @since 0.17.0
 	 */
@@ -240,7 +274,8 @@ abstract class FormField{
 	}
 
 	/**
-	 * set error message
+	 * Set error message
+	 *
 	 * @param string $error - message
 	 * @return string
 	 * @since 0.17.0
@@ -251,35 +286,40 @@ abstract class FormField{
 	}
 
 	/**
-	 * implement render html label and field
+	 * Implement render html label and field
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */
 	abstract public function render();
 
 	/**
-	 * set confirmed data 
+	 * Set confirmed data 
+	 *
 	 * @param mixed $data - confirmed data
 	 * @since 0.16.0
 	 */
 	abstract public function setData($data);
 
 	/**
-	 * get value field
+	 * Get value field
+	 *
 	 * @return mixed
 	 * @since 0.16.0
 	 */
 	abstract public function getData();
 
 	/**
-	 * remove field data 
+	 * Remove field data
+	 *
 	 * @param mixed $data - confirmed data
 	 * @since 0.17.0
 	 */
 	abstract public function clearData();
 
 	/**
-	 * implement render html field
+	 * Implement render html field
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */
@@ -287,6 +327,7 @@ abstract class FormField{
 
 	/**
 	 * implement render html label
+	 *
 	 * @return string
 	 * @since 0.15.0
 	 */

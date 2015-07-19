@@ -10,6 +10,7 @@
  */
 
 namespace Mapper;
+
 use Arbor\Core\Mapper;
 use Exception\DeviceNotFoundException;
 

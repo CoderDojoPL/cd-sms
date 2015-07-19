@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Component\Form;
 
 use Arbor\Component\Form\FormFormatter;
@@ -10,6 +23,9 @@ use Arbor\Validator\FileValidator;
 use Arbor\Exception\FileMaxSizeException;
 
 /**
+ * FormBuilder field
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.15.0
  */
 class FileField extends InputField{
@@ -49,7 +65,8 @@ class FileField extends InputField{
 	}
 
 	/**
-	 * set html tag multiple
+	 * Set html tag multiple
+	 *
 	 * @param boolean $flag - value of tag multiple
 	 * @since 0.17.0
 	 */
@@ -58,7 +75,8 @@ class FileField extends InputField{
 	}
 
 	/**
-	 * get html tag multiple
+	 * Get html tag multiple
+	 *
 	 * @return boolean
 	 * @since 0.17.0
 	 */
@@ -68,7 +86,8 @@ class FileField extends InputField{
 	}
 
 	/**
-	 * set html tag accept
+	 * Set html tag accept
+	 *
 	 * @param string $accept - value of tag accept
 	 * @since 0.18.0
 	 */
@@ -80,7 +99,8 @@ class FileField extends InputField{
 	}
 
 	/**
-	 * get html tag accept
+	 * Get html tag accept
+	 *
 	 * @return string
 	 * @since 0.18.0
 	 */
@@ -89,7 +109,8 @@ class FileField extends InputField{
 	}
 
 	/**
-	 * set max size file
+	 * Set max size file
+	 *
 	 * @param long $maxSize - size in bytes
 	 * @since 0.18.0
 	 */
@@ -105,7 +126,8 @@ class FileField extends InputField{
 	}
 
 	/**
-	 * get max size file
+	 * Get max size file
+	 *
 	 * @return long - file size in bytes
 	 * @since 0.18.0
 	 */
@@ -134,6 +156,9 @@ class FileField extends InputField{
 		$this->data=null;
 	}
 
+    /**
+     * {@inheritdoc}
+     */
 	public function componentRender(){
 		$template='<input ';
 
@@ -150,11 +175,23 @@ class FileField extends InputField{
 
 	}
 
-
+	/**
+	 * Get max size file from config server
+	 *
+	 * @return long - file size in bytes
+	 * @since 0.18.0
+	 */
 	private function getServerMaxSize(){
 		return min($this->phpSizeToBytes(ini_get('post_max_size')),$this->phpSizeToBytes(ini_get('upload_max_filesize')));  
 	}
 
+	/**
+	 * Php size format to bytes
+	 *
+	 * @param string $size - php size format
+	 * @return long - file size in bytes
+	 * @since 0.18.0
+	 */
 	private function phpSizeToBytes($size){  
 		if (is_numeric( $size)){
 			return $size;

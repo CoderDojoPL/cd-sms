@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Component\Form;
 
 use Arbor\Component\Form\FormFormatter;
@@ -8,6 +21,9 @@ use Arbor\Provider\Request;
 use Arbor\Core\ValidatorService;
 
 /**
+ * FormBuilder field
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.15.0
  */
 abstract class InputField extends FormField{
@@ -20,8 +36,9 @@ abstract class InputField extends FormField{
 	}
 
 	/**
-	 * set html tag pattern
-	 * @param string pattern - value of tag pattern (regular expression)
+	 * Set html tag pattern
+	 *
+	 * @param string $pattern - value of tag pattern (regular expression)
 	 * @since 0.16.0
 	 */
 	public function setPattern($pattern){
@@ -32,7 +49,8 @@ abstract class InputField extends FormField{
 	}
 
 	/**
-	 * get value of html tag pattern
+	 * Get value of html tag pattern
+	 *
 	 * @return string
 	 * @since 0.16.0
 	 */
@@ -41,7 +59,8 @@ abstract class InputField extends FormField{
 	}
 
 	/**
-	 * set value field
+	 * Set value field
+	 *
 	 * @param mixed $value - value field
 	 * @since 0.16.0
 	 */
@@ -50,7 +69,8 @@ abstract class InputField extends FormField{
 	}
 
 	/**
-	 * get value field
+	 * Get value field
+	 *
 	 * @return string|array
 	 * @since 0.16.0
 	 */

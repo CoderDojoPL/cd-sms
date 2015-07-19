@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Component\Form;
 
 use Arbor\Component\Form\FormFormatter;
@@ -9,6 +22,9 @@ use Arbor\Core\ValidatorService;
 use Arbor\Validator\TextValidator;
 
 /**
+ * FormBuilder field
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.15.0
  */
 class SelectField extends FormField{
@@ -34,6 +50,7 @@ class SelectField extends FormField{
 
 	/**
 	 * Get collection data (options value)
+	 *
 	 * @return array - eg:
 	 * array(
 	 * 	array(
@@ -50,6 +67,7 @@ class SelectField extends FormField{
 
 	/**
 	 * Set collection data (options value)
+	 *
 	 * @param array $collection - eg:
 	 * array(
 	 * 	array(
@@ -65,7 +83,8 @@ class SelectField extends FormField{
 	}
 
 	/**
-	 * set html tag multiple
+	 * Set html tag multiple
+	 *
 	 * @param boolean $flag - value of tag multiple
 	 * @since 0.15.0
 	 */
@@ -74,7 +93,8 @@ class SelectField extends FormField{
 	}
 
 	/**
-	 * get html tag multiple
+	 * Get html tag multiple
+	 *
 	 * @return boolean
 	 * @since 0.15.0
 	 */

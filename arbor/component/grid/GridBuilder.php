@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Component\Grid;
 
 use Arbor\Component\Grid\GridFormatter;
@@ -7,6 +20,9 @@ use Arbor\Component\Grid\GridDataManager;
 use Arbor\Component\Grid\BasicColumnFormatter;
 
 /**
+ * Generator grid. Support for mapping data, pagination and generate html code.
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.17.0
  */
 class GridBuilder{
@@ -18,6 +34,7 @@ class GridBuilder{
 
 	/**
 	 * Set formatter with html rule pattern
+	 *
 	 * @param Arbor\Component\Grid\GridFormatter $formatter
 	 * @since 0.17.0
 	 */
@@ -27,6 +44,7 @@ class GridBuilder{
 
 	/**
 	 * Set formatter with html rule pattern
+	 *
 	 * @param Arbor\Component\Grid\GridDataManager $dataManager
 	 * @since 0.17.0
 	 */
@@ -35,7 +53,8 @@ class GridBuilder{
 	}
 
 	/**
-	 * get DataManager
+	 * Get DataManager
+	 *
 	 * @return Arbor\Component\Grid\GridDataManager
 	 * @since 0.18.0
 	 */
@@ -44,7 +63,8 @@ class GridBuilder{
 	}
 
 	/**
-	 * get columns data
+	 * Get columns data
+	 *
 	 * @return array
 	 * @since 0.18.0
 	 */
@@ -53,7 +73,8 @@ class GridBuilder{
 	}
 
 	/**
-	 * get records
+	 * Get records
+	 *
 	 * @return array
 	 * @since 0.18.0
 	 */
@@ -62,15 +83,18 @@ class GridBuilder{
 	}
 
 	/**
-	 * get total count records
+	 * Get total count records
+	 *
 	 * @return int
 	 * @since 0.18.0
 	 */
 	public function getTotalCount(){
 		return $this->dataManager->getTotalCount();
 	}
+
 	/**
 	 * Set limit records on single page
+	 *
 	 * @param int $limit - items on page
 	 * @since 0.17.0
 	 */
@@ -80,6 +104,7 @@ class GridBuilder{
 
 	/**
 	 * Set current page
+	 *
 	 * @param int $page - current page
 	 * @since 0.17.0
 	 */
@@ -88,7 +113,8 @@ class GridBuilder{
 	}
 
 	/**
-	 * add column
+	 * Add column
+	 *
 	 * @param string $label - column name
 	 * @param string $key - mapped key for record
 	 * @since 0.17.0
@@ -102,6 +128,7 @@ class GridBuilder{
 
 	/**
 	 * Generate html grid string
+	 *
 	 * @return string with html form
 	 * @since 0.17.0
 	 */
@@ -112,6 +139,9 @@ class GridBuilder{
 	}
 
 
+	/**
+	 * @since 0.17.0
+	 */
 	public function __toString(){
 		return $this->render();
 	}

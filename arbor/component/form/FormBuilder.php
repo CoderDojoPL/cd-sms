@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Component\Form;
 
 use Arbor\Component\Form\FormFormatter;
@@ -10,8 +23,12 @@ use Arbor\Core\ValidatorService;
 use Arbor\Exception\FieldNotFoundException;
 use Arbor\Exception\FileNotUploadedException;
 use Arbor\Core\FileUploaded;
+use Arbor\Component\Form\FormField;
 
 /**
+ * Generator form. Support for mapping data, validation and generate html code.
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.13.0
  */
 class FormBuilder{
@@ -39,7 +56,8 @@ class FormBuilder{
 
 	/**
 	 * Set service to validate field data
-	 * $arg validatorService
+	 *
+	 * @param \Arbor\Core\ValidatorService $validatorService
 	 * @since 0.13.0
 	 */
 	public function setValidatorService(ValidatorService $validatorService){
@@ -48,7 +66,8 @@ class FormBuilder{
 
 	/**
 	 * Set formatter with html rule pattern
-	 * @arg formatter
+	 *
+	 * @param \Arbor\Component\Form\FormFormatter $formatter
 	 * @since 0.13.0
 	 */
 	public function setFormatter(FormFormatter $formatter){
@@ -57,7 +76,8 @@ class FormBuilder{
 
 	/**
 	 * Set designer with rule to generate fields
-	 * @param Arbor\Component\Form\Designer $designer
+	 *
+	 * @param \Arbor\Component\Form\Designer $designer
 	 * @since 0.18.0
 	 */
 	public function setDesigner(Designer $designer){
@@ -67,7 +87,8 @@ class FormBuilder{
 
 	/**
 	 * Set addon form tags
-	 * @arg tags - array widh data (all field is optional):
+	 *
+	 * @param array $tags - array widh data (all field is optional):
 	 * array(
 	 *	'method'=>'post' //"post" or "get"
 	 *	,'id'=>'id1' //html tag id
@@ -82,7 +103,8 @@ class FormBuilder{
 
 	/**
 	 * Set submit button tags
-	 * @arg tags - arrawy with data:
+	 *
+	 * @param array $tags - arrawy with data:
 	 * array(
 	 * 	'value'=> 'Apply' //label button, default: Apply
 	 * 	,'id'=>'id1' //html tag id
@@ -96,7 +118,8 @@ class FormBuilder{
 
 	/**
 	 * Add form field
-	 * @arg field - object of FormField
+	 *
+	 * @param \Arbor\Component\Form\FormField $field
 	 * @since 0.15.0
 	 */
 	public function addField(FormField $field){
@@ -119,7 +142,8 @@ class FormBuilder{
 
 	/**
 	 * Remove field from generator
-	 * @param string $name field name
+	 *
+	 * @param string $name - field name
 	 * @since 0.18.0
 	 */
 	public function removeField($name){
@@ -133,7 +157,8 @@ class FormBuilder{
 
 	/**
 	 * Generate html form string
-	 * @return string with html form
+	 *
+	 * @return string - with html form
 	 * @since 0.13.0
 	 */
 	public function render(){
@@ -149,7 +174,8 @@ class FormBuilder{
 
 	/**
 	 * Generate html string for selected field
-	 * @param string $name field name
+	 *
+	 * @param string $name - field name
 	 * @return string with html field
 	 * @since 0.16.0
 	 */
@@ -164,7 +190,8 @@ class FormBuilder{
 
 	/**
 	 * Generate html string for open form tag
-	 * @return string with html open form tag
+	 *
+	 * @return string - with html open form tag
 	 * @since 0.16.0
 	 */
 	public function renderBegin(){
@@ -173,7 +200,8 @@ class FormBuilder{
 
 	/**
 	 * Generate html string for close form tag
-	 * @return string with html close form tag
+	 *
+	 * @return string - with html close form tag
 	 * @since 0.16.0
 	 */
 	public function renderEnd(){
@@ -182,22 +210,28 @@ class FormBuilder{
 
 	/**
 	 * Generate html string for open form submit
-	 * @return string with html open form submit
+	 *
+	 * @return string - with html open form submit
 	 * @since 0.16.0
 	 */
 	public function renderSubmit(){
 		return $this->formatter->renderSubmit($this->submitTags);
 	}
 
+	/**
+	 * @return string - with html form
+	 * @since 0.16.0
+	 */
 	public function __toString(){
 		return $this->render();
 	}
 
 	/**
-	 * get field object
-	 * @param $name - field name (html name tag)
-	 * @return FormField
-	 * @throws Arbor\Exception\FieldNotFoundException - invalid param name
+	 * Get field object
+	 *
+	 * @param string $name - field name (html name tag)
+	 * @return \Arbor\Component\Form\FormField
+	 * @throws \Arbor\Exception\FieldNotFoundException - invalid param name
 	 * @since 0.13.0
 	 */
 	public function getField($name){
@@ -210,8 +244,9 @@ class FormBuilder{
 	}
 
 	/**
-	 * check confirmed form (clicked submit button in frontend/sended fields value)
-	 * @return if success then true else false
+	 * Check confirmed form (clicked submit button in frontend/sended fields value)
+	 *
+	 * @return boolean - if success then true else false
 	 * @since 0.13.0
 	 */
 	public function isConfirmed(){
@@ -219,8 +254,9 @@ class FormBuilder{
 	}
 
 	/**
-	 * check valid form
-	 * @return if success then true else false
+	 * Check valid form
+	 *
+	 * @return boolean - if success then true else false
 	 * @since 0.13.0
 	 */
 	public function isValid(){
@@ -234,8 +270,9 @@ class FormBuilder{
 	}
 
 	/**
-	 * set default values for fiels
-	 * @param array eg:
+	 * Set default values for fiels
+	 *
+	 * @param array $data eg:
 	 * array(
 	 * '{text field name 1}'=>'{text value name 1}'
 	 * ,'{text field name 2}'=>'{text value name 2}'
@@ -251,7 +288,8 @@ class FormBuilder{
 	}
 
 	/**
-	 * get data from fields
+	 * Get data from fields
+	 *
 	 * @return array
 	 * @since 0.17.0
 	 */
@@ -279,7 +317,8 @@ class FormBuilder{
 	}
 
 	/**
-	 * remove all field data
+	 * Remove all field data
+	 *
 	 * @since 0.17.0
 	 */
 	public function clearData(){
@@ -290,8 +329,9 @@ class FormBuilder{
 	}
 
 	/**
-	 * submit form. Check http confirm and validate fields
-	 * @param Arbor\Core\RequestProvider $request
+	 * Submit form. Check http confirm and validate fields
+	 *
+	 * @param \Arbor\Core\RequestProvider $request
 	 * @since 0.17.0
 	 */
 	public function submit(RequestProvider $request){
@@ -362,9 +402,9 @@ class FormBuilder{
 	}
 
 	/**
-	 * validate fields and get errors
-	 * @arg request
-	 * @return array with errors if success then empty array
+	 * Validate fields and get errors
+	 *
+	 * @return array - with errors if success then empty array
 	 * @since 0.13.0
 	 */
 	public function getErrors(){

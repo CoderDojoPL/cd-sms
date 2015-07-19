@@ -1,12 +1,26 @@
 <?php
 
+/**
+ * ArborPHP: Freamwork PHP (http://arborphp.com)
+ * Copyright (c) NewClass (http://newclass.pl)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the file LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) NewClass (http://newclass.pl)
+ * @link          http://arborphp.com ArborPHP Project
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
 namespace Arbor\Command;
 
 use Arbor\Core\Command;
 
 /**
  * Migrate project from previous stage to next
- * @author Michal Tomczak (michal.tomczak@iteracja.com)
+ *
+ * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.18.0
  */
 class Migrate extends Command{
@@ -15,6 +29,7 @@ class Migrate extends Command{
 
 	/**
 	 * Update project
+	 *
 	 * @since 0.18.0
 	 */	
 	public function update(){
@@ -56,6 +71,7 @@ class Migrate extends Command{
 
 	/**
 	 * Downgrade project
+	 *
 	 * @since 0.18.0
 	 */	
 	public function downgrade(){
@@ -99,7 +115,8 @@ class Migrate extends Command{
 	}
 
 	/**
-	 * get url to file with saved migrate stage
+	 * Get url to file with saved migrate stage
+	 *
 	 * @since 0.18.0
 	 */
 	private function getFilePath(){
