@@ -33,14 +33,45 @@ use Arbor\Contener\RequestConfig;
  * @since 0.1.0
  */
 class HttpDispatcher  implements Dispatcher {
-	private $request;
-	private $resources;
-	private $config;
 
+	/**
+	 * Request
+	 *
+	 * @var \Arbor\Provider\Request $request
+	 */
+	protected $request;
+
+	/**
+	 * ExecuteResources
+	 *
+	 * @var \Arbor\Core\ExecuteResources $resources
+	 */
+	protected $resources;
+
+	/**
+	 * ExecuteResources
+	 *
+	 * @var \Arbor\Contener\RequestConfig $config
+	 */
+	protected $config;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Contener\RequestConfig $config
+	 * @since 0.1.0
+	 */
 	public function __construct(RequestConfig $config){
 		$this->config=$config;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @param \Arbor\Core\ExecuteResources $resources
+	 * @param \Arbor\Core\EventManager $eventManager
+	 * @since 0.1.0
+	 */
 	public function execute(ExecuteResources $resources,EventManager $eventManager){
 		$this->resources=$resources;
 		$this->eventManager=$eventManager;
@@ -52,7 +83,13 @@ class HttpDispatcher  implements Dispatcher {
 
 	}	
 
-	private function callMethod(){
+	/**
+	 * Execute controller method
+	 *
+	 * @throws \Arbor\Exception\ActionNotFoundException
+	 * @since 0.1.0
+	 */
+	protected function callMethod(){
 
 		$this->resources->registerPresenter($this->getPresenter());
 		$response=new Response();
@@ -90,12 +127,26 @@ class HttpDispatcher  implements Dispatcher {
 		$this->prepareView($this->request , $this->resources->getPresenter() , $response);
 	}
 
-	private function getPresenter(){
+	/**
+	 * Get presenter
+	 *
+	 * @return \Arbor\Core\Presenter
+	 * @since 0.1.0
+	 */
+	protected function getPresenter(){
 		$presenterConfig=$this->config->getPresenter();
 		return new $presenterConfig['class']($this->services);
 	}
 
-	private function prepareView(Request $request , Presenter $presenter , Response $response){
+	/**
+	 * Render view
+	 *
+	 * @param \Arbor\Provider\Request $request
+	 * @param \Arbor\Core\Presenter $presenter
+	 * @param \Arbor\Provider\Response $response
+	 * @since 0.1.0
+	 */
+	protected function prepareView(Request $request , Presenter $presenter , Response $response){
 		$event=new ExecutePresenterEvent($request,$response);
 		$this->eventManager->fire('executePresenter',$event);
 

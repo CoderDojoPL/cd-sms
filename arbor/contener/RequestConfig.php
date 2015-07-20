@@ -85,7 +85,7 @@ class RequestConfig{
 	 * @return array
 	 * @since 0.1.0
 	 */
-	public function __construct($controller , $method ,$enviorment , $actionConfig){
+	public function __construct($controller , $method ,Enviorment $enviorment , $actionConfig){
 		$this->enviorment=$enviorment;
 		$this->route=$actionConfig['route'];
 		$this->presenter=$actionConfig['presenter'];

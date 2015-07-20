@@ -25,19 +25,56 @@ use Arbor\Core\ExecuteResources;
  */
 class EventManager{
 	
+	/**
+	 * Enviorment.
+	 *
+	 * @var \Arbor\Core\ExecuteResources $resources
+	 */
 	private $resources;
+
+	/**
+	 * Enviorment.
+	 *
+	 * @var array $events
+	 */
 	private $events=array();
+
+	/**
+	 * Cache classes.
+	 *
+	 * @var array $cacheClasses
+	 */
 	private $cacheClasses=array();
 
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Core\ExecuteResources $resources
+	 * @since 0.1.0
+	 */
 	public function __construct(ExecuteResources $resources){
 		$this->resources=$resources;
 	}
 
+	/**
+	 * Register event.
+	 *
+	 * @param string $event event name
+	 * @param array $config event config
+	 * @since 0.1.0
+	 */
 	public function register($event,$config){
 		$this->events+=array($event=>array());
 		$this->events[$event][]=$config;
 	}
 
+	/**
+	 * Execute event.
+	 *
+	 * @param string $event event name
+	 * @param object $infoClass contener with event info eg.: \Arbor\Event\ExecutePresenterEvent
+	 * @since 0.1.0
+	 */
 	public function fire($event,$infoClass=null){
 		if(isset($this->events[$event])){
 			foreach($this->events[$event] as $bind=>$config){

@@ -21,6 +21,9 @@ use Arbor\Contener\RequestConfig;
 use Arbor\Contener\CommandConfig;
 use Arbor\Exception\RouteNotFoundException;
 use Arbor\Exception\CommandNotFoundException;
+use Arbor\Core\HttpDispatcher;
+use Arbor\Core\HttpTestDispatcher;
+use Arbor\Core\CommandDispatcher;
 
 /**
  * Factory for dispatcher. 
@@ -31,6 +34,16 @@ use Arbor\Exception\CommandNotFoundException;
 class Router{
 	
 
+	/**
+	 * Create http dispatcher.
+	 *
+	 * @param \Arbor\Core\Enviorment $enviorment
+	 * @param \Arbor\Contener\GlobalConfig $config
+	 * @param string $url
+	 * @return \Arbor\Core\HttpDispatcher
+	 * @throws \Arbor\Exception\RouteNotFoundException
+	 * @since 0.1.0
+	 */
 	public function createHttpDispatcher(Enviorment $enviorment,GlobalConfig $config,$url){
 
 		$requestConfig=$this->findRecources($enviorment,$config,$url);
@@ -47,6 +60,16 @@ class Router{
 
 	}
 
+	/**
+	 * Create http test dispatcher.
+	 *
+	 * @param \Arbor\Core\Enviorment $enviorment
+	 * @param \Arbor\Contener\GlobalConfig $config
+	 * @param string $url
+	 * @return \Arbor\Core\HttpTestDispatcher
+	 * @throws \Arbor\Exception\RouteNotFoundException
+	 * @since 0.1.0
+	 */
 	public function createHttpTestDispatcher(Enviorment $enviorment,GlobalConfig $config,$url){
 
 		$requestConfig=$this->findRecources($enviorment,$config,$url);
@@ -63,6 +86,17 @@ class Router{
 
 	}
 
+	/**
+	 * Create command dispatcher.
+	 *
+	 * @param \Arbor\Core\Enviorment $enviorment
+	 * @param \Arbor\Contener\GlobalConfig $config
+	 * @param string $commandName
+	 * @param array $arguments
+	 * @return \Arbor\Core\CommandDispatcher
+	 * @throws \Arbor\Exception\CommandNotFoundException
+	 * @since 0.1.0
+	 */
 	public function createCommandDispatcher(Enviorment $enviorment,GlobalConfig $config,$commandName,$arguments){
 
 		$commandConfig=$this->findCommand($config,$commandName);
@@ -76,7 +110,16 @@ class Router{
 
 	}
 
-	private function findRecources($enviorment,$config,$url){
+	/**
+	 * Find resource routing
+	 *
+	 * @param \Arbor\Core\Enviorment $enviorment
+	 * @param \Arbor\Contener\GlobalConfig $config
+	 * @param string $url
+	 * @return \Arbor\Contener\RequestConfig
+	 * @since 0.1.0
+	 */
+	private function findRecources(Enviorment $enviorment,GlobalConfig $config,$url){
 		foreach($config->getResources() as $resource){
 			if(preg_match('/^'.$resource['pattern'].'$/',$url)){
 				return new RequestConfig('Resource','download',$enviorment,
@@ -91,7 +134,16 @@ class Router{
 
 	}
 
-	private function findAction($enviorment,$config,$url){
+	/**
+	 * Find action routing
+	 *
+	 * @param \Arbor\Core\Enviorment $enviorment
+	 * @param \Arbor\Contener\GlobalConfig $config
+	 * @param string $url
+	 * @return \Arbor\Contener\RequestConfig
+	 * @since 0.1.0
+	 */
+	private function findAction(Enviorment $enviorment,GlobalConfig $config,$url){
 		foreach($config->getMethods() as $methodName=>$method){
 			if(preg_match('/^'.$method['route']['pattern'].'$/',$url)){
 				$actionPart=explode(':',$methodName);
@@ -102,7 +154,15 @@ class Router{
 
 	}
 
-	private function findCommand($config,$commandRequestName){
+	/**
+	 * Find resource routing
+	 *
+	 * @param \Arbor\Contener\GlobalConfig $config
+	 * @param string $commandRequestName
+	 * @return \Arbor\Contener\CommandConfig
+	 * @since 0.1.0
+	 */
+	private function findCommand(GlobalConfig $config,$commandRequestName){
 
 		foreach($config->getCommands() as $commandName=>$command){
 			if(preg_match('/^'.$commandRequestName.'$/',$commandName)){

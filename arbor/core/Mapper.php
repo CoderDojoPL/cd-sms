@@ -16,7 +16,7 @@
 namespace Arbor\Core;
 
 use Arbor\Exception\ServiceNotFoundException;
-
+use Arbor\Core\Container;
 /**
  * Base class for mapper. Cast value to another value
  *
@@ -25,15 +25,40 @@ use Arbor\Exception\ServiceNotFoundException;
  */
 abstract class Mapper{
 
+	/**
+	 * ExecuteResources
+	 *
+	 * @var \Arbor\Core\Container $container
+	 */
 	private $container;
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param \Arbor\Core\Container $container
+	 * @since 0.1.0
+	 */
 	final public function __construct(Container $container){
 		$this->container=$container;
 	}
 
+	/**
+	 * Get service.
+	 *
+	 * @param string $name
+	 * @return object service object
+	 * @since 0.1.0
+	 */
 	final public function getService($name){
 		return $this->container->getService($name);
 	}
 
+	/**
+	 * Cast value to another value.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 * @since 0.1.0
+	 */
 	abstract public function cast($value);
 }
