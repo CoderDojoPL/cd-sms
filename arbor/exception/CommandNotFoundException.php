@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class CommandNotFoundException extends Exception{
 	
+	/**
+	 * Constructor
+	 *
+	 * @param string $commandName
+	 * @since 0.1.0
+	 */	
 	public function __construct($commandName){
 		parent::__construct(10,"Command '".$commandName."' not found.","Internal server error.");
 	}

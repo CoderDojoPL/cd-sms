@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class ValueNotFoundException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $name
+	 * @since 0.1.0
+	 */
 	public function __construct($name){
 		parent::__construct(6,'Value "'.$name.'" not found.','Internal server error.');
 	}

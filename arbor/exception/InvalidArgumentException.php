@@ -24,7 +24,15 @@ use Arbor\Core\Exception;
  * @since 0.1.0
  */
 class InvalidArgumentException extends Exception{
-	
+
+	/**
+	 * Constructor.
+	 *
+	 * @param int $position
+	 * @param string $name
+	 * @param string $message
+	 * @since 0.1.0
+	 */	
 	public function __construct($position,$name,$message){
 		parent::__construct(200+$position,'Invalid argument "'.$name.'": '.$message);
 	}

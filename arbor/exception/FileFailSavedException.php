@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class FileFailSavedException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $reason
+	 * @since 0.1.0
+	 */	
 	public function __construct($reason){
 		parent::__construct(10,"File fail saved. Reason: ".$reason,"Internal server error.");
 	}

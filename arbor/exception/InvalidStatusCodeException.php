@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class InvalidStatusCodeException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param int $statusCode
+	 * @since 0.1.0
+	 */
 	public function __construct($statusCode){
 		parent::__construct(7,'Invalid status code "'.$statusCode.'".','Internal server error.');
 	}

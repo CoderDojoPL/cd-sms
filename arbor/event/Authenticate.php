@@ -20,6 +20,7 @@ use Arbor\Provider\Response;
 use Arbor\Event\ExecuteActionEvent;
 use Arbor\Exception\ValueNotFoundException;
 use Arbor\Exception\PermissionDeniedException;
+use Arbor\Core\RequestProvider;
 
 /**
  * Event for support authenticate user
@@ -29,6 +30,13 @@ use Arbor\Exception\PermissionDeniedException;
  */
 class Authenticate extends Event{
 	
+	/**
+	 * Detect config authenticate.
+	 *
+	 * @param \Arbor\Event\ExecuteActionEvent $event
+	 * @param array $eventConfig
+	 * @since 0.1.0
+	 */
 	public function onExecuteAction(ExecuteActionEvent $event,$eventConfig){
 		$request=$event->getRequest();
 		foreach($request->getExtra() as $extra){
@@ -41,7 +49,17 @@ class Authenticate extends Event{
 
 	}
 
-	private function execute($event,$config,$eventConfig){
+	/**
+	 * Check authenticate.
+	 *
+	 * @param \Arbor\Event\ExecuteActionEvent $event
+	 * @param array $config
+	 * @param array $eventConfig
+	 * @throws \Arbor\Exception\ValueNotFoundException
+	 * @throws \Arbor\Exception\PermissionDeniedException
+	 * @since 0.1.0
+	 */
+	private function execute(ExecuteActionEvent $event,$config,$eventConfig){
 		$request=$event->getRequest();
 		$session=$request->getSession();
 		$maxTime=(isset($eventConfig['maxTime'])?$eventConfig['maxTime']:0);
@@ -80,7 +98,15 @@ class Authenticate extends Event{
 
 	}
 
-	private function createResponseRedirect($redirect,$request){
+	/**
+	 * Check authenticate.
+	 *
+	 * @param string $redirect
+	 * @param \Arbor\Core\RequestProvider $request
+	 * @return \Arbor\Provider\Response
+	 * @since 0.1.0
+	 */
+	private function createResponseRedirect($redirect,RequestProvider $request){
 		$response=new Response();
 		if($request->isAjax()){
 			$response->setStatusCode(401);

@@ -25,6 +25,12 @@ use Arbor\Core\Exception;
  */
 class InvalidQuerySelectorException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $query
+	 * @since 0.1.0
+	 */
 	public function __construct($query){
 		parent::__construct(20,'Invalid query selector: '.$query);
 	}

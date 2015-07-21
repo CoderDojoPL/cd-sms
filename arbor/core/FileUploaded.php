@@ -24,19 +24,52 @@ use Arbor\Exception\FileFailSavedException;
  * @since 0.1.0
  */
 class FileUploaded{
+
+	/**
+	 * File name.
+	 *
+	 * @var string $name
+	 */
 	private $name;
+
+	/**
+	 * File name in tmp dir.
+	 *
+	 * @var string $tmpName
+	 */
 	private $tmpName;
+
+	/**
+	 * Error code
+	 *
+	 * @var int $error
+	 */
 	private $error;
+
+	/**
+	 * File size in bytes.
+	 *
+	 * @var int $size
+	 */
 	private $size;
-	private $type;
+
+	/**
+	 * Mime type file.
+	 *
+	 * @var string $extension
+	 */
 	private $extension;
 
+	/**
+	 * Constrcutor.
+	 *
+	 * @param array $data
+	 */
 	public function __construct($data){
 		$this->name=$data['name'];
 		$this->tmpName=$data['tmp_name'];
 		$this->error=$data['error'];
 		$this->size=$data['size'];
-		$this->type=$data['type'];
 
 		if($this->tmpName){
 			$fileInfo = new \finfo(FILEINFO_MIME);
@@ -47,9 +80,10 @@ class FileUploaded{
 
 	/**
 	 * Save uploaded file to destiny dir
-	 * @arg path - path dir to save file
-	 * @arg name - file name if is empty then set name on origin name
-	 * @exception FileFailSavedException
+	 *
+	 * @param string $path path dir to save file
+	 * @param string $name file name if is empty then set name on origin name
+	 * @throws \Arbor\Exception\FileFailSavedException
 	 * @since 0.12.0
 	 */
 	public function save($path,$name=null){
@@ -79,24 +113,30 @@ class FileUploaded{
 		}
 	}
 
-	/*
-	 * Return true if is has error on uploaded, else return false
+	/**
+	 * Return true if is has error on uploaded, else return false.
+	 *
+	 * @return boolean
 	 * @since 0.12.0
 	 */
 	public function isError(){
 		return $this->error!='0';
 	}
 
-	/*
-	 * Return error message if fail uploaded
+	/**
+	 * Return error message if fail uploaded.
+	 *
+	 * @return string
 	 * @since 0.12.0
 	 */
 	public function getError(){
 		return $this->error;
 	}
 
-	/*
-	 * Get origin file name
+	/**
+	 * Get origin file name.
+	 *
+	 * @return string
 	 * @since 0.12.0
 	 */
 	public function getName(){
@@ -104,7 +144,9 @@ class FileUploaded{
 	}
 
 	/**
-	 * Get file size in bytes
+	 * Get file size in bytes.
+	 *
+	 * @return long
 	 * @since 0.17.0
 	 */
 	public function getSize(){
@@ -112,7 +154,8 @@ class FileUploaded{
 	}
 
 	/**
-	 * get file extension (mime/type)
+	 * Get file extension (mime/type).
+	 *
 	 * @return string
 	 * @since 0.17.0
 	 */

@@ -24,6 +24,11 @@ use Arbor\Core\Exception;
  */
 class ResourcesNotRegisteredException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @since 0.1.0
+	 */
 	public function __construct(){
 		parent::__construct(12,"Resources not registered.","Internal server error.");
 	}

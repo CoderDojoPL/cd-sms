@@ -23,6 +23,7 @@ use Arbor\Event\ExecutePresenterEvent;
 use Arbor\Core\EventManager;
 use Arbor\Exception\ActionNotFoundException;
 use Arbor\Provider\Session;
+use Arbor\Core\RequestProvider;
 use Arbor\Provider\Request;
 use Arbor\Contener\RequestConfig;
 
@@ -37,7 +38,7 @@ class HttpDispatcher  implements Dispatcher {
 	/**
 	 * Request
 	 *
-	 * @var \Arbor\Provider\Request $request
+	 * @var \Arbor\Core\RequestProvider $request
 	 */
 	protected $request;
 
@@ -141,12 +142,12 @@ class HttpDispatcher  implements Dispatcher {
 	/**
 	 * Render view
 	 *
-	 * @param \Arbor\Provider\Request $request
+	 * @param \Arbor\Core\RequestProvider $request
 	 * @param \Arbor\Core\Presenter $presenter
 	 * @param \Arbor\Provider\Response $response
 	 * @since 0.1.0
 	 */
-	protected function prepareView(Request $request , Presenter $presenter , Response $response){
+	protected function prepareView(RequestProvider $request , Presenter $presenter , Response $response){
 		$event=new ExecutePresenterEvent($request,$response);
 		$this->eventManager->fire('executePresenter',$event);
 

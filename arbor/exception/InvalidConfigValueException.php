@@ -24,6 +24,13 @@ use Arbor\Core\Exception;
  */
 class InvalidConfigValueException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $key
+	 * @param string $value
+	 * @since 0.1.0
+	 */
 	public function __construct($key,$value){
 		parent::__construct(8,'Invalid config value \''.$value.'\' for key \''.$key.'\'.','Invalid configuration.');
 	}

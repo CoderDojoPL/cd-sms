@@ -22,6 +22,7 @@ use Arbor\Exception\ValueNotFoundException;
 use Arbor\Exception\InvalidConfigValueException;
 use Arbor\Exception\RequiredArgumentException;
 use Arbor\Exception\InvalidArgumentException;
+use Arbor\Core\RequestProvider;
 
 /**
  * Event to foward http param ($_POST[],$_GET[],url) to controllr method.
@@ -31,6 +32,12 @@ use Arbor\Exception\InvalidArgumentException;
  */
 class Argument extends Event{
 	
+	/**
+	 * Detect config argument.
+	 *
+	 * @param \Arbor\Event\ExecuteActionEvent $event
+	 * @since 0.1.0
+	 */
 	public function onExecuteAction(ExecuteActionEvent $event){
 
 		$request=$event->getRequest();
@@ -43,7 +50,17 @@ class Argument extends Event{
 		}
 	}
 
-	private function validateArgument($request , $config , $position){
+	/**
+	 * Validate argument.
+	 *
+	 * @param \Arbor\Core\RequestProvider $request
+	 * @param array $config argument
+	 * @param int $position
+	 * @throws \Arbor\Exception\InvalidConfigValueException
+	 * @throws \Arbor\Exception\InvalidArgumentException
+	 * @since 0.1.0
+	 */
+	private function validateArgument(RequestProvider $request , $config , $position){
 		$value=null;
 		switch($config['storage']){
 			case 'url':
@@ -73,7 +90,17 @@ class Argument extends Event{
 
 	}
 
-	private function validateUrl($request , $config , $position){
+	/**
+	 * Validate url.
+	 *
+	 * @param \Arbor\Core\RequestProvider $request
+	 * @param array $config argument
+	 * @param int $position
+	 * @return string
+	 * @throws \Arbor\Exception\RequiredArgumentException
+	 * @since 0.1.0
+	 */
+	private function validateUrl(RequestProvider $request , $config , $position){
 		$url=$request->getUrl();
 
 		if(preg_match('/^'.$config['pattern'].'$/',$url,$matches) && isset($matches[1]))
@@ -84,7 +111,17 @@ class Argument extends Event{
 			throw new RequiredArgumentException($position,$config['name']);
 	}
 
-	private function validatePost($request , $config , $position){
+	/**
+	 * Validate POST.
+	 *
+	 * @param \Arbor\Core\RequestProvider $request
+	 * @param array $config argument
+	 * @param int $position
+	 * @return string
+	 * @throws \Arbor\Exception\RequiredArgumentException
+	 * @since 0.1.0
+	 */
+	private function validatePost(RequestProvider $request , $config , $position){
 		$postData=$request->getData();
 		$argumentName=$config['name'];
 		if(!isset($postData[$argumentName])){

@@ -26,11 +26,27 @@ use Arbor\Event\ExecutedActionEvent;
  */
 class HttpSecurity extends Event{
 	
+	/**
+	 * Init event.
+	 *
+	 * @param \Arbor\Event\ExecutedActionEvent $event
+	 * @param array $config
+	 * @since 0.1.0
+	 */
 	public function onExecutedAction(ExecutedActionEvent $event,$config){
 		$response=$event->getResponse();
 		$this->supportTimeForceSSL($response,$config);
 	}
+	
 
+	/**
+	 * Support Strict-Transport-Security
+	 *
+	 * @param \Arbor\Provider\Response $response
+	 * @param array $config
+	 * @see https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
+	 * @since 0.1.0
+	 */
 	private function supportTimeForceSSL(Response $response, $config){
 		if(isset($config['forceSSL']) && $config['forceSSL']=="true"){
 			$maxAge='3600000';

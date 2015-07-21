@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class RouteNotFoundException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $url
+	 * @since 0.1.0
+	 */
 	public function __construct($url){
 		parent::__construct(3,'Route not found for url: '.$url.".","Page not found.");
 	}

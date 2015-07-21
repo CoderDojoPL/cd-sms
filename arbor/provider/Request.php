@@ -21,6 +21,7 @@ use Arbor\Core\RequestProvider;
 use Arbor\Exception\HeaderNotFoundException;
 use Arbor\Core\FileUploaded;
 use Arbor\Exception\FileNotUploadedException;
+use Arbor\Contener\RequestConfig;
 
 /**
  * Provider for request.
@@ -44,7 +45,7 @@ class Request implements RequestProvider{
 	private $clientIp;
 	private $files=array();
 
-	public function __construct($config,$url,Session $session){
+	public function __construct(RequestConfig $config,$url,Session $session){
 		$this->config=$config;
 		$this->url=$url;
 		$this->session=$session;

@@ -25,6 +25,11 @@ use Arbor\Core\Exception;
  */
 class PermissionDeniedException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @since 0.1.0
+	 */
 	public function __construct(){
 		parent::__construct(311,'Permission denied');
 	}

@@ -24,6 +24,13 @@ use Arbor\Core\Exception;
  */
 class MethodNotFoundException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $className
+	 * @param string $methodName
+	 * @since 0.1.0
+	 */
 	public function __construct($className,$methodName){
 		parent::__construct(9,"Method '".$className."::".$methodName."' not found.","Internal server error.");
 	}

@@ -25,6 +25,13 @@ use Arbor\Core\Exception;
  */
 class RequiredArgumentException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param int $position
+	 * @param string $name
+	 * @since 0.1.0
+	 */
 	public function __construct($position,$name){
 		parent::__construct(100+$position,'Wymagany argument "'.$name.'".');
 	}

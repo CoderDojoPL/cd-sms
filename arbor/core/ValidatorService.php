@@ -24,8 +24,9 @@ namespace Arbor\Core;
 interface ValidatorService{
 
 	/**
-	 * validate once value
-	 * @param Arbor\Core\Validator $validator - class validator rule
+	 * Validate once value.
+	 *
+	 * @param \Arbor\Core\Validator $validator - class validator rule
 	 * @param mixed $value - valut to validation
 	 * @return null if success or message error if fail
 	 * @since 0.13.0
@@ -33,8 +34,8 @@ interface ValidatorService{
 	public function validate($validator,$value);
 
 	/**
-	 * validate multiple values
-	 * @arg validators - array with value and validators: 
+	 * Validate multiple values
+	 * @param array $validators - array with value and validators: 
 	 * array(
 	 * 'field name'=>array(
 	 *		'validator rule class'
@@ -50,9 +51,10 @@ interface ValidatorService{
 	public function multiValidate($validators);
 
 	/**
-	 * Validate data from storage array
-	 * @arg $validators - array with rules validation example: array('nameField'=>'Validator\ExampleClassValidator')
-	 * @arg $storage - array with values, example array('nameField1'=>'value1','nameField2'=>'value2')
+	 * Validate data from storage array.
+	 *
+	 * @param array $validators array with rules validation example: array('nameField'=>'Validator\ExampleClassValidator')
+	 * @param array $storage array with values, example array('nameField1'=>'value1','nameField2'=>'value2')
 	 * @return array with errors. If success then empty array.
 	 * @since 0.13.0
 	 */

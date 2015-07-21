@@ -25,7 +25,9 @@ use Arbor\Core\Exception;
 class FieldNotFoundException extends Exception{
 	
 	/**
-	 * @param string name - field name
+	 * Constructor.
+	 *
+	 * @param string $name field name
 	 * @since 0.16.0
 	 */
 	public function __construct($name){

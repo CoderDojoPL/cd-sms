@@ -24,6 +24,14 @@ use Arbor\Core\Exception;
  */
 class RuntimeException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $errfile
+	 * @param int $errline
+	 * @param string $errstr
+	 * @since 0.1.0
+	 */
 	public function __construct($errfile,$errline,$errstr){
 		parent::__construct(13,$errstr,"Internal server error.",$errfile,$errline);
 	}

@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class InvalidConfigKeyException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $key
+	 * @since 0.1.0
+	 */	
 	public function __construct($key){
 		parent::__construct(2,'Invalid config key \''.$key.'\'.','Invalid configuration.',"Internal server error.");
 	}

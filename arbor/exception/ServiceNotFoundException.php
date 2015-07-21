@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class ServiceNotFoundException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param string $service
+	 * @since 0.1.0
+	 */
 	public function __construct($service){
 		parent::__construct(5,'Service "'.$service.'" not found.','Internal server error.');
 	}

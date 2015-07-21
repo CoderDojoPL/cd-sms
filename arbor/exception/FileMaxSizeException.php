@@ -24,6 +24,12 @@ use Arbor\Core\Exception;
  */
 class FileMaxSizeException extends Exception{
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param long $maxSize
+	 * @since 0.1.0
+	 */	
 	public function __construct($maxSize){
 		parent::__construct(17,'Max size for file is too large. Server limit: '.$maxSize.'.');
 	}
