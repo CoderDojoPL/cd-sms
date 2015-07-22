@@ -46,6 +46,7 @@ class Doctrine{
 		$this->entityManager = EntityManager::create($dbParams, $config);
 
 		$this->entityManager->getEventManager()->addEventListener(array('onFlush'), $eventHandler);
+		$this->entityManager->getEventManager()->addEventListener(array('postFlush'), $eventHandler);
 	}
 
 	public function getEntityManager(){

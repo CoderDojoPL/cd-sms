@@ -12,6 +12,7 @@ namespace Library\Doctrine;
 
 use Arbor\Core\EventManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 
 class EventHandler{
 	
@@ -25,4 +26,10 @@ class EventHandler{
 		$this->eventManager->fire('doctrine.onFlush',$eventArgs);
 
 	}
+
+	public function postFlush(PostFlushEventArgs $eventArgs){
+		$this->eventManager->fire('doctrine.postFlush',$eventArgs);
+
+	}
+
 }

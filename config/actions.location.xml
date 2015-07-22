@@ -13,6 +13,7 @@
 		<route pattern="\/location\/add"/>
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
+		<log action="2" />
 	</action>
 
 	<action controller="Location" method="edit">
