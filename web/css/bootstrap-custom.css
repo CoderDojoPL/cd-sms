@@ -1,5 +1,18 @@
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
 body > .container {
-    padding-top: 65px;
+    /*padding-top: 65px;*/
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by its height */
+    margin: 0 auto -30px;
+    /* Pad bottom by footer height */
+    padding: 65px 0 30px;
 }
 
 .has-required label:after {
@@ -14,4 +27,22 @@ body > .container {
 
 .timeline-label img {
     max-width: 100%;
+}
+
+.footer{
+    width: 100%;
+    height: 20px;
+    display: block;
+    position: relative;
+    padding: 0.2em 0 0.2em 0;
+    color: gray;
+    font-size: x-small;
+}
+.footer .left{
+    position: absolute;
+    left: 10em;
+}
+.footer .right{
+    position: absolute;
+    right: 10em;
 }
