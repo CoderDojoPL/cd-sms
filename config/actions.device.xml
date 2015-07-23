@@ -18,6 +18,7 @@
 		<route pattern="\/device\/add\/serialNumber" />
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig" />
+		<log action="7" />
 	</action>
 
 	<action controller="Device" method="edit" >
@@ -25,6 +26,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig" />
 		<argument storage="url" name="id" pattern="^\/device\/edit\/([0-9]+)$" mapper="Mapper\Device" />
+		<log action="8" />
 	</action>
 
 	<action controller="Device" method="removeConfirm" >
@@ -39,6 +41,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig" />
 		<argument storage="url" name="id" pattern="^\/device\/remove\/([0-9]+)\/yes$" mapper="Mapper\Device" />
+		<log action="9" type="GET" />
 	</action>
 
 </content>

@@ -14,6 +14,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/user\/edit\/([0-9]+)$" mapper="Mapper\User"/>
+		<log action="1" />
 	</action>
 
 </content>

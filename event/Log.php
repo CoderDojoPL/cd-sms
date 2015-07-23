@@ -74,6 +74,9 @@ class Log extends Event{
 		$this->log->setCountModifiedEntities($this->entityCount);
 		$this->log->setIsSuccess($isSuccess);
 		$this->log->setResult(json_encode($event->getResponse()->getContent()));
+
+		$this->log->setUser($this->getSessionUser($event));
+
 		if(!$isSuccess && $responseContent instanceof \Exception)
 			$this->log->setFailMessage($responseContent->getMessage());
 			$em->persist($this->log);
@@ -109,13 +112,15 @@ class Log extends Event{
 
 	private function getLogAction($request,$reconnect=true){
 		$actionId=0;
-		if($request->getType()!='POST'){
-			return null;
-		}
 		foreach($request->getExtra() as $extra){
 			foreach($extra as $parameter=>$config){
 				if($parameter=='log'){
-					$actionId=$config['action'];
+					$type=(isset($config['type'])?strtoupper($config['type']):'POST');
+					if($request->getType()==$type){
+						$actionId=$config['action'];
+						break;
+					}
+
 				}
 			}
 		}
@@ -175,7 +180,7 @@ class Log extends Event{
 
 		foreach($this->insertedEntities as $entity){
 
-			$logEntity=$this->entityLogCreate($entity);
+			$logEntity=$this->createLogEntity($entity);
 
 
 			$logEntity->setLogLeft($log);
@@ -189,19 +194,13 @@ class Log extends Event{
 		foreach($this->updatedEntities as $entity){
 
 			$logEntity=$this->getUpdatedLogEntity($entity->getId(),str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log"));
-			if(in_array($entity, $this->flushedEntities)){ //rekord został zmodyfikowany w tej samej sesji
+			if(in_array($entity, $this->flushedEntities)){ //modified record in that same session
 				$this->fillLogEntity($entity,$logEntity);
 			}
-			else if($entity->getIsRemoved()){//rekord został usunięty
-				$logEntity->setLogRight($log);
-				$logEntity->setIsRemoved(true);
-				$this->entityCount++;
-
-			}
-			else{ //rekord edytowany
+			else{ //edited record
 				$logEntity->setLogRight($log);
 
-				$updatedLogEntity=$entity->createLog($em);
+				$updatedLogEntity=$this->createLogEntity($entity);
 				$updatedLogEntity->setLogLeft($log);
 				$em->persist($updatedLogEntity);
 				$this->entityCount++;
@@ -212,7 +211,7 @@ class Log extends Event{
 		foreach($this->removedEntities as $entity){
 			$logEntity=$this->getUpdatedLogEntity($entity['id'],$entity['name']);
 			$logEntity->setLogRight($log);
-			$logEntity->setIsRemoved(true);
+			$logEntity->setRemoved(true);
 			$this->entityCount++;
 		}
 
@@ -228,26 +227,12 @@ class Log extends Event{
 
 	}
 
-	public function entityLogCreate($entity){
+	private function createLogEntity($entity){
 		$values=array();
-		$logEntityName=get_class($entity).'Log';
+		$logEntityName=str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log");
 		$logEntity=new $logEntityName();
 		
-		foreach(get_class_methods($entity) as $method){
-			if(preg_match('/^get(.*)$/',$method,$finds)){
-				$methodName=$finds[1];
-				$data=$entity->$method();
-
-				if($methodName=='Id'){
-					$methodName='Origin';
-				}
-				$setMethodName='set'.$methodName;
-				if(method_exists($logEntity, $setMethodName)){
-					$logEntity->$setMethodName($data);
-				}
-			}
-		}
-
+		$this->fillLogEntity($entity,$logEntity);
 		return $logEntity;
 	}
 
@@ -255,13 +240,13 @@ class Log extends Event{
 		$values=array();
 		foreach(get_class_methods($entity) as $method){
 			if(preg_match('/^get(.*)$/',$method,$finds)){
-				if($method=='getId'){ //dla id nie ma settera
-					continue;					
-				}
-
+				$methodName=$finds[1];
 				$data=$entity->$method();
-				$methodSetterName='set'.$finds[1];
-				$logEntity->$methodSetterName($data);
+
+				$setMethodName='set'.$methodName;
+				if(method_exists($logEntity, $setMethodName)){
+					$logEntity->$setMethodName($data);
+				}
 			}
 		}
 
@@ -294,7 +279,7 @@ class Log extends Event{
 
 	private function getUpdatedLogEntity($id,$name){
 		$em=$this->getService('doctrine')->getEntityManager();
-		$entity=$em->getRepository($name)->findOneBy(array('originId'=>$id,'logRight'=>null));
+		$entity=$em->getRepository($name)->findOneBy(array('id'=>$id,'logRight'=>null));
 
 		if(!$entity)
 			throw new LogEntityNotFoundException();

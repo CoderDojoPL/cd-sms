@@ -21,6 +21,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/location\/edit\/([0-9]+)$" mapper="Mapper\Location"/>
+		<log action="3" />
 	</action>
 	
 	<action controller="Location" method="removeConfirm">
@@ -35,6 +36,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/location\/remove\/([0-9]+)\/yes$" mapper="Mapper\Location"/>
+		<log action="4" type="GET" />
 	</action>
 
 </content>

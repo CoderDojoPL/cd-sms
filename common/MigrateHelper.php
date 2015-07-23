@@ -71,19 +71,30 @@ abstract class MigrateHelper{
         $schemaDiff = $comparator->compare($fromSchema, $schema);
         $platform=$manager->getConnection()->getDatabasePlatform();
         $sqls=$schemaDiff->toSql($platform);
+    	foreach($sqls as $sql){
+			$manager->getConnection()->exec($sql);
+    	}
+
+	}
+
+	/**
+	 * Begin database transaction.
+	 */
+	protected function beginTransaction(){
+		$manager=$this->container->getDoctrine()->getEntityManager();
         $conn=$manager->getConnection();
         $conn->beginTransaction();
-        try{
-        	foreach($sqls as $sql){
-				$manager->getConnection()->exec($sql);
-        	}
-			$conn->commit();
 
-        }
-        catch(\Exception $e){
-        	$conn->rollback();
-        	throw $e;
-        }
+	}
+
+	/**
+	 * Commit database transaction.
+	 */
+	protected function commitTransaction(){
+		$manager=$this->container->getDoctrine()->getEntityManager();
+        $conn=$manager->getConnection();
+        $conn->commit();
+
 	}
 
 	/**

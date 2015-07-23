@@ -19,6 +19,8 @@
         <route pattern="\/order\/add\/addapply"/>
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
+        <log action="10" />
+
     </action>
 
     <action controller="Order" method="show">
@@ -33,6 +35,7 @@
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
         <argument storage="url" name="id" pattern="^\/order\/fetch\/([0-9]+)$" mapper="Mapper\Order"/>
+        <log action="11" type="GET" />
     </action>
 
     <action controller="Order" method="close">
@@ -40,6 +43,7 @@
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
         <argument storage="url" name="id" pattern="^\/order\/close\/([0-9]+)$" mapper="Mapper\Order"/>
+        <log action="12" type="GET" />
     </action>
 
 </content>

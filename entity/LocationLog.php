@@ -14,7 +14,6 @@ namespace Entity;
 /**
  * @Entity()
  * @Table(name="location_logs")
- * @HasLifecycleCallbacks
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
 class LocationLog
@@ -22,7 +21,6 @@ class LocationLog
 	/**
 	 * @Id
 	 * @Column(type="integer")
-	 * @GeneratedValue
 	 **/
 	protected $id;
 	/**
@@ -65,12 +63,8 @@ class LocationLog
 	 **/
 	protected $createdAt;
 
-	/**
-	 * @Column(name="origin_id",type="integer")
-	 **/
-	protected $origin;
-
     /**
+	 * @Id
      * @ManyToOne(targetEntity="Log")
      * @JoinColumn(name="log_left_id", referencedColumnName="id",onDelete="CASCADE")
      **/
@@ -197,6 +191,14 @@ class LocationLog
 	}
 
 	/**
+	 * @param int $id
+	 */
+	public function setId($id)
+	{
+		return $this->id=$id;
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getPhone()
@@ -243,17 +245,6 @@ class LocationLog
 	public function getCreatedAt()
 	{
 		return $this->createdAt;
-	}
-
-	public function setOrigin($origin)
-	{
-		$this->origin = $origin;
-		return $this;
-	}
-
-	public function getOrigin()
-	{
-		return $this->origin;
 	}
 
 	public function setLogLeft($logLeft)

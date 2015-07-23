@@ -24,6 +24,7 @@ class Version20150711112810 extends MigrateHelper{
 	 * {@inheritdoc}
 	 */
 	public function update(Container $container){
+		$this->beginTransaction();
 		$schema=$this->createSchema();
 
 		$deviceTags=$schema->createTable('device_tags');
@@ -158,6 +159,7 @@ class Version20150711112810 extends MigrateHelper{
 		$this->persist($orderStateEntity);
 
 		$this->flush();
+		$this->commitTransaction();
 
 	}
 
@@ -165,6 +167,7 @@ class Version20150711112810 extends MigrateHelper{
 	 * {@inheritdoc}
 	 */
 	public function downgrade(Container $container){
+		$this->beginTransaction();
 		$schema=$this->createSchema();
 
 		$schema->dropTable('device_tags');
@@ -190,6 +193,7 @@ class Version20150711112810 extends MigrateHelper{
 
 		// print_r($schema);exit;
 		$this->updateSchema($schema);
+		$this->commitTransaction();
 
 	}
 

@@ -27,6 +27,7 @@
 		<authenticate incognito="true" session-redirect="/" />
 		<route pattern="\/login\/oauth2callback" />
 		<presenter class="Library\Twig\Presenter\Twig" />
+		<log action="5" type="GET" />
 
 	</action>
 
@@ -34,12 +35,14 @@
 		<authenticate redirect="/login" />
 		<route pattern="\/logout" />
 		<presenter class="Library\Twig\Presenter\Twig" />
+		<log action="6" type="GET" />
 	</action>
 
 	<action controller="Authenticate" method="setLocation" >
 		<authenticate redirect="/login" />
 		<route pattern="\/login\/location" />
 		<presenter class="Library\Twig\Presenter\Twig" />
+		<log action="13" />
 	</action>
 
 </content>
