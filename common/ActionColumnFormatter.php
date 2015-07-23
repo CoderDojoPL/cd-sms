@@ -21,7 +21,7 @@ use Arbor\Component\Grid\ColumnFormatter;
 class ActionColumnFormatter implements ColumnFormatter{
 
 	private $prefix;
-	private $buttons;
+	protected $buttons;
 
 	/**
 	 * @param string $prefix - name to generate link urls e.g. order, device
