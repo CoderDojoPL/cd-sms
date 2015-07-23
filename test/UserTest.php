@@ -10,9 +10,9 @@
  */
 
 namespace Test;
-require_once __DIR__.'/../arbor/core/WebTestCase.php';
+require_once __DIR__.'/../common/WebTestCaseHelper.php';
 
-use Arbor\Core\WebTestCase;
+use Common\WebTestCaseHelper;
 use Entity\User;
 use Entity\Location;
 
@@ -20,12 +20,7 @@ use Entity\Location;
  * @package Test
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
-class UserTest extends WebTestCase{	
-
-	protected function setUp(){
-		$this->executeCommand('migrate:downgrade');
-		$this->executeCommand('migrate:update');
-	}
+class UserTest extends WebTestCaseHelper{	
 
 	public function testIndexUnautheticate(){
 
@@ -50,16 +45,10 @@ class UserTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
-		$user=new User();
-		$user->setEmail('test@coderdojo.org.pl');
-		$user->setFirstName('first name');
-		$user->setLastName('last name');
-		$user->setLocation($location);
-		$em->persist($user);
-
-		$em->flush();
+		$user=$this->user;
+		$this->flush();
 
 		$session=$this->createSession();
 		$session->set('user.id',$user->getId());
@@ -106,16 +95,16 @@ class UserTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
 		$user=new User();
 		$user->setEmail('test@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($location);
-		$em->persist($user);
+		$this->persist($user);
 
-		$em->flush();
+		$this->flush();
 
 		$client=$this->createClient();
 		$url=$client->loadPage('/user/edit/'.$user->getId())
@@ -138,7 +127,7 @@ class UserTest extends WebTestCase{
 		$location1->setPostal('00-000');
 		$location1->setPhone('+48100000000');
 		$location1->setEmail('email@email.pl');
-		$em->persist($location1);
+		$this->persist($location1);
 
 		$location2=new Location();
 		$location2->setName('Location 2 name');
@@ -149,16 +138,16 @@ class UserTest extends WebTestCase{
 		$location2->setPostal('02-000');
 		$location2->setPhone('+28100000000');
 		$location2->setEmail('email2@email.pl');
-		$em->persist($location2);
+		$this->persist($location2);
 
 		$user=new User();
 		$user->setEmail('test@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($location1);
-		$em->persist($user);
+		$this->persist($user);
 
-		$em->flush();
+		$this->flush();
 
 
 		$session=$this->createSession();
@@ -207,8 +196,8 @@ class UserTest extends WebTestCase{
 
 		$em->clear();
 		$users=$em->getRepository('Entity\User')->findAll();
-		$this->assertCount(1,$users, 'Invalid number users');
-		$user=$users[0];
+		$this->assertCount(2,$users, 'Invalid number users');
+		$user=$users[1];
 		$this->assertEquals('test@coderdojo.org.pl',$user->getEmail(),'Invalid user email');
 		$this->assertEquals('First name edit',$user->getFirstName(),'Invalid user first name');
 		$this->assertEquals('Last name edit',$user->getLastName(),'Invalid user last name');

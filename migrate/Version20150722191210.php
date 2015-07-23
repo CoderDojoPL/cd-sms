@@ -255,6 +255,7 @@ class Version20150722191210 extends MigrateHelper{
 	 * {@inheritdoc}
 	 */
 	public function downgrade(Container $container){
+		$this->beginTransaction();
 		$schema=$this->createSchema();
 
 		$logs=$schema->getTable('logs');
@@ -283,8 +284,8 @@ class Version20150722191210 extends MigrateHelper{
 		//$orderLogs->removeForeignKey('FK_BD7EFC4BDAA1F695');
 		// $orderLogs->removeForeignKey('FK_BD7EFC4B3AC4A3EA');
 
-		$deviceTagLogs->removeForeignKey('FK_90B420CADAA1F695');
-		$deviceTagLogs->removeForeignKey('FK_90B420CA3AC4A3EA');
+		// $deviceTagLogs->removeForeignKey('FK_90B420CADAA1F695');
+		// $deviceTagLogs->removeForeignKey('FK_90B420CA3AC4A3EA');
 
 		$schema->dropTable('log_actions');
 		$schema->dropTable('logs');
@@ -292,9 +293,12 @@ class Version20150722191210 extends MigrateHelper{
 		$schema->dropTable('user_logs');
 		$schema->dropTable('device_logs');
 		$schema->dropTable('order_logs');
+		$schema->dropTable('device_tag_logs');
 
 				
 		$this->updateSchema($schema);
+		$this->commitTransaction();
+
 
 	}
 

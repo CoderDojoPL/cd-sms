@@ -10,9 +10,9 @@
  */
 
 namespace Test;
-require_once __DIR__.'/../arbor/core/WebTestCase.php';
+require_once __DIR__.'/../common/WebTestCaseHelper.php';
 
-use Arbor\Core\WebTestCase;
+use Common\WebTestCaseHelper;
 use Entity\User;
 use Entity\Location;
 
@@ -20,12 +20,7 @@ use Entity\Location;
  * @package Test
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
-class AuthenticateTest extends WebTestCase{	
-
-	protected function setUp(){
-		$this->executeCommand('migrate:downgrade');
-		$this->executeCommand('migrate:update');
-	}
+class AuthenticateTest extends WebTestCaseHelper{	
 
 	public function testSetLocationUnautheticate(){
 
@@ -44,9 +39,9 @@ class AuthenticateTest extends WebTestCase{
 		$user->setEmail('test@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
-		$em->persist($user);
+		$this->persist($user);
 
-		$em->flush();
+		$this->flush();
 
 		$location=$this->getService('doctrine')->getRepository('Entity\Location')->findOneBy(array());
 
@@ -82,8 +77,8 @@ class AuthenticateTest extends WebTestCase{
 
 		$em->clear();
 		$users=$em->getRepository('Entity\User')->findAll();
-		$this->assertCount(1,$users, 'Invalid number users');
-		$user=$users[0];
+		$this->assertCount(2,$users, 'Invalid number users');
+		$user=$users[1];
 		$this->assertEquals($location->getId(),$user->getLocation()->getId(),'Invalid location');
 
 		$client->loadPage('/login/location');

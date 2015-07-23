@@ -10,9 +10,9 @@
  */
 
 namespace Test;
-require_once __DIR__.'/../arbor/core/WebTestCase.php';
+require_once __DIR__.'/../common/WebTestCaseHelper.php';
 
-use Arbor\Core\WebTestCase;
+use Common\WebTestCaseHelper;
 use Entity\Location;
 use Entity\User;
 
@@ -20,25 +20,7 @@ use Entity\User;
  * @package Test
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
-class LocationTest extends WebTestCase{	
-	private $user;
-	protected function setUp(){
-		$this->executeCommand('migrate:downgrade');
-		$this->executeCommand('migrate:update');
-
-		$em=$this->getService('doctrine')->getEntityManager();
-
-		$user=new User();
-		$user->setEmail('test@coderdojo.org.pl');
-		$user->setFirstName('first name');
-		$user->setLastName('last name');
-		$user->setLocation($em->getRepository('Entity\Location')->findOneBy(array()));
-		$em->persist($user);
-		$em->flush();
-
-		$this->user=$user;
-
-	}
+class LocationTest extends WebTestCaseHelper{	
 
 	public function testIndexUnautheticate(){
 
@@ -63,9 +45,10 @@ class LocationTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
+		
 
-		$em->flush();
+		$this->flush();
 
 		$session=$this->createSession();
 		$session->set('user.id',$this->user->getId());
@@ -123,9 +106,10 @@ class LocationTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
+		
 
-		$em->flush();
+		$this->flush();
 		$client=$this->createClient();
 		$url=$client->loadPage('/location/remove/'.$location->getId())
 		->getUrl();
@@ -147,9 +131,10 @@ class LocationTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
+		
 
-		$em->flush();
+		$this->flush();
 
 		$session=$this->createSession();
 		$session->set('user.id',$this->user->getId());
@@ -271,9 +256,10 @@ class LocationTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
+		
 
-		$em->flush();
+		$this->flush();
 
 		$client=$this->createClient();
 		$url=$client->loadPage('/location/edit/'.$location->getId())
@@ -299,16 +285,18 @@ class LocationTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
+		
 
 		$user=new User();
 		$user->setEmail('test@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($location);
-		$em->persist($user);
+		$this->persist($user);
+		
 
-		$em->flush();
+		$this->flush();
 
 
 		$session=$this->createSession();

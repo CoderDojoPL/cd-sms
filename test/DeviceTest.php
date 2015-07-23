@@ -10,9 +10,9 @@
  */
 
 namespace Test;
-require_once __DIR__.'/../arbor/core/WebTestCase.php';
+require_once __DIR__.'/../common/WebTestCaseHelper.php';
 
-use Arbor\Core\WebTestCase;
+use Common\WebTestCaseHelper;
 use Entity\Location;
 use Entity\Device;
 use Entity\DeviceTag;
@@ -24,26 +24,7 @@ use Entity\Order;
  * @package Test
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
-class DeviceTest extends WebTestCase{	
-
-	private $user;
-
-	protected function setUp(){
-		$this->executeCommand('migrate:downgrade');
-		$this->executeCommand('migrate:update');
-		$em=$this->getService('doctrine')->getEntityManager();
-
-		$user=new User();
-		$user->setEmail('test@coderdojo.org.pl');
-		$user->setFirstName('first name');
-		$user->setLastName('last name');
-		$user->setLocation($em->getRepository('Entity\Location')->findOneBy(array()));
-		$em->persist($user);
-		$em->flush();
-
-		$this->user=$user;
-
-	}
+class DeviceTest extends WebTestCaseHelper{	
 
 	public function testIndexUnautheticate(){
 
@@ -68,13 +49,13 @@ class DeviceTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
 
 
 		$deviceTag=new DeviceTag();
 		$deviceTag->setName('DeviceTag name');
-		$em->persist($deviceTag);
+		$this->persist($deviceTag);
 
 		$device=new Device();
 		$device->setName('Device name');
@@ -87,10 +68,10 @@ class DeviceTest extends WebTestCase{
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
 
-		$em->persist($device);
+		$this->persist($device);
 
 
-		$em->flush();
+		$this->flush();
 
 		$session=$this->createSession();
 		$session->set('user.id',$this->user->getId());
@@ -150,13 +131,13 @@ class DeviceTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
 
 
 		$deviceTag=new DeviceTag();
 		$deviceTag->setName('DeviceTag name');
-		$em->persist($deviceTag);
+		$this->persist($deviceTag);
 
 		$device=new Device();
 		$device->setName('Device name');
@@ -169,10 +150,10 @@ class DeviceTest extends WebTestCase{
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
 
-		$em->persist($device);
+		$this->persist($device);
 
 
-		$em->flush();
+		$this->flush();
 		$client=$this->createClient();
 		$url=$client->loadPage('/device/remove/'.$device->getId())
 		->getUrl();
@@ -194,12 +175,12 @@ class DeviceTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
 
 		$deviceTag=new DeviceTag();
 		$deviceTag->setName('DeviceTag name');
-		$em->persist($deviceTag);
+		$this->persist($deviceTag);
 
 		$device=new Device();
 		$device->setName('Device name');
@@ -212,7 +193,7 @@ class DeviceTest extends WebTestCase{
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
 
-		$em->persist($device);
+		$this->persist($device);
 
 		$user=new User();
 		$user->setEmail('owner@coderdojo.org.pl');
@@ -220,17 +201,17 @@ class DeviceTest extends WebTestCase{
 		$user->setLastName('last name');
 		$user->setLocation($location);
 
-		$em->persist($user);
+		$this->persist($user);
 
 		$order=new Order();
 		$order->setOwner($user);
 		$order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
 		$order->setDevice($device);
 
-		$em->persist($order);
+		$this->persist($order);
 
 
-		$em->flush();
+		$this->flush();
 
 		$session=$this->createSession();
 		$session->set('user.id',$this->user->getId());
@@ -288,9 +269,9 @@ class DeviceTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
-		$em->flush();
+		$this->flush();
 
 		$session=$this->createSession();
 		$session->set('user.id',$this->user->getId());
@@ -405,13 +386,13 @@ class DeviceTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
 
 
 		$deviceTag=new DeviceTag();
 		$deviceTag->setName('DeviceTag name');
-		$em->persist($deviceTag);
+		$this->persist($deviceTag);
 
 		$device=new Device();
 		$device->setName('Device name');
@@ -424,10 +405,10 @@ class DeviceTest extends WebTestCase{
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
 
-		$em->persist($device);
+		$this->persist($device);
 
 
-		$em->flush();
+		$this->flush();
 
 		$client=$this->createClient();
 		$url=$client->loadPage('/device/edit/'.$device->getId())
@@ -450,13 +431,13 @@ class DeviceTest extends WebTestCase{
 		$location->setPostal('00-000');
 		$location->setPhone('+48100000000');
 		$location->setEmail('email@email.pl');
-		$em->persist($location);
+		$this->persist($location);
 
 
 
 		$deviceTag=new DeviceTag();
 		$deviceTag->setName('DeviceTag name');
-		$em->persist($deviceTag);
+		$this->persist($deviceTag);
 
 		$device=new Device();
 		$device->setName('Device name');
@@ -472,10 +453,10 @@ class DeviceTest extends WebTestCase{
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
 
-		$em->persist($device);
+		$this->persist($device);
 
 
-		$em->flush();
+		$this->flush();
 
 
 		$session=$this->createSession();
