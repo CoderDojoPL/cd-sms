@@ -36,7 +36,6 @@ class ActionColumnFormatter implements ColumnFormatter{
 	 * {@inheritdoc}
 	 */
 	public function render($data){
-
 		$html='';
 		$action='';
 		$icon='';

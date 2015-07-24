@@ -52,7 +52,7 @@ class BasicGridFormatter implements GridFormatter{
 					<thead>
 						<tr>';
 		foreach($columns as $column){
-			$html.='<th data-id="'.$column['key'].'" data-template="'.htmlspecialchars($column['formatter']->render('{data}')).'" data-name="'.$column['key'].'">'.$column['label'].'</th>';
+			$html.='<th>'.$column['label'].'</th>';
 		}
 
 		$html.='</tr>

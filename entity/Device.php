@@ -41,8 +41,8 @@ class Device
 	/**
 	 * @ManyToMany(targetEntity="DeviceTag")
 	 * @JoinTable(name="devices_tags",
-	 *      joinColumns={@JoinColumn(name="device_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id")}
+	 *      joinColumns={@JoinColumn(name="device_id", referencedColumnName="id",onDelete="CASCADE")},
+	 *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id",onDelete="CASCADE")}
 	 *      )
 	 **/
 	private $tags;
