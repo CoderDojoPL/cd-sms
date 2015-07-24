@@ -304,7 +304,7 @@ class Version20150722191210 extends MigrateHelper{
 
 	private function createLogEntity($entity){
 		$values=array();
-		$logEntityName=get_class($entity).'Log';
+		$logEntityName=str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log");
 		$logEntity=new $logEntityName();
 		
 		$this->fillLogEntity($entity,$logEntity);

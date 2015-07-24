@@ -24,6 +24,7 @@ class Version20150717214510 extends MigrateHelper{
 	 * {@inheritdoc}
 	 */
 	public function update(Container $container){
+		$this->beginTransaction();
 		$schema=$this->createSchema();
 		$users=$schema->getTable('users');
 		$devices=$schema->getTable('devices');
@@ -46,6 +47,7 @@ class Version20150717214510 extends MigrateHelper{
 		$devices->addNamedForeignKeyConstraint('FK_11074E9A64D218E',$locations, array('location_id'),array('id'),array('onDelete'=>'CASCADE'));
 				
 		$this->updateSchema($schema);
+		$this->commitTransaction();
 
 	}
 
@@ -54,6 +56,7 @@ class Version20150717214510 extends MigrateHelper{
 	 * {@inheritdoc}
 	 */
 	public function downgrade(Container $container){
+		$this->beginTransaction();
 		$schema=$this->createSchema();
 
 		$orders=$schema->getTable('orders');
@@ -77,6 +80,7 @@ class Version20150717214510 extends MigrateHelper{
 		$devices->addNamedForeignKeyConstraint('FK_11074E9A64D218E',$locations, array('location_id'),array('id'));
 				
 		$this->updateSchema($schema);
+		$this->commitTransaction();
 
 	}
 

@@ -32,6 +32,10 @@ class Log extends Event{
 		$logAction=$this->getLogAction($request);
 		if($logAction){
 			$this->createLog($event,$logAction);
+			$this->insertedEntities=array();
+			$this->updatedEntities=array();
+			$this->removedEntities=array();
+
 		}
 
 		$this->monitoring=true;
@@ -192,7 +196,6 @@ class Log extends Event{
 		}
 
 		foreach($this->updatedEntities as $entity){
-
 			$logEntity=$this->getUpdatedLogEntity($entity->getId(),str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log"));
 			if(in_array($entity, $this->flushedEntities)){ //modified record in that same session
 				$this->fillLogEntity($entity,$logEntity);
@@ -204,10 +207,10 @@ class Log extends Event{
 				$updatedLogEntity->setLogLeft($log);
 				$em->persist($updatedLogEntity);
 				$this->entityCount++;
+				$this->flushedEntities[]=$entity;				
 
 			}
 		}
-
 		foreach($this->removedEntities as $entity){
 			$logEntity=$this->getUpdatedLogEntity($entity['id'],$entity['name']);
 			$logEntity->setLogRight($log);

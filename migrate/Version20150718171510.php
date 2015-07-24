@@ -27,6 +27,7 @@ class Version20150718171510 extends MigrateHelper{
 		$locations=$container->findOne('Location',array());
 
 		if(!$locations){
+			$this->beginTransaction();
 			$location=new \Entity\Location();
 			$location->setName('Main');
 			$location->setCity('?');
@@ -37,6 +38,7 @@ class Version20150718171510 extends MigrateHelper{
 			$location->setEmail('?');
 			$this->persist($location);
 			$this->flush();
+			$this->commitTransaction();
 		}
 
 	}
