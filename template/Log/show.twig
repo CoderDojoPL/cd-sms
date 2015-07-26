@@ -62,10 +62,10 @@
 									<td>{{record.name}}</td>
 									<td>{{record.dimensions}}</td>
 									<td>{{record.weight}}</td>
-									<td>{{record.serialNumber}}</td>
+									<td>{{record.serial_number}}</td>
 									<td>{{record.state}}</td>
 									<td>{{record.location}}</td>
-									<td>{{record.warrantyExpirationDate|date('Y-m-d')}}</td>
+									<td>{{record.warranty_expiration_date|date('Y-m-d')}}</td>
 									<td>{{record.price}}</td>
 									<td>{{record.note}}</td>
 								</tr>
@@ -99,16 +99,28 @@
 						<tbody>
 							{%for record in editDevices%}
 								<tr>
-									<td>{{record.id}}</td>
+									<td>-{{record.id}}</td>
 									<td>{{record.name}}</td>
 									<td>{{record.dimensions}}</td>
 									<td>{{record.weight}}</td>
-									<td>{{record.serialNumber}}</td>
+									<td>{{record.serial_number}}</td>
 									<td>{{record.state}}</td>
 									<td>{{record.location}}</td>
-									<td>{{record.warrantyExpirationDate|date('Y-m-d')}}</td>
+									<td>{{record.warranty_expiration_date|date('Y-m-d')}}</td>
 									<td>{{record.price}}</td>
 									<td>{{record.note}}</td>
+								</tr>
+								<tr>
+									<td>+{{record.id}}</td>
+									<td>{{record._name}}</td>
+									<td>{{record._dimensions}}</td>
+									<td>{{record._weight}}</td>
+									<td>{{record._serial_number}}</td>
+									<td>{{record._state}}</td>
+									<td>{{record._location}}</td>
+									<td>{{record._warranty_expiration_date|date('Y-m-d')}}</td>
+									<td>{{record._price}}</td>
+									<td>{{record._note}}</td>
 								</tr>
 							{%endfor%}
 						</tbody>
@@ -143,10 +155,10 @@
 									<td>{{record.name}}</td>
 									<td>{{record.dimensions}}</td>
 									<td>{{record.weight}}</td>
-									<td>{{record.serialNumber}}</td>
+									<td>{{record.serial_number}}</td>
 									<td>{{record.state}}</td>
 									<td>{{record.location}}</td>
-									<td>{{record.warrantyExpirationDate|date('Y-m-d')}}</td>
+									<td>{{record.warranty_expiration_date|date('Y-m-d')}}</td>
 									<td>{{record.price}}</td>
 									<td>{{record.note}}</td>
 								</tr>
@@ -156,6 +168,335 @@
 				</div>
 			</div>
 		{%endif%}
+
+
+		{%if addLocations %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Add locations</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Name</th>
+								<th>City</th>
+								<th>Street</th>
+								<th>Number</th>
+								<th>Apartment</th>
+								<th>Postal</th>
+								<th>Phone</th>
+								<th>Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in addLocations%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.name}}</td>
+									<td>{{record.city}}</td>
+									<td>{{record.street}}</td>
+									<td>{{record.number}}</td>
+									<td>{{record.apartment}}</td>
+									<td>{{record.postal}}</td>
+									<td>{{record.phone}}</td>
+									<td>{{record.email}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if editLocations %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Edit locations</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Name</th>
+								<th>City</th>
+								<th>Street</th>
+								<th>Number</th>
+								<th>Apartment</th>
+								<th>Postal</th>
+								<th>Phone</th>
+								<th>Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in editLocations%}
+								<tr>
+									<td>-{{record.id}}</td>
+									<td>{{record.name}}</td>
+									<td>{{record.city}}</td>
+									<td>{{record.street}}</td>
+									<td>{{record.number}}</td>
+									<td>{{record.apartment}}</td>
+									<td>{{record.postal}}</td>
+									<td>{{record.phone}}</td>
+									<td>{{record.email}}</td>
+								</tr>
+								<tr>
+									<td>+{{record.id}}</td>
+									<td>{{record._name}}</td>
+									<td>{{record._city}}</td>
+									<td>{{record._street}}</td>
+									<td>{{record._number}}</td>
+									<td>{{record._apartment}}</td>
+									<td>{{record._postal}}</td>
+									<td>{{record._phone}}</td>
+									<td>{{record._email}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if removeLocations %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Remove locations</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Name</th>
+								<th>City</th>
+								<th>Street</th>
+								<th>Number</th>
+								<th>Apartment</th>
+								<th>Postal</th>
+								<th>Phone</th>
+								<th>Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in removeLocations%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.name}}</td>
+									<td>{{record.city}}</td>
+									<td>{{record.street}}</td>
+									<td>{{record.number}}</td>
+									<td>{{record.apartment}}</td>
+									<td>{{record.postal}}</td>
+									<td>{{record.phone}}</td>
+									<td>{{record.email}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if addUsers %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Add Users</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Email</th>
+								<th>First name</th>
+								<th>Last Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in addUsers%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.email}}</td>
+									<td>{{record.first_name}}</td>
+									<td>{{record.last_name}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if editUsers %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Edit Users</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Email</th>
+								<th>First name</th>
+								<th>Last Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in editUsers%}
+								<tr>
+									<td>-{{record.id}}</td>
+									<td>{{record.email}}</td>
+									<td>{{record.first_name}}</td>
+									<td>{{record.last_name}}</td>
+								</tr>
+								<tr>
+									<td>+{{record.id}}</td>
+									<td>{{record._email}}</td>
+									<td>{{record._first_name}}</td>
+									<td>{{record._last_name}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if removeUsers %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Remove Users</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Email</th>
+								<th>First name</th>
+								<th>Last Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in removeUsers%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.email}}</td>
+									<td>{{record.first_name}}</td>
+									<td>{{record.last_name}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if addOrders %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Add Orders</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Owner</th>
+								<th>Device</th>
+								<th>State</th>
+								<th>Performer</th>
+								<th>Fetched at</th>
+								<th>Closed at</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in addOrders%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.owner}}</td>
+									<td>{{record.device}}</td>
+									<td>{{record.state}}</td>
+									<td>{{record.performer}}</td>
+									<td>{{record.fetched_at}}</td>
+									<td>{{record.closed_at}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if editOrders %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Edit Orders</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Owner</th>
+								<th>Device</th>
+								<th>State</th>
+								<th>Performer</th>
+								<th>Fetched at</th>
+								<th>Closed at</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in editOrders%}
+								<tr>
+									<td>-{{record.id}}</td>
+									<td>{{record.owner}}</td>
+									<td>{{record.device}}</td>
+									<td>{{record.state}}</td>
+									<td>{{record.performer}}</td>
+									<td>{{record.fetched_at}}</td>
+									<td>{{record.closed_at}}</td>
+								</tr>
+								<tr>
+									<td>+{{record.id}}</td>
+									<td>{{record._owner}}</td>
+									<td>{{record._device}}</td>
+									<td>{{record._state}}</td>
+									<td>{{record._performer}}</td>
+									<td>{{record._fetched_at}}</td>
+									<td>{{record._closed_at}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if removeOrders %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Remove Orders</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Owner</th>
+								<th>Device</th>
+								<th>State</th>
+								<th>Performer</th>
+								<th>Fetched at</th>
+								<th>Closed at</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in removeOrders%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.owner}}</td>
+									<td>{{record.device}}</td>
+									<td>{{record.state}}</td>
+									<td>{{record.performer}}</td>
+									<td>{{record.fetched_at}}</td>
+									<td>{{record.closed_at}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
 	</DIV>
+
 
 {% endblock %}
