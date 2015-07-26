@@ -116,14 +116,18 @@ class GridBuilder{
 	 * Add column
 	 *
 	 * @param string $label - column name
-	 * @param string $key - mapped key for record
+	 * @param string|array $keys - mapped keys for record
 	 * @since 0.17.0
 	 */
-	public function addColumn($label,$key,$formatter=null){
+	public function addColumn($label,$keys,$formatter=null){
 		if(!$formatter){			
 			$formatter=new BasicColumnFormatter();
 		}
-		$this->columns[]=array('label'=>$label,'key'=>$key,'formatter'=>$formatter);
+
+		if(!is_array($keys)){
+			$keys=array($keys);
+		}
+		$this->columns[]=array('label'=>$label,'keys'=>$keys,'formatter'=>$formatter);
 	}
 
 	/**

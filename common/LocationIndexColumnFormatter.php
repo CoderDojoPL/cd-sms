@@ -26,7 +26,7 @@ class LocationIndexColumnFormatter extends ActionColumnFormatter
 
     public function render($data)
     {
-        if ($data == $this->user->getLocation()->getId()) {
+        if ($data[0] == $this->user->getLocation()->getId()) {
             if (($key = array_search('remove', $this->buttons)) !== false) {
                 unset($this->buttons[$key]);
             }

@@ -1,0 +1,161 @@
+{% extends _request.isAjax ? "base_blank.twig" : "base_logged.twig" %}
+
+{% block body %}
+	<!-- Page Heading -->
+	<div class="row">
+		<div class="col-lg-12">
+			<ol class="breadcrumb">
+				<li>
+					<i class="fa fa-dashboard"></i> <a href="/log">Logs</a>
+				</li>
+				<li class="active">
+					<i class="fa fa-file"></i> Show
+				</li>
+			</ol>
+		</div>
+	</div>
+
+	<DIV class="row">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">Detail</div>
+			<div class="panel-body">
+			<table class="table">
+				<tr><th>Action:</th><td>{{entity.action}}</td></tr>
+				<tr><th>User:</th><td>{{entity.user}}</td></tr>
+				<tr><th>Date:</th><td>{{entity.createdAt|date('Y-m-d H:i:s')}}</td></tr>
+				<tr><th>Arguments:</th><td><pre>{{entity.arguments}}</pre></td></tr>
+				<tr><th>Result:</th><td><pre>{{entity.result}}</pre></td></tr>
+				<tr><th>Ip address:</th><td>{{entity.ipAddress}}</td></tr>
+				<tr><th>User agent:</th><td>{{entity.userAgent}}</td></tr>
+				<tr><th>Is success:</th><td>{%if entity.isSuccess%}Yes{%else%}No: {{entity.failMessage}}{%endif%}</td></tr>
+			</table>
+			</div>
+		</div>
+	</DIV>
+
+	<DIV class="row">
+
+		{%if addDevices %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Add devices</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Name</th>
+								<th>Dimensions</th>
+								<th>Weight</th>
+								<th>Serial number</th>
+								<th>State</th>
+								<th>Location</th>
+								<th>Warranty expiration date</th>
+								<th>Price</th>
+								<th>Note</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in addDevices%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.name}}</td>
+									<td>{{record.dimensions}}</td>
+									<td>{{record.weight}}</td>
+									<td>{{record.serialNumber}}</td>
+									<td>{{record.state}}</td>
+									<td>{{record.location}}</td>
+									<td>{{record.warrantyExpirationDate|date('Y-m-d')}}</td>
+									<td>{{record.price}}</td>
+									<td>{{record.note}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+
+		{%if editDevices %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Edit devices</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Name</th>
+								<th>Dimensions</th>
+								<th>Weight</th>
+								<th>Serial number</th>
+								<th>State</th>
+								<th>Location</th>
+								<th>Warranty expiration date</th>
+								<th>Price</th>
+								<th>Note</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in editDevices%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.name}}</td>
+									<td>{{record.dimensions}}</td>
+									<td>{{record.weight}}</td>
+									<td>{{record.serialNumber}}</td>
+									<td>{{record.state}}</td>
+									<td>{{record.location}}</td>
+									<td>{{record.warrantyExpirationDate|date('Y-m-d')}}</td>
+									<td>{{record.price}}</td>
+									<td>{{record.note}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+
+		{%if removeDevices %}
+			<div class="panel panel-default">
+				<div class="panel-heading">Remove devices</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<thead>
+							<tr><th>Id</th>
+								<th>Name</th>
+								<th>Dimensions</th>
+								<th>Weight</th>
+								<th>Serial number</th>
+								<th>State</th>
+								<th>Location</th>
+								<th>Warranty expiration date</th>
+								<th>Price</th>
+								<th>Note</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for record in removeDevices%}
+								<tr>
+									<td>{{record.id}}</td>
+									<td>{{record.name}}</td>
+									<td>{{record.dimensions}}</td>
+									<td>{{record.weight}}</td>
+									<td>{{record.serialNumber}}</td>
+									<td>{{record.state}}</td>
+									<td>{{record.location}}</td>
+									<td>{{record.warrantyExpirationDate|date('Y-m-d')}}</td>
+									<td>{{record.price}}</td>
+									<td>{{record.note}}</td>
+								</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{%endif%}
+	</DIV>
+
+{% endblock %}

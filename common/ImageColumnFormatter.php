@@ -26,6 +26,7 @@ class ImageColumnFormatter implements ColumnFormatter
 	 */
 	public function render($data)
 	{
+		$data=$data[0];
 		$html = "";
 		if (is_file(ltrim($data, '/'))) {
 			$html = '<a href="' . $data . '" target="_blank" data-toggle="lightbox"><img src="' . $data . '" width="50" /></a>';

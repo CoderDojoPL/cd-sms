@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<action controller="Log" method="index" >
+		<route pattern="\/log" />
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+	</action>
+
+    <action controller="Log" method="show">
+        <route pattern="^\/log\/show\/([0-9]+)$"/>
+        <authenticate redirect="/login"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <argument storage="url" name="id" pattern="^\/log\/show\/([0-9]+)$" mapper="Mapper\Log"/>
+    </action>
+
+</content>

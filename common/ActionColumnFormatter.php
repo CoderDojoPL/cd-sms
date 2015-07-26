@@ -44,13 +44,13 @@ class ActionColumnFormatter implements ColumnFormatter{
 			$href='href=""';
 			switch($button){
 				case 'show':
-					$href='href="/'.$this->prefix.'/'.$action.'/'.$data.'"';
+					$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
 				break;
 				case 'edit':
-					$href='href="/'.$this->prefix.'/'.$action.'/'.$data.'"';
+					$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
 				break;
 				case 'remove':
-					$href='href="/'.$this->prefix.'/'.$action.'/'.$data.'"';
+					$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
 				break;
 			}
 

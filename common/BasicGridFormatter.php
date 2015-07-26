@@ -73,7 +73,11 @@ class BasicGridFormatter implements GridFormatter{
 		foreach($records as $record){
 			$html.='<tr>';
 			foreach($columns as $column){
-				$html.='<td>'.$column['formatter']->render($record[$column['key']]).'</td>';
+				$records=array();
+				foreach($column['keys'] as $key){
+					$records[]=$record[$key];
+				}
+				$html.='<td>'.$column['formatter']->render($records).'</td>';
 			}
 
 			$html.='</tr>';

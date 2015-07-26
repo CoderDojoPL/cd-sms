@@ -42,7 +42,7 @@ class BasicDataManager implements GridDataManager{
 		$result=array();
 
         $records=$this->entityManager->createQuery(
-                'SELECT i FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'')
+                'SELECT i FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'').' ORDER BY i.id'
             )
         ->setMaxResults($limit)
         ->setFirstResult(($page-1)*$limit)

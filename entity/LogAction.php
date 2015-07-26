@@ -53,4 +53,14 @@ class LogAction
         return $this->name;
     }
 
+    /**
+     * Entity to string.
+     *
+     * @return string
+     */    
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
 }
