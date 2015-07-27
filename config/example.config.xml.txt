@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <variable name="prod.database.driver" value="pdo_pgsql" />
+    <variable name="prod.database.host" value="127.0.0.1" />
+    <variable name="prod.database.user" value="root" />
+    <variable name="prod.database.password" value="password" />
+    <variable name="prod.database.dbname" value="dev" />
+
+    <variable name="prod.google.clientId" value="api google" />
+    <variable name="prod.google.clientSecret" value="api google" />
+    <variable name="prod.google.redirectUri" value="api google" />
+
+
+</content>
