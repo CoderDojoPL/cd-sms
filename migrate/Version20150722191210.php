@@ -213,8 +213,10 @@ class Version20150722191210 extends MigrateHelper{
 		$logEntity->setAction($container->cast('Mapper\LogAction',14));
 		$logEntity->setIpAddress('127.0.0.1');
 		$logEntity->setIsSuccess(true);
+		$logEntity->setCountModifiedEntities(0);
 		$this->persist($logEntity);
 		$count=0;
+		$this->flush();
 		foreach($container->find('User') as $dbEntity){
 			$logDbEntity=$this->createLogEntity($dbEntity);
 			$logDbEntity->setLogLeft($logEntity);
