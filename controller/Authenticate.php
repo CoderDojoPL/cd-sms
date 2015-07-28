@@ -16,6 +16,7 @@ use Arbor\Exception\ValueNotFoundException;
 use Arbor\Provider\Response;
 use Common\BasicFormFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
+use Exception\InvalidAuthEmailException;
 
 /**
  * Authenticate user with Google OAuth2 API
@@ -26,7 +27,6 @@ use Library\Doctrine\Form\DoctrineDesigner;
  */
 class Authenticate extends Controller
 {
-
 
 	/**
 	 * Set location for user
@@ -79,6 +79,44 @@ class Authenticate extends Controller
 		} catch (ValueNotFoundException $e) {
 
 		}
+	}
+
+
+	/**
+	 * Method to login by api
+	 *
+	 * @param string $token Google token
+	 * @return array
+	 */
+	public function apiLogin($token)
+	{
+		$googleService = $this->getService('google');
+		$client = $googleService->getClient();
+
+		$session = $this->getRequest()->getSession();
+
+		$client->setAccessToken($token);
+
+		$session->set('access.token', $client->getAccessToken());
+
+		$tokenData = $client->verifyIdToken()->getAttributes();
+		$userInfoData = $googleService->getAddInfo()->userinfo->get();
+
+		$email = $tokenData['payload']['email'];
+		if (!preg_match('/^.*?@coderdojo.org.pl$/', $email)) {//FIXME domain to config
+			$session->clear();
+			throw new InvalidAuthEmailException();
+		} else {
+
+			$user = $this->findOne('User', array('email' => $email));
+			if (!$user) {
+				$user = $this->createUser($tokenData['payload'], $userInfoData);
+			}
+
+			$session->set('user.id', $user->getId());
+
+		}
+
 	}
 
 	/**
