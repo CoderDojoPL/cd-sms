@@ -10,7 +10,7 @@
 namespace Entity;
 
 /**
- * @Role()
+ * @Entity()
  * @Table(name="roles")
  * @HasLifecycleCallbacks
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
@@ -32,7 +32,7 @@ class Role
 
     /**
      * @ManyToMany(targetEntity="Functionality")
-     * @JoinTable(name="functionalities",
+     * @JoinTable(name="roles_functionalities",
      *      joinColumns={@JoinColumn(name="role_id", referencedColumnName="id",onDelete="CASCADE")},
      *      inverseJoinColumns={@JoinColumn(name="functionality_id", referencedColumnName="id",onDelete="CASCADE")}
      *      )

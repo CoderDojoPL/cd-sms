@@ -11,7 +11,7 @@
 namespace Entity;
 
 /**
- * @Functionality()
+ * @Entity()
  * @Table(name="functionalities")
  * @HasLifecycleCallbacks
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
