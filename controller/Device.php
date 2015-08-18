@@ -44,6 +44,7 @@ class Device extends Controller
     public function index()
     {
         $grid = $this->createGrid();
+        $grid->render();
         return compact('grid');
     }
 
@@ -195,12 +196,18 @@ class Device extends Controller
         $entity->setNote($data['note']);
         $entity->setPrice($data['price'] ? $data['price'] : NULL);
 
+
         if ($state)
             $entity->setState($this->cast('Mapper\DeviceState', $state));
 
         if (isset($data['location'])) {
             $entity->setLocation($this->cast('Mapper\Location', $data['location']));
         }
+
+        if (isset($data['user'])) {
+            $entity->setUser($this->cast('Mapper\User', $data['user']));
+        }
+
         $this->persist($entity);
 
         $tagsPart = explode(',', $data['tags']);
@@ -359,6 +366,7 @@ class Device extends Controller
 
         if ($entity) {
             $builder->removeField('location');
+            $builder->removeField('user');
             $builder->addField(new TextField(array(
                 'name' => 'serialNumber'
             , 'label' => 'Serial number'

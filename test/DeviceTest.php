@@ -284,7 +284,7 @@ class DeviceTest extends WebTestCaseHelper{
 		$form=$client->getElement('form');
 		$fields=$form->getFields();
 
-		$this->assertCount(11,$fields,'Invalid number fields');
+		$this->assertCount(12,$fields,'Invalid number fields');
 
 		$fields[7]->setData('0');
 		//check required fields
@@ -296,7 +296,7 @@ class DeviceTest extends WebTestCaseHelper{
 		$fields=$form->getFields();
 		
 
-		$this->assertCount(11,$fields,'Invalid number fields');
+		$this->assertCount(12,$fields,'Invalid number fields');
 		$this->assertEquals('Value can not empty',$fields[0]->getParent()->getElement('label')->getText(),'Invalid error message for name');
 		$this->assertEquals('Value can not empty',$fields[1]->getParent()->getElement('label')->getText(),'Invalid error message for dimensions');
 		$this->assertEquals('Value can not empty',$fields[2]->getParent()->getElement('label')->getText(),'Invalid error message for weight');
@@ -310,6 +310,7 @@ class DeviceTest extends WebTestCaseHelper{
 		$this->assertFalse($fields[8]->getParent()->hasElement('label'),'Redundant error message for note');
 		$this->assertEquals('Value can not empty',$fields[9]->getParent()->getElement('label')->getText(),'Invalid error message for type');
 		$this->assertEquals('Value can not empty',$fields[10]->getParent()->getElement('label')->getText(),'Invalid error message for location');
+		$this->assertEquals('Value can not empty',$fields[11]->getParent()->getElement('label')->getText(),'Invalid error message for user');
 
 		$fields[0]->setData('Name test');
 		$fields[1]->setData('10x10x10');
@@ -321,6 +322,7 @@ class DeviceTest extends WebTestCaseHelper{
 		$fields[8]->setData('Note');
 		$fields[9]->setData('1');//Refill
 		$fields[10]->setData($location->getId());
+		$fields[11]->setData($this->user->getId());
 
 		$form->submit();
 
@@ -360,6 +362,7 @@ class DeviceTest extends WebTestCaseHelper{
 			$this->assertEquals('Note',$devices[$i]->getNote(),'Invalid device note');
 			$this->assertEquals(1,$devices[$i]->getType()->getId(),'Invalid device type');
 			$this->assertEquals($location->getId(),$devices[$i]->getLocation()->getId(),'Invalid device location');
+			$this->assertEquals($this->user->getId(),$devices[$i]->getUser()->getId(),'Invalid device user');
 			$tags=$devices[$i]->getTags();
 			$this->assertCount(2,$tags,'Invalid count device tags');
 
@@ -452,6 +455,7 @@ class DeviceTest extends WebTestCaseHelper{
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
+		$device->setUser($this->user);
 
 		$this->persist($device);
 
@@ -543,6 +547,7 @@ class DeviceTest extends WebTestCaseHelper{
 		$this->assertEquals('note edit',$device->getNote(),'Invalid device note');
 		$this->assertEquals(2,$device->getType()->getId(),'Invalid device type');
 		$this->assertEquals($location->getId(),$device->getLocation()->getId(),'Invalid device location');
+		$this->assertEquals($this->user->getId(),$device->getUser()->getId(),'Invalid device location');
 		$tags=$device->getTags();
 		$this->assertCount(2,$tags,'Invalid count device tags');
 

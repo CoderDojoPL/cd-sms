@@ -209,43 +209,6 @@ class Version20150722191210 extends MigrateHelper{
 		$this->persist($actionLogEntity);
 		$this->flush();
 
-		$logEntity=new \Entity\Log();
-		$logEntity->setAction($container->cast('Mapper\LogAction',14));
-		$logEntity->setIpAddress('127.0.0.1');
-		$logEntity->setIsSuccess(true);
-		$this->persist($logEntity);
-		$count=0;
-		foreach($container->find('User') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
-			$count++;
-		}
-
-		foreach($container->find('Order') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
-			$count++;
-		}
-
-		foreach($container->find('Location') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
-			$count++;
-		}
-
-		foreach($container->find('Device') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
-			$count++;
-		}
-
-		$logEntity->setCountModifiedEntities($count);
-
-		$this->flush();
 		$this->commitTransaction();
 
 	}
@@ -300,32 +263,6 @@ class Version20150722191210 extends MigrateHelper{
 		$this->commitTransaction();
 
 
-	}
-
-	private function createLogEntity($entity){
-		$values=array();
-		$logEntityName=str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log");
-		$logEntity=new $logEntityName();
-		
-		$this->fillLogEntity($entity,$logEntity);
-		return $logEntity;
-	}
-
-	private function fillLogEntity($entity,&$logEntity){
-		$values=array();
-		foreach(get_class_methods($entity) as $method){
-			if(preg_match('/^get(.*)$/',$method,$finds)){
-				$methodName=$finds[1];
-				$data=$entity->$method();
-
-				$setMethodName='set'.$methodName;
-				if(method_exists($logEntity, $setMethodName)){
-					$logEntity->$setMethodName($data);
-				}
-			}
-		}
-
-		return $logEntity;
 	}
 
 }
