@@ -23,16 +23,18 @@ class BasicDataManager implements GridDataManager{
 	private $entityManager;
 	private $storage;
 	private $condition;
-
+	private $vars;
 	/**
 	 * @param Doctrine\ORM\EntityManager $entityManager
 	 * @param string $storage - entity name e.g. User, Order
 	 * @param string $condition - DQL query with conditions records
+	 * @param array $vars - DQL vars for conditions
 	 */
-	public function __construct($entityManager,$storage,$condition=null){
+	public function __construct($entityManager,$storage,$condition=null,$vars=array()){
 		$this->entityManager=$entityManager;
 		$this->storage=$storage;
 		$this->condition=$condition;
+		$this->vars=$vars;
 	}
 
 	/**
@@ -43,10 +45,11 @@ class BasicDataManager implements GridDataManager{
 
         $records=$this->entityManager->createQuery(
                 'SELECT i FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'').' ORDER BY i.id'
-            )
-        ->setMaxResults($limit)
-        ->setFirstResult(($page-1)*$limit)
-        ->getResult();
+		)
+			->setParameters($this->vars)
+			->setMaxResults($limit)
+			->setFirstResult(($page-1)*$limit)
+			->getResult();
 
 		foreach($records as $record){
 			$result[]=$this->entityToArray($record);
@@ -62,7 +65,8 @@ class BasicDataManager implements GridDataManager{
 		$records=$this->entityManager->createQuery(
                 'SELECT count(i) as c FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'')
             )
-        ->getResult();
+			->setParameters($this->vars)
+			->getResult();
         return $records[0]['c'];
 	}
 

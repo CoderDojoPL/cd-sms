@@ -280,6 +280,7 @@ abstract class AbstractQuery
      */
     public function setParameters(array $params, array $types = array())
     {
+
         foreach ($params as $key => $value) {
             $this->setParameter($key, $value, isset($types[$key]) ? $types[$key] : null);
         }

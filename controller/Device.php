@@ -301,7 +301,7 @@ class Device extends Controller
         $builder->addColumn('Name', 'name');
         $builder->addColumn('Serial number', 'serialNumber');
         $builder->addColumn('Type', 'type');
-        $builder->addColumn('Location', 'location');
+        $builder->addColumn('Location', array('location','user'));
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
         return $builder;
     }

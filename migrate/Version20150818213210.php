@@ -36,9 +36,11 @@ class Version20150818213210 extends MigrateHelper{
 		$devices->addNamedForeignKeyConstraint('FK_11074E9AA76ED395',$users, array('user_id'),array('id'),array('onDelete'=>'CASCADE'));
 
 		$deviceLogs->addColumn('user_id','integer',array('notnull'=>false));
-
-
 		$this->updateSchema($schema);
+
+		$logActionEntity=new \Entity\LogAction(15);
+		$logActionEntity->setName('Set free state device.');
+		$this->persist($logActionEntity);
 
 		$logEntity=new \Entity\Log();
 		$logEntity->setAction($container->cast('Mapper\LogAction',14));
