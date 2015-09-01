@@ -16,34 +16,39 @@ namespace Entity;
  * @Table(name="user_logs")
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
-class UserLog{
+class UserLog
+{
 
-	/** 
-	 * @Id
-	 * @Column(type="integer") 
-	 **/
-	protected $id;
+    /**
+     * @Id
+     * @Column(type="integer")
+     **/
+    protected $id;
 
-    /** 
-     * @Column(type="string") 
+    /**
+     * @Column(type="string")
      **/
     protected $email;
 
-    /** 
-     * @Column(name="first_name",type="string") 
+    /**
+     * @Column(name="first_name",type="string")
      **/
     protected $firstName;
 
-    /** 
-     * @Column(name="last_name",type="string") 
+    /**
+     * @Column(name="last_name",type="string")
      **/
     protected $lastName;
 
-    /** 
-     * @Column(name="location_id",type="integer") 
+    /**
+     * @Column(name="location_id",type="integer")
      **/
     protected $location;
 
+    /**
+     * @Column(name="role_id",type="integer",nullable=true)
+     **/
+    protected $role;
     /**
      * @Column(name="created_at",type="datetime")
      **/
@@ -67,43 +72,52 @@ class UserLog{
      **/
     protected $removed;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->setCreatedAt(new \DateTime());
         $this->setRemoved(false);
     }
 
-	public function getId(){
-		return $this->id;
-	}
-
-    public function setId($id){
-        return $this->id=$id;
+    public function getId()
+    {
+        return $this->id;
     }
 
-    public function setEmail($email){
-        $this->email=$email;
+    public function setId($id)
+    {
+        return $this->id = $id;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
         return $this;
     }
 
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setFirstName($firstName){
-        $this->firstName=$firstName;
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
         return $this;
     }
 
-    public function getFirstName(){
+    public function getFirstName()
+    {
         return $this->firstName;
     }
 
-    public function setLastName($lastName){
-        $this->lastName=$lastName;
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
         return $this;
     }
 
-    public function getLastName(){
+    public function getLastName()
+    {
         return $this->lastName;
     }
 
@@ -120,8 +134,8 @@ class UserLog{
      */
     public function setLocation($location)
     {
-        if($location){
-            $location=$location->getId();
+        if ($location) {
+            $location = $location->getId();
         }
 
         $this->location = $location;
@@ -129,8 +143,9 @@ class UserLog{
 
     }
 
-    public function __toString(){
-        return $this->getFirstName(). ' ' . $this->getLastName();
+    public function __toString()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
     public function setCreatedAt($createdAt)
@@ -175,6 +190,25 @@ class UserLog{
     public function getRemoved()
     {
         return $this->removed;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed $role
+     */
+    public function setRole($role)
+    {
+        if ($role) {
+            $role = $role->getId();
+        }
+        $this->role = $role;
     }
 
 }

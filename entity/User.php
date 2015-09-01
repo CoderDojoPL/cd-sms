@@ -17,27 +17,28 @@ namespace Entity;
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
-class User{
+class User
+{
 
-	/** 
-	 * @Id
-	 * @Column(type="integer") 
-	 * @GeneratedValue
-	 **/
-	protected $id;
+    /**
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     **/
+    protected $id;
 
-    /** 
-     * @Column(type="string") 
+    /**
+     * @Column(type="string")
      **/
     protected $email;
 
-    /** 
-     * @Column(name="first_name",type="string") 
+    /**
+     * @Column(name="first_name",type="string")
      **/
     protected $firstName;
 
-    /** 
-     * @Column(name="last_name",type="string") 
+    /**
+     * @Column(name="last_name",type="string")
      **/
     protected $lastName;
 
@@ -47,34 +48,47 @@ class User{
      **/
     protected $location;
 
-	public function getId(){
-		return $this->id;
-	}
+    /**
+     * @ManyToOne(targetEntity="Role")
+     * @JoinColumn(name="role_id", referencedColumnName="id",onDelete="SET NULL")
+     **/
+    protected $role;
 
-    public function setEmail($email){
-        $this->email=$email;
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
         return $this;
     }
 
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setFirstName($firstName){
-        $this->firstName=$firstName;
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
         return $this;
     }
 
-    public function getFirstName(){
+    public function getFirstName()
+    {
         return $this->firstName;
     }
 
-    public function setLastName($lastName){
-        $this->lastName=$lastName;
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
         return $this;
     }
 
-    public function getLastName(){
+    public function getLastName()
+    {
         return $this->lastName;
     }
 
@@ -96,8 +110,25 @@ class User{
 
     }
 
-    public function __toString(){
-        return $this->getFirstName(). ' ' . $this->getLastName();
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+    public function __toString()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
 

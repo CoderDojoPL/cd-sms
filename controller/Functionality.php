@@ -20,17 +20,17 @@ use Common\BasicGridFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
 
 /**
- * Class User
+ * Class Role
  *
  * @package Controller
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
-class User extends Controller
+class Functionality extends Controller
 {
 
 	/**
-	 * Shows list of users
+	 * Shows list of functionalities
 	 *
 	 * @return array
 	 */
@@ -41,7 +41,7 @@ class User extends Controller
 	}
 
 	/**
-	 * Helper for creating grid with users
+	 * Helper for creating grid with functionalities
 	 *
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
@@ -49,10 +49,10 @@ class User extends Controller
 	private function createGrid()
 	{
 		$builder = $this->getService('grid')->create();
-		$builder->setFormatter(new BasicGridFormatter('user', false));//prefix
+		$builder->setFormatter(new BasicGridFormatter('functionality'));//prefix
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
-			, 'Entity\User'
+			, 'Entity\Functionality'
 		));
 
 		$builder->setLimit(10);
@@ -63,21 +63,42 @@ class User extends Controller
 		$builder->setPage($query['page']);
 
 		$builder->addColumn('#', 'id');
-		$builder->addColumn('Email', 'email');
-		$builder->addColumn('First Name', 'firstName');
-		$builder->addColumn('Last Name', 'lastName');
-//		$builder->addColumn('Test concat', array('firstName','lastName'));
-		$builder->addColumn('Location', 'location');
+		$builder->addColumn('Name', 'name');
+		$builder->addColumn('Description', 'description');
 //        $builder->render();
 
-		$builder->addColumn('Action', 'id', new ActionColumnFormatter('user', array('edit')));
+		$builder->addColumn('Action', 'id', new ActionColumnFormatter('functionality', array('edit')));
 		return $builder;
 	}
 
 	/**
+	 * Save new functionality to database
+	 *
+	 * @return Response|array
+	 */
+	public function add()
+	{
+		$form = $this->createForm();
+
+		if ($form->isValid()) {
+			$data = $form->getData();
+
+			$entity = new \Entity\Functionality();
+			$this->setEntity($entity, $data);
+			$this->flush();
+
+			$response = new Response();
+			$response->redirect('/functionality');
+
+			return $response;
+
+		}
+		return compact('form');
+	}
+	/**
 	 * Saves user entity to database after edit
 	 *
-	 * @param User $entity
+	 * @param Functionality $entity
 	 * @return Response|array
 	 */
 	public function edit($entity)
@@ -91,7 +112,7 @@ class User extends Controller
 			$this->flush();
 
 			$response = new Response();
-			$response->redirect('/user');
+			$response->redirect('/functionality');
 
 			return $response;
 
@@ -100,9 +121,9 @@ class User extends Controller
 	}
 
 	/**
-	 * Create form for edit user
+	 * Create form for edit Role
 	 *
-	 * @param null|User $entity
+	 * @param null|Functionality $entity
 	 * @return mixed
 	 * @throws \Arbor\Exception\ServiceNotFoundException
 	 */
@@ -112,11 +133,7 @@ class User extends Controller
 		$builder->setValidatorService($this->getService('validator'));
 		$builder->setFormatter(new BasicFormFormatter());
 		$builder->setSubmitTags(array('cancel' => true));
-		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\User'));
-
-        $emailField=$builder->getField('email');
-        $emailField->setTag('readonly',true);
-        $emailField->setRequired(false);
+		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Functionality'));
 
 		if ($entity) {
 			$helper = $this->getService('form.helper');
@@ -132,15 +149,14 @@ class User extends Controller
 	/**
 	 * Setting entity from form data
 	 *
-	 * @param \Entity\User $entity
+	 * @param \Entity\Functionality $entity
 	 * @param $data
 	 */
 	private function setEntity($entity, $data)
 	{
-		$entity->setFirstName($data['firstName']);
-		$entity->setLastName($data['lastName']);
-		$entity->setLocation($this->cast('Mapper\Location', $data['location']));
-		$entity->setRole($this->cast('Mapper\Role', $data['role']));
+		$entity->setName($data['name']);
+		$entity->setDescription($data['description']);
+//		$entity->setLocation($this->cast('Mapper\Location', $data['location']));
 		$this->persist($entity);
 	}
 

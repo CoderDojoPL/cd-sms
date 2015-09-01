@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 namespace Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity()
  * @Table(name="roles")
  * @HasLifecycleCallbacks
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
- * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
 class Role
 {
@@ -38,6 +38,12 @@ class Role
      *      )
      **/
     private $functionalities;
+
+    function __construct()
+    {
+        $this->functionalities = new ArrayCollection();
+    }
+
 
     /**
      * @return mixed
@@ -71,6 +77,25 @@ class Role
     {
         $this->functionalities = $functionalities;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    function __toString()
+    {
+        return $this->getName();
     }
 
 
