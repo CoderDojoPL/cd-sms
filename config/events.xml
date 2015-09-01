@@ -10,5 +10,5 @@
     <event bind="executePresenter" class="Event\Log" method="onExecutePresenter" />
     <event bind="doctrine.onFlush" class="Event\Log" method="onFlush" />
     <event bind="doctrine.postFlush" class="Event\Log" method="postFlush" />
-    
+
 </content>

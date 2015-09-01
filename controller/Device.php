@@ -205,6 +205,7 @@ class Device extends Controller
 
         $tagsPart = explode(',', $data['tags']);
         $entity->getTags()->clear();
+        $this->flush();
         foreach ($tagsPart as $tag) {
             $tag = trim($tag);
             $tagEntity = $this->findOne('DeviceTag', array('name' => $tag));
@@ -213,7 +214,6 @@ class Device extends Controller
                 $tagEntity = new \Entity\DeviceTag();
                 $tagEntity->setName($tag);
                 $this->persist($tagEntity);
-                $this->flush();
 
             }
 

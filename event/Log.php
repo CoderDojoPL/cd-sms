@@ -165,7 +165,6 @@ class Log extends Event{
 	    		$this->removedEntities[]=array('id'=>$entity->getId(),'name'=>str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log"));
 
         }
-
 	}
 
 	public function postFlush(PostFlushEventArgs $eventArgs){
@@ -174,7 +173,6 @@ class Log extends Event{
 		$this->monitoring=false;
 
 		$em=$eventArgs->getEntityManager();
-		$uow = $em->getUnitOfWork();
 		if(!$this->log){
 			$this->conn->rollback();
 			throw new LogNotFoundException();			
@@ -191,7 +189,7 @@ class Log extends Event{
 			$em->persist($logEntity);
 			$this->entityCount++;
 			if(!in_array($entity, $this->flushedEntities)){
-				$this->flushedEntities[]=$entity;				
+				$this->flushedEntities[]=$entity;
 			}
 		}
 
@@ -207,7 +205,7 @@ class Log extends Event{
 				$updatedLogEntity->setLogLeft($log);
 				$em->persist($updatedLogEntity);
 				$this->entityCount++;
-				$this->flushedEntities[]=$entity;				
+				$this->flushedEntities[]=$entity;
 
 			}
 		}
