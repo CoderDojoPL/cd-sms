@@ -11,6 +11,9 @@
 namespace Test;
 require_once __DIR__ . '/../common/WebTestCaseHelper.php';
 
+use Common\WebTestCaseHelper;
+
+
 /**
  * @package Test
  * @author Sławek Nowak (s.nowak@coderdojo.org.pl)

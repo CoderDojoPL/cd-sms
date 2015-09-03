@@ -161,7 +161,7 @@ class UserTest extends WebTestCaseHelper{
 		$form=$client->getElement('form');
 		$fields=$form->getFields();
 
-		$this->assertCount(4,$fields,'Invalid number fields');
+		$this->assertCount(5,$fields,'Invalid number fields');
 
 		$this->assertEquals('test@coderdojo.org.pl',$fields[0]->getData(),'Invalid field value for email');
 		$this->assertEquals('first name',$fields[1]->getData(),'Invalid field value for first name');
@@ -180,7 +180,7 @@ class UserTest extends WebTestCaseHelper{
 
 		$this->assertEquals('/user/edit/'.$user->getId(),$client->getUrl(),'Invalid url form after submited location');
 
-		$this->assertCount(4,$fields,'Invalid number fields');
+		$this->assertCount(5,$fields,'Invalid number fields');
 		$this->assertFalse($fields[0]->getParent()->hasElement('label'),'Redundant error message for email');
 		$this->assertEquals('Value can not empty',$fields[1]->getParent()->getElement('label')->getText(),'Invalid error message for first name');
 		$this->assertEquals('Value can not empty',$fields[2]->getParent()->getElement('label')->getText(),'Invalid error message for last name');

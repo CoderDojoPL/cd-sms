@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * This file is part of the HMS project.
@@ -19,7 +19,7 @@ use Common\MigrateHelper;
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class Version20150722191210 extends MigrateHelper{
-	
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -154,82 +154,82 @@ class Version20150722191210 extends MigrateHelper{
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>1
-			,'name'=>'Edit user.'
+		,'name'=>'Edit user.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>2
-			,'name'=>'Add location.'
+		,'name'=>'Add location.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>3
-			,'name'=>'Edit location.'
+		,'name'=>'Edit location.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>4
-			,'name'=>'Remove location.'
+		,'name'=>'Remove location.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>5
-			,'name'=>'Sign in.'
+		,'name'=>'Sign in.'
 		));
 
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>6
-			,'name'=>'Sign out.'
+		,'name'=>'Sign out.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>7
-			,'name'=>'Add device.'
+		,'name'=>'Add device.'
 		));
 
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>8
-			,'name'=>'Edit device.'
+		,'name'=>'Edit device.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>9
-			,'name'=>'Remove device.'
+		,'name'=>'Remove device.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>10
-			,'name'=>'Add order.'
+		,'name'=>'Add order.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>11
-			,'name'=>'Fetch order.'
+		,'name'=>'Fetch order.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>12
-			,'name'=>'Close order.'
+		,'name'=>'Close order.'
 		));
 
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>13
-			,'name'=>'Set location user.'
+		,'name'=>'Set location user.'
 		));
 
 		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
 			'id'=>14
-			,'name'=>'Install system.'
+		,'name'=>'Install system.'
 		));
 
 
 		$this->executeQuery("INSERT INTO logs(".($this->getDriver()=='pdo_pgsql'?'id,':'')."log_action_id,ip_address,is_success,count_modified_entities,created_at) VALUES(".($this->getDriver()=='pdo_pgsql'?"nextval('logs_id_seq'),":'').":logActionId,:ipAddress,:isSuccess,0,now())",array(
 			'logActionId'=>'14'
-			,'ipAddress'=>'127.0.0.1'
-			,'isSuccess'=>true
+		,'ipAddress'=>'127.0.0.1'
+		,'isSuccess'=>true
 		));
 
 		$logData=$this->executeQuery("SELECT * FROM logs ORDER BY id DESC LIMIT 1");
@@ -257,7 +257,7 @@ class Version20150722191210 extends MigrateHelper{
 
 		$this->executeQuery("UPDATE logs SET count_modified_entities=:count WHERE id=:id",array(
 			'id'=>$logId
-			,'count'=>$count
+		,'count'=>$count
 		));
 
 		$this->commitTransaction();
@@ -312,7 +312,7 @@ class Version20150722191210 extends MigrateHelper{
 		$schema->dropTable('order_logs');
 		$schema->dropTable('device_tag_logs');
 
-				
+
 		$this->updateSchema($schema);
 		$this->commitTransaction();
 
