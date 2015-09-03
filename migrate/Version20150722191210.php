@@ -152,104 +152,121 @@ class Version20150722191210 extends MigrateHelper{
 
 		$this->updateSchema($schema);
 
-		$actionLogEntity=new \Entity\LogAction(1);
-		$actionLogEntity->setName('Edit user.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>1
+			,'name'=>'Edit user.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(2);
-		$actionLogEntity->setName('Add location.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>2
+			,'name'=>'Add location.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(3);
-		$actionLogEntity->setName('Edit location.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>3
+			,'name'=>'Edit location.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(4);
-		$actionLogEntity->setName('Remove location.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>4
+			,'name'=>'Remove location.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(5);
-		$actionLogEntity->setName('Sign in.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>5
+			,'name'=>'Sign in.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(6);
-		$actionLogEntity->setName('Sign out.');
-		$this->persist($actionLogEntity);
 
-		$actionLogEntity=new \Entity\LogAction(7);
-		$actionLogEntity->setName('Add device.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>6
+			,'name'=>'Sign out.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(8);
-		$actionLogEntity->setName('Edit device.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>7
+			,'name'=>'Add device.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(9);
-		$actionLogEntity->setName('Remove device.');
-		$this->persist($actionLogEntity);
 
-		$actionLogEntity=new \Entity\LogAction(10);
-		$actionLogEntity->setName('Add order.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>8
+			,'name'=>'Edit device.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(11);
-		$actionLogEntity->setName('Featch order.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>9
+			,'name'=>'Remove device.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(12);
-		$actionLogEntity->setName('Close order.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>10
+			,'name'=>'Add order.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(13);
-		$actionLogEntity->setName('Set location user.');
-		$this->persist($actionLogEntity);
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>11
+			,'name'=>'Fetch order.'
+		));
 
-		$actionLogEntity=new \Entity\LogAction(14);
-		$actionLogEntity->setName('Install system.');
-		$this->persist($actionLogEntity);
-		$this->flush();
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>12
+			,'name'=>'Close order.'
+		));
 
-		$logEntity=new \Entity\Log();
-		$logEntity->setAction($container->cast('Mapper\LogAction',14));
-		$logEntity->setIpAddress('127.0.0.1');
-		$logEntity->setIsSuccess(true);
-		$this->persist($logEntity);
+
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>13
+			,'name'=>'Set location user.'
+		));
+
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>14
+			,'name'=>'Install system.'
+		));
+
+
+		$this->executeQuery("INSERT INTO logs(".($this->getDriver()=='pdo_pgsql'?'id,':'')."log_action_id,ip_address,is_success,count_modified_entities,created_at) VALUES(".($this->getDriver()=='pdo_pgsql'?"nextval('logs_id_seq'),":'').":logActionId,:ipAddress,:isSuccess,0,now())",array(
+			'logActionId'=>'14'
+			,'ipAddress'=>'127.0.0.1'
+			,'isSuccess'=>true
+		));
+
+		$logData=$this->executeQuery("SELECT * FROM logs ORDER BY id DESC LIMIT 1");
+		$logId=$logData[0]['id'];
 		$count=0;
-		foreach($container->find('User') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
+		foreach($this->getExistedRecords('users') as $record){
+			$this->createLogRecord('user_logs',$record,$logId);
 			$count++;
 		}
 
-		foreach($container->find('Order') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
+		foreach($this->getExistedRecords('orders') as $record){
+			$this->createLogRecord('order_logs',$record,$logId);
 			$count++;
 		}
 
-		foreach($container->find('Location') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
+		foreach($this->getExistedRecords('locations') as $record){
+			$this->createLogRecord('location_logs',$record,$logId);
 			$count++;
 		}
 
-		foreach($container->find('Device') as $dbEntity){
-			$logDbEntity=$this->createLogEntity($dbEntity);
-			$logDbEntity->setLogLeft($logEntity);
-			$this->persist($logDbEntity);
+		foreach($this->getExistedRecords('devices') as $record){
+			$this->createLogRecord('device_logs',$record,$logId);
 			$count++;
 		}
 
-		$logEntity->setCountModifiedEntities($count);
+		$this->executeQuery("UPDATE logs SET count_modified_entities=:count WHERE id=:id",array(
+			'id'=>$logId
+			,'count'=>$count
+		));
 
-		$this->flush();
 		$this->commitTransaction();
 
 	}
 
+	private function getExistedRecords($table){
+		return $this->executeQuery("SELECT * FROM ".$table);
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -302,30 +319,46 @@ class Version20150722191210 extends MigrateHelper{
 
 	}
 
-	private function createLogEntity($entity){
-		$values=array();
-		$logEntityName=str_replace('DoctrineProxies\__CG__\\','',get_class($entity)."Log");
-		$logEntity=new $logEntityName();
-		
-		$this->fillLogEntity($entity,$logEntity);
-		return $logEntity;
-	}
-
-	private function fillLogEntity($entity,&$logEntity){
-		$values=array();
-		foreach(get_class_methods($entity) as $method){
-			if(preg_match('/^get(.*)$/',$method,$finds)){
-				$methodName=$finds[1];
-				$data=$entity->$method();
-
-				$setMethodName='set'.$methodName;
-				if(method_exists($logEntity, $setMethodName)){
-					$logEntity->$setMethodName($data);
-				}
+	private function createLogRecord($tableName, $record, $logId){
+		$ignoreColumn=array('created_at','removed','log_right_id','log_left_id','updated_at');
+		$sql=array("INSERT INTO ");
+		$sql[]=$tableName;
+		$sql[]="(";
+		$parameters=array();
+		$first=true;
+		foreach($record as $columnName=>$value){
+			if(in_array($columnName,$ignoreColumn)){
+				continue;
 			}
-		}
 
-		return $logEntity;
+			if($first){
+				$first=false;
+			}
+			else{
+				$sql[]=",";
+			}
+			$sql[]=$columnName;
+		}
+		$sql[]=",created_at,removed,log_left_id) values(";
+		$first=true;
+		foreach($record as $columnName=>$value){
+			if(in_array($columnName,$ignoreColumn)){
+				continue;
+			}
+
+			if($first){
+				$first=false;
+			}
+			else{
+				$sql[]=",";
+			}
+			$sql[]=":";
+			$sql[]=$columnName;
+			$parameters[$columnName]=$value;
+		}
+		$sql[]=",now(),false,:logId);";
+		$parameters['logId']=$logId;
+		$this->executeQuery(implode("",$sql),$parameters);
 	}
 
 }

@@ -66,7 +66,6 @@ class User extends Controller
 		$builder->addColumn('Email', 'email');
 		$builder->addColumn('First Name', 'firstName');
 		$builder->addColumn('Last Name', 'lastName');
-//		$builder->addColumn('Test concat', array('firstName','lastName'));
 		$builder->addColumn('Location', 'location');
 //        $builder->render();
 
