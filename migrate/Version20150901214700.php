@@ -55,13 +55,43 @@ class Version20150901214700 extends MigrateHelper
         $roleLogs->addNamedForeignKeyConstraint('FK_4E30B4C83AC4A3EA', $logs, array('log_right_id'), array('id'));
 
         $users = $schema->getTable('users');
-        $users->addColumn('role_id','integer', array('notnull' => false));
+        $users->addColumn('role_id', 'integer', array('notnull' => false));
         $users->addNamedForeignKeyConstraint('FK_1483A5E9D60322AC', $roles, array('role_id'), array('id'));
 
         $usersLogs = $schema->getTable('user_logs');
-        $usersLogs->addColumn('role_id','integer', array('notnull' => false));
+        $usersLogs->addColumn('role_id', 'integer', array('notnull' => false));
 
         $this->updateSchema($schema);
+
+        $this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)", array(
+            'id' => 15
+        , 'name' => 'Create role.'
+        ));
+
+        $this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)", array(
+            'id' => 16
+        , 'name' => 'Edit role.'
+        ));
+
+        $functionalitiesData = array(
+            array('name' => 'Device add', 'description' => 'Add new device'),
+            array('name' => 'Device edit', 'description' => 'Edit existing device'),
+            array('name' => 'Device remove', 'description' => 'Remove device'),
+            array('name' => 'Location add', 'description' => 'Add new location'),
+            array('name' => 'Location edit', 'description' => 'Edit existing location'),
+            array('name' => 'User edit', 'description' => 'Edit user data and roles'),
+            array('name' => 'Role add', 'description' => 'Add new role'),
+            array('name' => 'Role edit', 'description' => 'Edit existing role'),
+            array('name' => 'Order list', 'description' => 'List order for devices other users'),
+            array('name' => 'New order', 'description' => 'Place new order for device'),
+            array('name' => 'Fetch order', 'description' => 'Fetch order for device to complete'),
+            array('name' => 'Close order', 'description' => 'Confirm and close order for device'),
+            array('name' => 'Report - show logs', 'description' => 'Show system logs')
+        );
+        foreach ($functionalitiesData as $oneF) {
+            $this->executeQuery("INSERT INTO functionalities(" . ($this->getDriver() == 'pdo_pgsql' ? 'id,' : '') . "name,description) VALUES(" . ($this->getDriver() == 'pdo_pgsql' ? "nextval('functionalities_id_seq')," : '') . ":name,:description)", $oneF);
+        }
+
         $this->commitTransaction();
     }
 
