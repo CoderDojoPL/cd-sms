@@ -23,13 +23,21 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Library\Doctrine\Exception\DoctrineTypeNotSupportedException;
 
+/**
+ * Map entity to form.
+ *
+ * Class DoctrineDesigner
+ * @package Library\Doctrine\Form
+ */
 class DoctrineDesigner implements Designer{
 
 	private $entityName;
 	private $doctrineService;
 	
 	/**
+	 * @param \Library\Doctrine\Service\Doctrine $doctrineService
 	 * @param string $entityName
+	 * @param array $filter
 	 * @since 0.18.0
 	 */
 	public function __construct($doctrineService,$entityName,$filter=null){
@@ -59,6 +67,12 @@ class DoctrineDesigner implements Designer{
 		
 	}
 
+	/**
+	 * @param FormBuilder $form
+	 * @param ClassMetadata $metaData
+	 * @param string $fieldName
+	 * @throws DoctrineTypeNotSupportedException
+	 */
 	public function createField($form,$metaData,$fieldName){
 		$type=$metaData->getTypeOfColumn($fieldName);
 		switch($type){
@@ -96,18 +110,35 @@ class DoctrineDesigner implements Designer{
 
 	}
 
+	/**
+	 * @param FormBuilder $form
+	 * @param ClassMetadata $metaData
+	 * @param string $fieldName
+	 */
 	public function createAssociationField($form,$metaData,$fieldName){
 		$formField=new SelectField(array());
 		$formField->setLabel($this->translateName($fieldName));
 		$formField->setName($fieldName);
+		$mapping=$metaData->getAssociationMapping($fieldName);
+		$required=false;
 
-		$formField->setRequired(true);
 
 		$targetEntityName=$metaData->getAssociationTargetClass($fieldName);
 		$targetEntity=$this->doctrineService->getRepository($targetEntityName);
 
 		if($metaData->isCollectionValuedAssociation($fieldName)){
 			$formField->setMultiple(true);
+			$formField->setRequired(false);
+		}
+		else{
+			foreach($mapping['joinColumns'] as $joinColumn){
+				if(!$joinColumn['nullable']){
+					$required=true;
+					break;
+				}
+			}
+			$formField->setRequired($required);
+
 		}
 
 		$collection=$this->entityToCollection($targetEntity->findAll(),!$formField->isMultiple());

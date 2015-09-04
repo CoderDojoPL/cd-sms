@@ -117,6 +117,9 @@ class User extends Controller
         $emailField->setTag('readonly',true);
         $emailField->setRequired(false);
 
+		$builder->getField('location')->setRequired(true);
+		$builder->getField('role')->setRequired(true);
+
 		if ($entity) {
 			$helper = $this->getService('form.helper');
 			$data = $helper->entityToArray($entity);

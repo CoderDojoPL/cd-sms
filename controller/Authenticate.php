@@ -233,6 +233,7 @@ class Authenticate extends Controller
 		$builder->setFormatter(new BasicFormFormatter());
 		$builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\User',array('location')));
 
+		$builder->getField('location')->setRequired(true);
 		$builder->submit($this->getRequest());
 
 		return $builder;
