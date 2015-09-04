@@ -6,6 +6,7 @@
 		<route pattern="\/user"/>
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
+		<permission functionality="7" />
 
 	</action>
 
@@ -15,6 +16,7 @@
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/user\/edit\/([0-9]+)$" mapper="Mapper\User"/>
 		<log action="1" />
+		<permission functionality="7" />
 	</action>
 
 </content>

@@ -50,7 +50,7 @@ class Location extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('location'));//prefix
+        $builder->setFormatter(new BasicGridFormatter('location',$this->isAllow(4)));//prefix
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\Location'

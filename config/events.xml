@@ -4,11 +4,14 @@
 
     <event bind="executeAction" class="Arbor\Event\Argument" method="onExecuteAction" />
     <event bind="executeAction" class="Library\Google\Event\Authenticate" method="onExecuteAction" />
+    <event bind="executeAction" class="Event\Permission" method="onExecuteAction" />
     <event bind="executeAction" class="Event\SetLocation" method="onExecuteAction" />
 
     <event bind="executeAction" class="Event\Log" method="onExecuteAction" />
     <event bind="executePresenter" class="Event\Log" method="onExecutePresenter" />
     <event bind="doctrine.onFlush" class="Event\Log" method="onFlush" />
     <event bind="doctrine.postFlush" class="Event\Log" method="postFlush" />
+
+    <event bind="executePresenter" class="Event\AppendSystemData" method="onExecutePresenter" />
 
 </content>

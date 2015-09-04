@@ -50,7 +50,7 @@ class Order extends Controller
 	private function createGrid()
 	{
 		$builder = $this->getService('grid')->create();
-		$builder->setFormatter(new BasicGridFormatter('order'));//prefix
+		$builder->setFormatter(new BasicGridFormatter('order',$this->isAllow(11)));
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
 			, 'Entity\Order'

@@ -6,6 +6,7 @@
 		<route pattern="\/log" />
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig" />
+        <permission functionality="14" />
 	</action>
 
     <action controller="Log" method="show">
@@ -13,6 +14,7 @@
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
         <argument storage="url" name="id" pattern="^\/log\/show\/([0-9]+)$" mapper="Mapper\Log"/>
+        <permission functionality="14" />
     </action>
 
 </content>

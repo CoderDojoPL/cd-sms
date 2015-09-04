@@ -49,7 +49,7 @@ class Role extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('role'));//prefix
+        $builder->setFormatter(new BasicGridFormatter('role',$this->isAllow(8)));//prefix
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\Role'

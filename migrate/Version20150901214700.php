@@ -79,6 +79,7 @@ class Version20150901214700 extends MigrateHelper
             array('name' => 'Device remove', 'description' => 'Remove device'),
             array('name' => 'Location add', 'description' => 'Add new location'),
             array('name' => 'Location edit', 'description' => 'Edit existing location'),
+            array('name' => 'Location remove', 'description' => 'Remove location'),
             array('name' => 'User edit', 'description' => 'Edit user data and roles'),
             array('name' => 'Role add', 'description' => 'Add new role'),
             array('name' => 'Role edit', 'description' => 'Edit existing role'),
@@ -88,8 +89,8 @@ class Version20150901214700 extends MigrateHelper
             array('name' => 'Close order', 'description' => 'Confirm and close order for device'),
             array('name' => 'Report - show logs', 'description' => 'Show system logs')
         );
-        foreach ($functionalitiesData as $oneF) {
-            $this->executeQuery("INSERT INTO functionalities(" . ($this->getDriver() == 'pdo_pgsql' ? 'id,' : '') . "name,description) VALUES(" . ($this->getDriver() == 'pdo_pgsql' ? "nextval('functionalities_id_seq')," : '') . ":name,:description)", $oneF);
+        for($i=0; $i<count($functionalitiesData); $i++) {
+            $this->executeQuery("INSERT INTO functionalities(id,name,description) VALUES(".($i+1). ",:name,:description)", $functionalitiesData[$i]);
         }
 
         $this->commitTransaction();
@@ -129,48 +130,3 @@ class Version20150901214700 extends MigrateHelper
     }
 
 }
-/*
-CREATE TABLE functionalities (id INT NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id));
-CREATE TABLE roles (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
-CREATE TABLE roles_functionalities (role_id INT NOT NULL, functionality_id INT NOT NULL, PRIMARY KEY(role_id, functionality_id));
-CREATE INDEX IDX_1314141ED60322AC ON roles_functionalities (role_id);
-CREATE INDEX IDX_1314141E39EDDC8 ON roles_functionalities (functionality_id);
-CREATE TABLE role_logs (id INT NOT NULL, log_left_id INT NOT NULL, log_right_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, removed BOOLEAN NOT NULL, PRIMARY KEY(id, log_left_id));
-CREATE INDEX IDX_4E30B4C8DAA1F695 ON role_logs (log_left_id);
-CREATE INDEX IDX_4E30B4C83AC4A3EA ON role_logs (log_right_id);
-ALTER TABLE roles_functionalities ADD CONSTRAINT FK_1314141E39EDDC8 FOREIGN KEY (functionality_id) REFERENCES functionalities (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE role_logs ADD CONSTRAINT FK_4E30B4C8DAA1F695 FOREIGN KEY (log_left_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE role_logs ADD CONSTRAINT FK_4E30B4C83AC4A3EA FOREIGN KEY (log_right_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE device_tags ALTER id DROP DEFAULT;
-ALTER TABLE files ALTER id DROP DEFAULT;
-ALTER TABLE locations ALTER id DROP DEFAULT;
-ALTER TABLE orders ALTER id DROP DEFAULT;
-ALTER TABLE users ADD role_id INT DEFAULT NULL;
-ALTER TABLE users ALTER id DROP DEFAULT;
-ALTER TABLE users ADD CONSTRAINT FK_1483A5E9D60322AC FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE;
-CREATE INDEX IDX_1483A5E9D60322AC ON users (role_id);
-ALTER TABLE device_logs DROP CONSTRAINT FK_79B61366DAA1F695;
-ALTER TABLE device_logs DROP CONSTRAINT FK_79B613663AC4A3EA;
-ALTER TABLE device_logs ADD CONSTRAINT FK_79B61366DAA1F695 FOREIGN KEY (log_left_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE device_logs ADD CONSTRAINT FK_79B613663AC4A3EA FOREIGN KEY (log_right_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE device_tag_logs DROP CONSTRAINT FK_90B420CADAA1F695;
-ALTER TABLE device_tag_logs DROP CONSTRAINT FK_90B420CA3AC4A3EA;
-ALTER TABLE device_tag_logs ADD CONSTRAINT FK_90B420CADAA1F695 FOREIGN KEY (log_left_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE device_tag_logs ADD CONSTRAINT FK_90B420CA3AC4A3EA FOREIGN KEY (log_right_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE location_logs DROP CONSTRAINT FK_708B731CDAA1F695;
-ALTER TABLE location_logs DROP CONSTRAINT FK_708B731C3AC4A3EA;
-ALTER TABLE location_logs ADD CONSTRAINT FK_708B731CDAA1F695 FOREIGN KEY (log_left_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE location_logs ADD CONSTRAINT FK_708B731C3AC4A3EA FOREIGN KEY (log_right_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE logs ALTER id DROP DEFAULT;
-ALTER TABLE order_logs DROP CONSTRAINT FK_BD7EFC4BDAA1F695;
-ALTER TABLE order_logs DROP CONSTRAINT FK_BD7EFC4B3AC4A3EA;
-ALTER TABLE order_logs ADD CONSTRAINT FK_BD7EFC4BDAA1F695 FOREIGN KEY (log_left_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE order_logs ADD CONSTRAINT FK_BD7EFC4B3AC4A3EA FOREIGN KEY (log_right_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE user_logs ADD role_id INT DEFAULT NULL;
-ALTER TABLE user_logs ALTER location_id SET NOT NULL;
-ALTER TABLE user_logs DROP CONSTRAINT FK_8A0E8A95DAA1F695;
-ALTER TABLE user_logs DROP CONSTRAINT FK_8A0E8A953AC4A3EA;
-ALTER TABLE user_logs ADD CONSTRAINT FK_8A0E8A95DAA1F695 FOREIGN KEY (log_left_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE user_logs ADD CONSTRAINT FK_8A0E8A953AC4A3EA FOREIGN KEY (log_right_id) REFERENCES logs (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE devices ALTER id DROP DEFAULT
-*/

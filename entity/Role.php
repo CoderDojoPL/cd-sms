@@ -63,7 +63,7 @@ class Role
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getFunctionalities()
     {

@@ -94,48 +94,14 @@ class Twig implements Presenter{
 		return new \Twig_SimpleFunction('isAllow', function ($requireFunctionalities) use($functionalities){
 			if(!is_array($requireFunctionalities))
 				$requireFunctionalities=array($requireFunctionalities);
-			
 			foreach($requireFunctionalities as $requireFunctionality){
-				if(isset($functionalities[$requireFunctionality]))
+				if(in_array($requireFunctionality , $functionalities)){
 					return true;
+				}
 			}
 			return false;
 
 		});
-	}
-
-	private function isAllow($userId,$functionalities){
-		$doctrine=$this->getService('doctrine');
-		$user=$doctrine->getRepository('Entity\User')->findOneById($userId);
-		if(!$user)
-			return true; //jeżeli nie jest zalogowany i nie wymaga autentykacji to przepuszczaj
-
-		$role=$user->getRole();
-		if(count($functionalities)==0)
-			return true;
-
-		foreach($functionalities as $functionality){
-			foreach($role->getFunctionalities() as $userFunctionality){
-				if($functionality==$userFunctionality->getCode())
-					return true;
-			}
-		}
-
-		return false;
-
-	}
-
-	private function getFunctionalities($extra){
-		$functionalities=array();
-		foreach($extra as $parameter){
-			foreach($parameter as $name=>$value){
-				if($name=='functionality')
-					$functionalities[]=$value['name'];
-			}
-
-		}
-
-		return $functionalities;
 	}
 
 }

@@ -276,7 +276,7 @@ class Device extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('device'));
+        $builder->setFormatter(new BasicGridFormatter('device',$this->isAllow(1)));
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\Device'

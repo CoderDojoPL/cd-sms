@@ -111,7 +111,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return Role
      */
     public function getRole()
     {
