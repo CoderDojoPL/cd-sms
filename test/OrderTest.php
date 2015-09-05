@@ -17,10 +17,9 @@ use Common\WebTestCaseHelper;
 use Entity\Location;
 use Entity\Device;
 use Entity\DeviceTag;
-use Entity\DeviceState;
 use Entity\User;
 use Entity\Order;
-
+use Entity\Role;
 
 /**
  * @package Test
@@ -73,12 +72,20 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->persist($device);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
+
 		$user = new User();
 		$user->setEmail('owner@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($location);
-
+		$user->setRole($role);
 		$this->persist($user);
 
 		$order = new Order();
@@ -203,12 +210,20 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->persist($deviceOtherLocation);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
 
 		$user = new User();
 		$user->setEmail('owner@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($location);
+		$user->setRole($role);
 
 		$this->persist($user);
 
@@ -345,13 +360,20 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->persist($deviceOtherLocation);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
 
 		$user = new User();
 		$user->setEmail('owner@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($location);
-
+		$user->setRole($role);
 		$this->persist($user);
 
 		$this->flush();
@@ -412,12 +434,20 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->persist($device);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
+
 		$owner = new User();
 		$owner->setEmail('owner@coderdojo.org.pl');
 		$owner->setFirstName('first name');
 		$owner->setLastName('last name');
 		$owner->setLocation($location);
-
+		$owner->setRole($role);
 		$this->persist($owner);
 
 		$performer = new User();
@@ -425,7 +455,7 @@ class OrderTest extends WebTestCaseHelper
 		$performer->setFirstName('first name');
 		$performer->setLastName('last name');
 		$performer->setLocation($location);
-
+		$performer->setRole($role);
 		$this->persist($performer);
 
 		$order = new Order();
@@ -499,12 +529,20 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->persist($device);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
+
 		$owner = new User();
 		$owner->setEmail('owner@coderdojo.org.pl');
 		$owner->setFirstName('first name');
 		$owner->setLastName('last name');
 		$owner->setLocation($location);
-
+		$owner->setRole($role);
 		$this->persist($owner);
 
 		$performer = new User();
@@ -512,7 +550,7 @@ class OrderTest extends WebTestCaseHelper
 		$performer->setFirstName('first name');
 		$performer->setLastName('last name');
 		$performer->setLocation($location);
-
+		$performer->setRole($role);
 		$this->persist($performer);
 
 		$order = new Order();
@@ -589,12 +627,20 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->persist($device);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
+
 		$owner = new User();
 		$owner->setEmail('owner@coderdojo.org.pl');
 		$owner->setFirstName('first name');
 		$owner->setLastName('last name');
 		$owner->setLocation($location2);
-
+		$owner->setRole($role);
 		$this->persist($owner);
 
 		$performer = new User();
@@ -602,7 +648,7 @@ class OrderTest extends WebTestCaseHelper
 		$performer->setFirstName('first name');
 		$performer->setLastName('last name');
 		$performer->setLocation($location1);
-
+		$performer->setRole($role);
 		$this->persist($performer);
 
 		$order = new Order();

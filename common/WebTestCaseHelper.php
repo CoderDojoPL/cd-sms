@@ -13,9 +13,8 @@ namespace Common;
 require_once __DIR__.'/../arbor/core/WebTestCase.php';
 
 use Arbor\Core\WebTestCase;
-use Entity\Location;
 use Entity\User;
-
+use Entity\Role;
 /**
  * Test helper.
  *
@@ -54,11 +53,19 @@ class WebTestCaseHelper extends WebTestCase{
 		$this->log->setCountModifiedEntities(0);
 		$em->persist($this->log);
 
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
 		$user=new User();
 		$user->setEmail('test@coderdojo.org.pl');
 		$user->setFirstName('first name');
 		$user->setLastName('last name');
 		$user->setLocation($em->getRepository('Entity\Location')->findOneBy(array()));
+		$user->setRole($role);
 		$em->persist($user);
 		$this->createLogEntity($user);
 		$em->flush();

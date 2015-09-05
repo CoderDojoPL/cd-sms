@@ -134,6 +134,7 @@ class Role extends Controller
         $builder->setFormatter(new BasicFormFormatter());
         $builder->setSubmitTags(array('cancel' => true));
         $builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Role'));
+        $builder->getField('functionalities')->setRequired(true);
 
         if ($entity) {
             $helper = $this->getService('form.helper');

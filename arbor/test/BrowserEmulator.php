@@ -18,12 +18,8 @@ namespace Arbor\Test;
 use Arbor\Exception\EmptyDataException;
 use Arbor\Exception\InvalidQuerySelectorException;
 use Arbor\Exception\ElementNotFoundException;
-use Arbor\Test\Request;
 use Arbor\Core\Enviorment;
-use Arbor\Test\HTMLElement;
 use Arbor\Provider\Session;
-use Arbor\Test\AnchorElement;
-use Arbor\Test\FormElement;
 
 /**
  * Emulator for functionality test

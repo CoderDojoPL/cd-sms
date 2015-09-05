@@ -55,7 +55,7 @@ class AppendSystemData extends Event{
     private function getFunctionalities($event){
         $user=$this->getSessionUser($event);
         $result=array();
-        if(!$user->getRole()){
+        if(!$user || !$user->getRole()){
             return $result;
         }
 

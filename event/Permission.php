@@ -26,6 +26,10 @@ class Permission extends Event{
      */
     public function onExecuteAction(ExecuteActionEvent $event){
 
+        if($event->getResponse()){//ignore when setted response by other event.
+            return;
+        }
+
         $request=$event->getRequest();
         $verify=false;
         foreach($request->getExtra() as $extra){

@@ -50,9 +50,9 @@ class RoleTest extends WebTestCaseHelper
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
 
         $tr = $client->getElement('table')->getElement('tbody')->findElements('tr');
-        $this->assertCount(1, $tr, 'Invalid number records in grid');
+        $this->assertCount(2, $tr, 'Invalid number records in grid');
 
-        $td = $tr[0]->findElements('td');
+        $td = $tr[1]->findElements('td');
 
         $this->assertCount(3, $td, 'Invalid number columns in grid');
         $this->assertEquals($role->getId(), $td[0]->getText(), 'Invalid data column id');
@@ -98,26 +98,26 @@ class RoleTest extends WebTestCaseHelper
         $form->submit();//check required
 
         $this->assertEquals('/role/add', $client->getUrl(), 'Invalid url form incorrect submit form');
+
         $form = $client->getElement('form');
         $fields = $form->getFields();
         $this->assertCount(2, $fields, 'Invalid number fields');
         $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
         $this->assertEquals('Value can not empty', $fields[1]->getParent()->getElement('label')->getText(), 'Invalid error message for functionalities');
-/*
+
         $fields[0]->setData('Name test');
-        $fields[1]->setData(1);
+        $fields[1]->setData(array(1));
 
         $form->submit();
-        echo $client->getResponse()->getContent();die;
+
         $this->assertEquals('/role', $client->getUrl(), 'Invalid url form after submit');
 
         $roles = $em->getRepository('Entity\Role')->findAll();
-        $this->assertCount(1, $roles, 'Invalid number devices');
+        $this->assertCount(2, $roles, 'Invalid number roles');
 
-        $this->assertEquals('Name test', $roles[0]->getName(), 'Invalid role name');
-        print_r($roles[0]);die;
-        $this->assertEquals($em->getRepository('Entity\Functionality')->findOneById(1)->getName(), $roles[0]->getFunctionalities(), 'Invalid device dimensions');
-*/
+        $this->assertEquals('Name test', $roles[1]->getName(), 'Invalid role name');
+
+        $this->assertEquals(1, $roles[1]->getFunctionalities()->get(0)->getId(), 'Invalid role functionalities');
 
     }
 }
