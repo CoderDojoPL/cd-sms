@@ -22,7 +22,7 @@ use Entity\Role;
  */
 class RoleTest extends WebTestCaseHelper
 {
-
+    //First role is from migrate script
     public function testIndexUnautheticate()
     {
         $client = $this->createClient();
@@ -51,6 +51,7 @@ class RoleTest extends WebTestCaseHelper
 
         $tr = $client->getElement('table')->getElement('tbody')->findElements('tr');
         $this->assertCount(3, $tr, 'Invalid number records in grid');
+        //one role from migrate, one created on test, one TR is a header
 
         $td = $tr[2]->findElements('td');
 
@@ -116,8 +117,66 @@ class RoleTest extends WebTestCaseHelper
         $this->assertCount(3, $roles, 'Invalid number roles');
 
         $this->assertEquals('Name test', $roles[2]->getName(), 'Invalid role name');
-
         $this->assertEquals(1, $roles[2]->getFunctionalities()->get(0)->getId(), 'Invalid role functionalities');
+    }
+
+    public function testEditUnautheticate()
+    {
+        $em = $this->getService('doctrine')->getEntityManager();
+        $role = new Role();
+        $role->setName('Test role');
+        $role->getFunctionalities()->add($em->getRepository('Entity\Functionality')->findOneById(1));
+        $this->persist($role);
+        $this->flush();
+        $client = $this->createClient();
+        $url = $client->loadPage('/role/edit/' . $role->getId())->getUrl();
+
+        $this->assertEquals('/login', $url);
+    }
+
+    public function testEdit()
+    {
+
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $role = new Role();
+        $role->setName('Test role');
+        $role->getFunctionalities()->add($em->getRepository('Entity\Functionality')->findOneById(1));
+        $this->persist($role);
+        $this->flush();
+
+        $session = $this->createSession();
+        $session->set('user.id', $this->user->getId());
+
+        $client = $this->createClient($session);
+        $client->loadPage('/role/edit/' . $role->getId());
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields();
+        $this->assertCount(2, $fields, 'Invalid number fields');
+        $this->assertEquals('Test role', $fields[0]->getData(), 'Invalid role name');
+        $this->assertEquals(1, $fields[1]->getData(), 'Invalid role functionalities');
+        $fields[0]->setData('');
+        $fields[1]->setData('');
+        $form->submit();
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields();
+        $this->assertCount(2, $fields, 'Invalid number fields');
+        $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
+        $this->assertEquals('Value can not empty', $fields[1]->getParent()->getElement('label')->getText(), 'Invalid error message for dimensions');
+        $fields[0]->setData('Name test');
+        $fields[1]->setData(array(9));
+
+        $form->submit();
+        $this->assertEquals('/role', $client->getUrl(), 'Invalid url form after submit');
+
+        $em->clear();
+        $newRole = $em->getRepository('Entity\Role')->findOneBy(array('id' => $role->getId()));
+        $this->assertEquals('Name test', $newRole->getName(), 'Invalid role name');
+        $this->assertEquals(9, $newRole->getFunctionalities()->get(0)->getId(), 'Invalid role functionalities');
 
     }
 }
