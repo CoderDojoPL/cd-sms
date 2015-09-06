@@ -65,6 +65,15 @@ class Version20150818213210 extends MigrateHelper{
 
 		$this->updateSchema($schema);
 
+
+		$this->executeQuery("DELETE FROM device_logs WHERE log_left_id IN(SELECT id FROM logs WHERE log_action_id=:id) or log_right_id IN(SELECT id FROM logs WHERE log_action_id=:id)",array(
+			'id'=>17
+		));
+
+		$this->executeQuery("DELETE FROM logs WHERE log_action_id=:id",array(
+			'id'=>17
+		));
+
 		$this->executeQuery("DELETE FROM log_actions WHERE id=:id",array(
 			'id'=>17
 		));

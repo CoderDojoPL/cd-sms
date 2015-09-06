@@ -80,7 +80,7 @@ class DeviceMy extends Controller
         $this->flush();
 
         $response = new Response();
-        $response->redirect('/device\/my');
+        $response->redirect('/device/my');
         return $response;
 
     }

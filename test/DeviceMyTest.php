@@ -167,30 +167,35 @@ class DeviceMyTest extends WebTestCaseHelper
 
     }
 
-/*    public function testRemove()
+    public function testFreeRemove()
     {
 
         $em = $this->getService('doctrine')->getEntityManager();
 
-        $location = new Location();
-        $location->setName('Location name');
-        $location->setCity('Location city');
-        $location->setStreet('Location street');
-        $location->setNumber('Location number');
-        $location->setApartment('Location apartment');
-        $location->setPostal('00-000');
-        $location->setPhone('+48100000000');
-        $location->setEmail('email@email.pl');
-        $this->persist($location);
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
 
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setDimensions('10x10x10');
+        $device->setWeight('10kg');
+        $device->setSerialNumber('Device serial number');
+        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $device->setUser($this->user);
+        $device->setLocation($this->user->getLocation());
 
+        $this->persist($device);
         $this->flush();
 
         $session = $this->createSession();
         $session->set('user.id', $this->user->getId());
 
         $client = $this->createClient($session);
-        $client->loadPage('/location/remove/' . $location->getId());
+        $client->loadPage('/device/my/free/' . $device->getId());
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
 
@@ -207,14 +212,15 @@ class DeviceMyTest extends WebTestCaseHelper
 
         $buttons[1]->click();
 
-        $this->assertEquals('/location', $client->getUrl(), 'Invalid url button NO.');
+        $this->assertEquals('/device/my', $client->getUrl(), 'Invalid url button NO.');
 
         $buttons[0]->click();
 
-        $this->assertEquals('/location', $client->getUrl(), 'Invalid url button YES.');
+        $this->assertEquals('/device/my', $client->getUrl(), 'Invalid url button YES.');
 
+        $em->clear();
+        $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
 
-        //check removed in database
-        $this->assertCount(1, $em->getRepository('Entity\Location')->findAll());
-    }*/
+        $this->assertEquals(1,$device->getState()->getId(),'Invalid device state.');
+    }
 }

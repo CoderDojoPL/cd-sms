@@ -20,7 +20,7 @@
         <authenticate redirect="/login" />
         <presenter class="Library\Twig\Presenter\Twig" />
         <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)\/yes$" mapper="Mapper\Device" />
-        <log action="15" type="GET" />
+        <log action="17" type="GET" />
     </action>
 
 </content>
