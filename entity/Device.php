@@ -112,6 +112,11 @@ class Device
 	protected $note;
 
 	/**
+	 * @Column(type="text")
+	 **/
+	protected $symbol;
+
+	/**
 	 * @return mixed
 	 */
 	public function getState()
@@ -324,6 +329,21 @@ class Device
 		$this->note = $note;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getSymbol()
+	{
+		return $this->symbol;
+	}
+
+	/**
+	 * @param mixed $symbol
+	 */
+	public function setSymbol($symbol)
+	{
+		$this->symbol = $symbol;
+	}
 
 	public function __toString()
 	{

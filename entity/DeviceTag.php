@@ -17,35 +17,40 @@ namespace Entity;
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
-class DeviceTag{
+class DeviceTag
+{
 
-	/** 
-	 * @Id
-	 * @Column(type="integer") 
-	 * @GeneratedValue
-	 **/
-	protected $id;
+    /**
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     **/
+    protected $id;
 
-    /** 
-     * @Column(type="string") 
+    /**
+     * @Column(type="string")
      **/
     protected $name;
 
-	public function getId(){
-		return $this->id;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 
-    public function setName($name){
-        $this->name=$name;
+    public function setName($name)
+    {
+        $this->name = $name;
         return $this;
     }
 
-    public function getName(){
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function __toString(){
-    	return $this->getName();
+    public function __toString()
+    {
+        return $this->getName();
     }
 
 }

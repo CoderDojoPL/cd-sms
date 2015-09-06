@@ -111,6 +111,11 @@ class DeviceLog
      **/
     protected $removed;
 
+	/**
+	 * @Column(type="text")
+	 **/
+	protected $symbol;
+
     public function __construct(){
         $this->setCreatedAt(new \DateTime());
         $this->setRemoved(false);
@@ -366,4 +371,22 @@ class DeviceLog
     {
         return $this->removed;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getSymbol()
+	{
+		return $this->symbol;
+	}
+
+	/**
+	 * @param mixed $symbol
+	 */
+	public function setSymbol($symbol)
+	{
+		$this->symbol = $symbol;
+	}
+
+
 }

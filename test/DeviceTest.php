@@ -69,7 +69,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
-
+        $device->setSymbol('REF1');
         $this->persist($device);
 
 
@@ -88,15 +88,16 @@ class DeviceTest extends WebTestCaseHelper
 
         $td = $tr[0]->findElements('td');
 
-        $this->assertCount(7, $td, 'Invalid number columns in grid');
+        $this->assertCount(8, $td, 'Invalid number columns in grid');
         $this->assertEquals($device->getId(), $td[0]->getText(), 'Invalid data columns id');
         $this->assertEquals('', $td[1]->getText(), 'Invalid data columns photo');
         $this->assertEquals($device->getName(), $td[2]->getText(), 'Invalid data columns name');
         $this->assertEquals($device->getSerialNumber(), $td[3]->getText(), 'Invalid data columns serial number');
         $this->assertEquals($device->getType()->getName(), $td[4]->getText(), 'Invalid data columns type');
-        $this->assertEquals($device->getLocation()->getName(), $td[5]->getText(), 'Invalid data columns location');
+        $this->assertEquals($device->getSymbol(), $td[5]->getText(), 'Invalid data columns symbol');
+        $this->assertEquals($device->getLocation()->getName(), $td[6]->getText(), 'Invalid data columns location');
 
-        $actionButtons = $td[6]->findElements('a');
+        $actionButtons = $td[7]->findElements('a');
 
         $footerTr = $client->getElement('table')->getElement('tfoot')->findElements('tr');
         $addButton = $footerTr[1]->getElement('a');
@@ -151,6 +152,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
+        $device->setSymbol('REF1');
 
         $this->persist($device);
 
@@ -195,6 +197,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
+        $device->setSymbol('REF1');
 
         $this->persist($device);
 
@@ -365,6 +368,7 @@ class DeviceTest extends WebTestCaseHelper
             $this->assertEquals('Note', $devices[$i]->getNote(), 'Invalid device note');
             $this->assertEquals(1, $devices[$i]->getType()->getId(), 'Invalid device type');
             $this->assertEquals($location->getId(), $devices[$i]->getLocation()->getId(), 'Invalid device location');
+            $this->assertEquals('REF'.($i+1), $devices[$i]->getSymbol(), 'Invalid device symbol');
             $tags = $devices[$i]->getTags();
             $this->assertCount(2, $tags, 'Invalid count device tags');
 
@@ -409,6 +413,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
+        $device->setSymbol('REF1');
 
         $this->persist($device);
 
@@ -457,6 +462,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
+        $device->setSymbol('REF1');
 
         $this->persist($device);
 

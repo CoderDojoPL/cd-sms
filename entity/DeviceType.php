@@ -17,38 +17,86 @@ namespace Entity;
  * @author Slawomir Nowak (s.nowak@coderdojo.org.pl)
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  **/
-class DeviceType{
+class DeviceType
+{
 
-	/** 
-	 * @Id
-	 * @Column(type="integer") 
-	 **/
-	protected $id;
+    /**
+     * @Id
+     * @Column(type="integer")
+     **/
+    protected $id;
 
-    /** 
-     * @Column(type="string") 
+    /**
+     * @Column(type="string")
      **/
     protected $name;
 
-    public function __construct($id){
-        $this->id=$id;
+    /**
+     * @Column(name="symbol_prefix", type="string")
+     **/
+    protected $symbolPrefix;
+
+    /**
+     * @Column(type="integer",options={"default"=0})
+     **/
+    protected $current;
+
+    public function __construct($id)
+    {
+        $this->id = $id;
     }
 
-	public function getId(){
-		return $this->id;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 
-    public function setName($name){
-        $this->name=$name;
+    public function setName($name)
+    {
+        $this->name = $name;
         return $this;
     }
 
-    public function getName(){
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function __toString(){
-    	return $this->getName();
+    /**
+     * @return mixed
+     */
+    public function getSymbolPrefix()
+    {
+        return $this->symbolPrefix;
+    }
+
+    /**
+     * @param mixed $symbolPrefix
+     */
+    public function setSymbolPrefix($symbolPrefix)
+    {
+        $this->symbolPrefix = $symbolPrefix;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrent()
+    {
+        return $this->current;
+    }
+
+    /**
+     * @param mixed $current
+     */
+    public function setCurrent($current)
+    {
+        $this->current = $current;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 
 }

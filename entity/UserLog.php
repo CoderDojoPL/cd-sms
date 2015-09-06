@@ -41,7 +41,7 @@ class UserLog
     protected $lastName;
 
     /**
-     * @Column(name="location_id",type="integer")
+     * @Column(name="location_id",type="integer",nullable=true)
      **/
     protected $location;
 

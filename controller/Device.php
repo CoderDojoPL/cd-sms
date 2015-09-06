@@ -22,6 +22,7 @@ use Arbor\Component\Form\CheckboxField;
 use Arbor\Component\Form\FileField;
 use Common\ImageColumnFormatter;
 use Doctrine\Common\Version;
+use Entity\DeviceType;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\BasicDataManager;
@@ -187,10 +188,12 @@ class Device extends Controller
      */
     private function saveEntity($entity, $data, $serialNumber, $state = null)
     {
+        $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
+        /* @var $deviceType \Entity\DeviceType */
         $entity->setName($data['name']);
         $entity->setDimensions($data['dimensions']);
         $entity->setWeight($data['weight']);
-        $entity->setType($this->cast('Mapper\DeviceType', $data['type']));
+        $entity->setType($deviceType);
         $entity->setSerialNumber($serialNumber);
         $entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
         $entity->setNote($data['note']);
@@ -202,6 +205,10 @@ class Device extends Controller
 
         if (isset($data['location'])) {
             $entity->setLocation($this->cast('Mapper\Location', $data['location']));
+            $current = $deviceType->getCurrent();
+            $prefix = $deviceType->getSymbolPrefix();
+            $entity->setSymbol($prefix.++$current);
+            $deviceType->setCurrent($current);
         }
 
         if (isset($data['user']) && $data['user']) {
@@ -301,6 +308,7 @@ class Device extends Controller
         $builder->addColumn('Name', 'name');
         $builder->addColumn('Serial number', 'serialNumber');
         $builder->addColumn('Type', 'type');
+        $builder->addColumn('Symbol', 'symbol');
         $builder->addColumn('Location', array('location','user'));
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
         return $builder;
@@ -337,6 +345,7 @@ class Device extends Controller
         $builder->removeField('updatedAt');
         $builder->removeField('createdAt');
         $builder->removeField('state');
+        $builder->removeField('symbol');
 
         $builder->addField(new FileField(array(
             'name' => 'photo'
