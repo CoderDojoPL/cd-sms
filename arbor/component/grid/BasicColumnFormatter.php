@@ -29,7 +29,7 @@ class BasicColumnFormatter implements ColumnFormatter{
 	 * {@inheritdoc}
 	 */
 	public function render($data){
-		return htmlspecialchars(implode(' ',$data));
+		return htmlspecialchars(trim(implode(' ',$data)));
 	}
 
 }

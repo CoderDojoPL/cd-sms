@@ -50,9 +50,9 @@ class RoleTest extends WebTestCaseHelper
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
 
         $tr = $client->getElement('table')->getElement('tbody')->findElements('tr');
-        $this->assertCount(2, $tr, 'Invalid number records in grid');
+        $this->assertCount(3, $tr, 'Invalid number records in grid');
 
-        $td = $tr[1]->findElements('td');
+        $td = $tr[2]->findElements('td');
 
         $this->assertCount(3, $td, 'Invalid number columns in grid');
         $this->assertEquals($role->getId(), $td[0]->getText(), 'Invalid data column id');
@@ -113,11 +113,11 @@ class RoleTest extends WebTestCaseHelper
         $this->assertEquals('/role', $client->getUrl(), 'Invalid url form after submit');
 
         $roles = $em->getRepository('Entity\Role')->findAll();
-        $this->assertCount(2, $roles, 'Invalid number roles');
+        $this->assertCount(3, $roles, 'Invalid number roles');
 
-        $this->assertEquals('Name test', $roles[1]->getName(), 'Invalid role name');
+        $this->assertEquals('Name test', $roles[2]->getName(), 'Invalid role name');
 
-        $this->assertEquals(1, $roles[1]->getFunctionalities()->get(0)->getId(), 'Invalid role functionalities');
+        $this->assertEquals(1, $roles[2]->getFunctionalities()->get(0)->getId(), 'Invalid role functionalities');
 
     }
 }

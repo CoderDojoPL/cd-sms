@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <action controller="DeviceMy" method="index" >
+        <route pattern="\/device\/my" />
+        <authenticate redirect="/login" />
+        <presenter class="Library\Twig\Presenter\Twig" />
+    </action>
+
+    <action controller="DeviceMy" method="freeConfirm" >
+        <route pattern="^\/device\/my\/free\/([0-9]+)$" />
+        <authenticate redirect="/login" />
+        <presenter class="Library\Twig\Presenter\Twig" />
+        <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)$" mapper="Mapper\Device" />
+    </action>
+
+    <action controller="DeviceMy" method="free" >
+        <route pattern="^\/device\/my\/free\/([0-9]+)\/yes$" />
+        <authenticate redirect="/login" />
+        <presenter class="Library\Twig\Presenter\Twig" />
+        <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)\/yes$" mapper="Mapper\Device" />
+        <log action="15" type="GET" />
+    </action>
+
+</content>

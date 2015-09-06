@@ -304,13 +304,13 @@ class Version20150722191210 extends MigrateHelper{
 		// $deviceTagLogs->removeForeignKey('FK_90B420CADAA1F695');
 		// $deviceTagLogs->removeForeignKey('FK_90B420CA3AC4A3EA');
 
-		$schema->dropTable('log_actions');
-		$schema->dropTable('logs');
 		$schema->dropTable('location_logs');
 		$schema->dropTable('user_logs');
 		$schema->dropTable('device_logs');
 		$schema->dropTable('order_logs');
 		$schema->dropTable('device_tag_logs');
+		$schema->dropTable('logs');
+		$schema->dropTable('log_actions');
 
 
 		$this->updateSchema($schema);

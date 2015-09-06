@@ -70,6 +70,9 @@ class BrowserEmulator{
 		return $this->request->getUrl();
 	}
 
+	/**
+	 * @return Response
+	 */
 	public function getResponse(){
 		return $this->response;
 	}

@@ -180,6 +180,7 @@ class Order extends Controller
 
 		//set new location on device
 		$entity->getDevice()->setLocation($this->getUser()->getLocation());
+		$entity->getDevice()->setUser($this->getUser());
 		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 1));
 
 		$this->flush();

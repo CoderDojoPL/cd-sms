@@ -93,6 +93,18 @@ class Version20150901214700 extends MigrateHelper
             $this->executeQuery("INSERT INTO functionalities(id,name,description) VALUES(".($i+1). ",:name,:description)", $functionalitiesData[$i]);
         }
 
+        $this->executeQuery("INSERT INTO roles(".($this->getDriver()=='pdo_pgsql'?'id,':'')."name) VALUES(".($this->getDriver()=='pdo_pgsql'?"nextval('roles_id_seq'),":'').":name)", array(
+            'name' => 'Admin'
+        ));
+
+        $this->executeQuery("INSERT INTO role_logs(id,name,log_left_id,created_at,removed) VALUES((select max(id) from roles),:name,(select min(id) from logs),now(),false)", array(
+            'name' => 'Admin'
+        ));
+
+        $this->executeQuery("UPDATE users SET role_id=(SELECT max(id) FROM roles)");
+
+        $this->executeQuery("INSERT INTO roles_functionalities(role_id,functionality_id) VALUES((SELECT MAX(id) FROM roles),9)");
+
         $this->commitTransaction();
     }
 
@@ -126,6 +138,23 @@ class Version20150901214700 extends MigrateHelper
         $schema->dropTable('role_logs');
 
         $this->updateSchema($schema);
+
+        $this->executeQuery("DELETE FROM logs WHERE log_action_id=:id",array(
+            'id'=>15
+        ));
+
+        $this->executeQuery("DELETE FROM log_actions WHERE id=:id",array(
+            'id'=>15
+        ));
+
+        $this->executeQuery("DELETE FROM logs WHERE log_action_id=:id",array(
+            'id'=>16
+        ));
+
+        $this->executeQuery("DELETE FROM log_actions WHERE id=:id",array(
+            'id'=>16
+        ));
+
         $this->commitTransaction();
     }
 
