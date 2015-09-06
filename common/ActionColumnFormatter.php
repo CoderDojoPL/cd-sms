@@ -41,18 +41,7 @@ class ActionColumnFormatter implements ColumnFormatter{
 		$icon='';
 		foreach($this->buttons as $button){
 			$action=$button;
-			$href='href=""';
-			switch($button){
-				case 'show':
-					$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
-				break;
-				case 'edit':
-					$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
-				break;
-				case 'remove':
-					$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
-				break;
-			}
+			$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
 
 			$html.='<a type="button" '.$href.' class="btn btn-default btn-xs">'.ucfirst($action).'</a>';
 

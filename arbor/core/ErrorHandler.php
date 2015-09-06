@@ -143,7 +143,9 @@ class ErrorHandler{
 	 * @since 0.1.0
 	 */	
 	private function parseView($exception){
-		error_log($exception->getMessage()." ".$exception->getFile()."(".$exception->getLine().")");
+		if(!$this->resources->getEnviorment()->isSilent()){
+			error_log($exception->getMessage()." ".$exception->getFile()."(".$exception->getLine().")");
+		}
 		$response=new Response();
 		$response->setStatusCode(500);
 		$response->setContent($exception);

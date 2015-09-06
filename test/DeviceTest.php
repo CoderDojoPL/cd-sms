@@ -289,7 +289,7 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
-        $this->assertCount(11, $fields, 'Invalid number fields');
+        $this->assertCount(12, $fields, 'Invalid number fields');
 
         $fields[7]->setData('0');
         //check required fields
@@ -301,7 +301,7 @@ class DeviceTest extends WebTestCaseHelper
         $fields = $form->getFields();
 
 
-        $this->assertCount(11, $fields, 'Invalid number fields');
+        $this->assertCount(12, $fields, 'Invalid number fields');
         $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
         $this->assertEquals('Value can not empty', $fields[1]->getParent()->getElement('label')->getText(), 'Invalid error message for dimensions');
         $this->assertEquals('Value can not empty', $fields[2]->getParent()->getElement('label')->getText(), 'Invalid error message for weight');

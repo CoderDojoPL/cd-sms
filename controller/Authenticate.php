@@ -214,6 +214,10 @@ class Authenticate extends Controller
 		$userEntity->setFirstName($userData['givenName']);
 		$userEntity->setLastName($userData['familyName']);
 
+		if(!$this->findOne('User')){ //first user
+			$userEntity->setRole($this->findOne('Role'));
+		}
+
 		$this->persist($userEntity);
 		$this->flush();
 

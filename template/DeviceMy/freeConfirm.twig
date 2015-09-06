@@ -1,0 +1,31 @@
+{% extends _request.isAjax ? "base_blank.twig" : "base_logged.twig" %}
+
+{%block body%}
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="/device/my">Devices</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-file"></i> My
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Free
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <DIV class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Realy want to set free state on "{{entity.name}}"?</div>
+                        <div class="panel-body text-center">
+                            <a type="button" href="/device/my/free/{{entity.id}}/yes" class="btn btn-default btn-lg">Yes</a>
+                            <a type="button" href="/device/my" class="btn btn-default btn-lg">No</a>
+                        </div>
+                    </div>
+
+                </DIV>
+                <!-- /.row -->
+{%endblock%}

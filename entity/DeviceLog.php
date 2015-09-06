@@ -74,6 +74,11 @@ class DeviceLog
 	protected $location;
 
 	/**
+	 * @Column(name="user_id",type="integer",nullable=true)
+	 **/
+	protected $user;
+
+	/**
 	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
 	 **/
 	protected $warrantyExpirationDate;
@@ -241,6 +246,26 @@ class DeviceLog
         }
 
 		$this->location = $location;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUser()
+	{
+		return $this->user;
+	}
+
+	/**
+	 * @param mixed $user
+	 */
+	public function setUser($user)
+	{
+	    if($user){
+            $user=$user->getId();
+        }
+
+		$this->user = $user;
 	}
 
 	/**

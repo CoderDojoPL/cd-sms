@@ -91,6 +91,12 @@ class Device
 	protected $location;
 
 	/**
+	 * @ManyToOne(targetEntity="User")
+	 * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
+	 **/
+	protected $user;
+
+	/**
 	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
 	 **/
 	protected $warrantyExpirationDate;
@@ -251,6 +257,22 @@ class Device
 	public function setLocation($location)
 	{
 		$this->location = $location;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUser()
+	{
+		return $this->user;
+	}
+
+	/**
+	 * @param mixed $user
+	 */
+	public function setUser($user)
+	{
+		$this->user = $user;
 	}
 
 	/**

@@ -18,22 +18,18 @@ use Arbor\Component\Grid\GridDataManager;
  * @package Common
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
-class BasicDataManager implements GridDataManager{
+class DqlDataManager implements GridDataManager{
 
 	private $entityManager;
-	private $storage;
-	private $condition;
-	private $vars;
+
 	/**
 	 * @param Doctrine\ORM\EntityManager $entityManager
-	 * @param string $storage - entity name e.g. User, Order
-	 * @param string $condition - DQL query with conditions records
-	 * @param array $vars - DQL vars for conditions
+	 * @param string $dql
 	 */
-	public function __construct($entityManager,$storage,$condition=null,$vars=array()){
+	public function __construct($entityManager,$dql,$dqlCount,$vars=array()){
 		$this->entityManager=$entityManager;
-		$this->storage=$storage;
-		$this->condition=$condition;
+		$this->dql=$dql;
+		$this->dqlCount=$dqlCount;
 		$this->vars=$vars;
 	}
 
@@ -44,7 +40,7 @@ class BasicDataManager implements GridDataManager{
 		$result=array();
 
         $records=$this->entityManager->createQuery(
-                'SELECT i FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'').' ORDER BY i.id'
+                $this->dql
 		)
 			->setParameters($this->vars)
 			->setMaxResults($limit)
@@ -63,7 +59,7 @@ class BasicDataManager implements GridDataManager{
 	 */
 	public function getTotalCount(){
 		$records=$this->entityManager->createQuery(
-                'SELECT count(i) as c FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'')
+			$this->dqlCount
             )
 			->setParameters($this->vars)
 			->getResult();
@@ -78,6 +74,9 @@ class BasicDataManager implements GridDataManager{
 	 */
 	private function entityToArray($entity){
 		$values=array();
+		if(is_array($entity))
+			return $entity;
+
 		foreach(get_class_methods($entity) as $method){
 			if(preg_match('/^get(.*)$/',$method,$finds)){
 				$data=$entity->$method();
@@ -86,7 +85,7 @@ class BasicDataManager implements GridDataManager{
 					if($data instanceof \DateTime)
 						$data=$data->format('Y-m-d H:i:s');
 					else if($data instanceof \Doctrine\ORM\PersistentCollection){
-						
+
 					}
 					else
 						$data=(string)$data;
