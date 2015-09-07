@@ -68,8 +68,8 @@ class Version20150906185600 extends MigrateHelper
         $recs = $this->executeQuery("select * FROM devices WHERE type_id = 2");
         $cnt = 0;
         foreach ($recs as $record){
-            $this->executeQuery("UPDATE devices set symbol = 'REF".++$cnt."' where id = ".$record['id']);
-            $this->executeQuery("UPDATE device_logs set symbol = 'REF".$cnt."' where id = ".$record['id']);
+            $this->executeQuery("UPDATE devices set symbol = 'HAR".++$cnt."' where id = ".$record['id']);
+            $this->executeQuery("UPDATE device_logs set symbol = 'HAR".$cnt."' where id = ".$record['id']);
         }
         $this->executeQuery("UPDATE device_types SET symbol_prefix='HAR', current=".$cnt." where id = 2");
 
