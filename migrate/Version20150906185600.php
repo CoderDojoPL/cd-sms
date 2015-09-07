@@ -57,7 +57,7 @@ class Version20150906185600 extends MigrateHelper
 
         $this->updateSchema($schema);
 
-        $recs = $this->executeQuery("select * FROM devices WHERE type_id = 1");
+        $recs = $this->executeQuery("select * FROM devices WHERE type_id = 1",array(),true);
         $cnt = 0;
         foreach ($recs as $record){
             $this->executeQuery("UPDATE devices set symbol = 'REF".++$cnt."' where id = ".$record['id']);
@@ -65,7 +65,7 @@ class Version20150906185600 extends MigrateHelper
         }
         $this->executeQuery("UPDATE device_types SET symbol_prefix='REF', current=".$cnt." where id = 1");
 
-        $recs = $this->executeQuery("select * FROM devices WHERE type_id = 2");
+        $recs = $this->executeQuery("select * FROM devices WHERE type_id = 2",array(),true);
         $cnt = 0;
         foreach ($recs as $record){
             $this->executeQuery("UPDATE devices set symbol = 'HAR".++$cnt."' where id = ".$record['id']);
@@ -73,7 +73,7 @@ class Version20150906185600 extends MigrateHelper
         }
         $this->executeQuery("UPDATE device_types SET symbol_prefix='HAR', current=".$cnt." where id = 2");
 
-        $logData=$this->executeQuery("SELECT * FROM logs ORDER BY id LIMIT 1");
+        $logData=$this->executeQuery("SELECT * FROM logs ORDER BY id LIMIT 1",array(),true);
         $logId=$logData[0]['id'];
         $count=0;
         foreach($this->getExistedRecords('device_types') as $record){
@@ -110,7 +110,7 @@ class Version20150906185600 extends MigrateHelper
     }
 
     private function getExistedRecords($table){
-        return $this->executeQuery("SELECT * FROM ".$table);
+        return $this->executeQuery("SELECT * FROM ".$table,array(),true);
     }
 
     private function createLogRecord($tableName, $record, $logId){

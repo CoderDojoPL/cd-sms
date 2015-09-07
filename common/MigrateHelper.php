@@ -103,12 +103,15 @@ abstract class MigrateHelper{
 	 *
 	 * @param string $sql raw sql query
 	 * @param array $parameters parameters inside sql query
-	 * @return array
+	 * @param boolean $result only for query who return data
+	 * @return array|null
 	 */
-	protected function executeQuery($sql,$parameters=array()){
+	protected function executeQuery($sql,$parameters=array(),$result=false){
 		$stmt=$this->container->getDoctrine()->getEntityManager()->getConnection()->prepare($sql);
 		$stmt->execute($parameters);
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		if($result){
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		}
 	}
 
 	/**

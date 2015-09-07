@@ -126,7 +126,7 @@ class Version20150711112810 extends MigrateHelper{
 
 		$this->updateSchema($schema);
 
-		$this->executeQuery("INSERT INTO device_types(id,name) VALUES(:id,:name)",array(
+		$this->executeQuery("INSERT INTO device_types(id,name) VALUES(:id,:name);",array(
 			'id'=>1
 			,'name'=>'Refill'
 		));

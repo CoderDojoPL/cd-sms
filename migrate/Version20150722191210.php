@@ -232,7 +232,7 @@ class Version20150722191210 extends MigrateHelper{
 		,'isSuccess'=>true
 		));
 
-		$logData=$this->executeQuery("SELECT * FROM logs ORDER BY id DESC LIMIT 1");
+		$logData=$this->executeQuery("SELECT * FROM logs ORDER BY id DESC LIMIT 1",array(),true);
 		$logId=$logData[0]['id'];
 		$count=0;
 		foreach($this->getExistedRecords('users') as $record){
@@ -265,7 +265,7 @@ class Version20150722191210 extends MigrateHelper{
 	}
 
 	private function getExistedRecords($table){
-		return $this->executeQuery("SELECT * FROM ".$table);
+		return $this->executeQuery("SELECT * FROM ".$table,array(),true);
 	}
 
 	/**
