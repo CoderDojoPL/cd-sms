@@ -14,6 +14,7 @@
  */
 
 namespace Arbor\Test;
+use Arbor\Exception\InvalidFieldNameException;
 
 /**
  * Html Element for BrowserEmulator
@@ -42,10 +43,62 @@ class FormElement extends HTMLElement{
 		$fields=$this->getFields();
 		$data=array();
 		foreach($fields as $field){
-			$data[$field->getName()]=$field->getData();
+			$this->fillData($data,$field);
 		}
-
 		$url=($this->getAction()?$this->getAction():$this->browser->getUrl());
 		$this->browser->requestPost($url,$data);
+	}
+
+	public function fillData(&$data,$field){
+		$name=$field->getName();
+		$value=$field->getData();
+		if(preg_match('/^(.*?)(\[.*?\])+$/',$name,$matched)){ //array field
+			if(!isset($data[$matched[1]])){
+				$data[$matched[1]]=array();
+			}
+
+			$lastNode=&$data[$matched[1]];
+			if(preg_match_all('/\[(.*?)\]/',$name,$matched)){
+				$fieldParts=$matched[1];
+				for($i=0; $i<count($fieldParts); $i++){
+					$sectionName=$fieldParts[$i];
+
+					if($sectionName==''){
+						if($i==count($fieldParts)-1){
+							if($value!=null){
+								if(!is_array($value)){
+									$value=array($value);
+								}
+								$lastNode=array_merge($lastNode,$value);
+							}
+						}
+						else{
+							$lastNode[]=array();
+							$lastNode=&$lastNode[count($lastNode)-1];
+						}
+
+					}
+					else{
+						if($i==count($fieldParts)-1) {
+//							if($value!=null) {
+								$lastNode[$sectionName] = $value;
+//							}
+						}
+						else if(!isset($lastNode[$sectionName])){
+							$lastNode[$sectionName]=array();
+							$lastNode=&$lastNode[$sectionName];
+						}
+
+					}
+
+				}
+
+			}
+			else
+				throw new InvalidFieldNameException();
+		}
+		else{
+			$data[$name]=$value;
+		}
 	}
 }

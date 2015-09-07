@@ -19,12 +19,13 @@ use Arbor\Core\Container;
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 abstract class MigrateHelper{
-	private $container;
+	protected $container;
+	private $schema;
 
 	/**
 	 * Method executed when update project
 	 *
-	 * @param Arbor\Core\Container $container
+	 * @param \Arbor\Core\Container $container
 	 */
 	public final function up(Container $container){
 		$this->container=$container;
@@ -36,7 +37,7 @@ abstract class MigrateHelper{
 	/**
 	 * Method executed when downgrade project
 	 *
-	 * @param Arbor\Core\Container $container
+	 * @param \Arbor\Core\Container $container
 	 */
 	public final function down(Container $container){
 		$this->container=$container;
@@ -48,7 +49,7 @@ abstract class MigrateHelper{
 	/**
 	 * Create Doctrine schema with loaded current database stage 
 	 *
-	 * @return Doctrine\DBAL\Schema\Schema
+	 * @return \Doctrine\DBAL\Schema\Schema
 	 */
 	protected function createSchema(){
 		$manager=$this->container->getDoctrine()->getEntityManager();
@@ -60,9 +61,9 @@ abstract class MigrateHelper{
 	}
 
 	/**
-	 * Check diffrent in schemas (current and modified by migrate script) and executed sql
+	 * Check different in schemas (current and modified by migrate script) and executed sql
 	 *
-	 * @return Doctrine\DBAL\Schema\Schema $schema
+	 * @return \Doctrine\DBAL\Schema\Schema $schema
 	 */
 	protected function updateSchema($schema){
 		$manager=$this->container->getDoctrine()->getEntityManager();
@@ -95,6 +96,31 @@ abstract class MigrateHelper{
         $conn=$manager->getConnection();
         $conn->commit();
 
+	}
+
+	/**
+	 * Execute raw sql.
+	 *
+	 * @param string $sql raw sql query
+	 * @param array $parameters parameters inside sql query
+	 * @param boolean $result only for query who return data
+	 * @return array|null
+	 */
+	protected function executeQuery($sql,$parameters=array(),$result=false){
+		$stmt=$this->container->getDoctrine()->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->execute($parameters);
+		if($result){
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		}
+	}
+
+	/**
+	 * Get driver name for current db connection.
+	 *
+	 * @return string
+	 */
+	protected function getDriver(){
+		return $this->container->getDoctrine()->getEntityManager()->getConnection()->getDriver()->getName();
 	}
 
 	/**

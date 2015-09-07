@@ -22,6 +22,7 @@ use Arbor\Component\Form\CheckboxField;
 use Arbor\Component\Form\FileField;
 use Common\ImageColumnFormatter;
 use Doctrine\Common\Version;
+use Entity\DeviceType;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\BasicDataManager;
@@ -44,6 +45,7 @@ class Device extends Controller
     public function index()
     {
         $grid = $this->createGrid();
+        $grid->render();
         return compact('grid');
     }
 
@@ -186,25 +188,38 @@ class Device extends Controller
      */
     private function saveEntity($entity, $data, $serialNumber, $state = null)
     {
+        $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
+        /* @var $deviceType \Entity\DeviceType */
         $entity->setName($data['name']);
         $entity->setDimensions($data['dimensions']);
         $entity->setWeight($data['weight']);
-        $entity->setType($this->cast('Mapper\DeviceType', $data['type']));
+        $entity->setType($deviceType);
         $entity->setSerialNumber($serialNumber);
         $entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
         $entity->setNote($data['note']);
         $entity->setPrice($data['price'] ? $data['price'] : NULL);
+
 
         if ($state)
             $entity->setState($this->cast('Mapper\DeviceState', $state));
 
         if (isset($data['location'])) {
             $entity->setLocation($this->cast('Mapper\Location', $data['location']));
+            $current = $deviceType->getCurrent();
+            $prefix = $deviceType->getSymbolPrefix();
+            $entity->setSymbol($prefix.++$current);
+            $deviceType->setCurrent($current);
         }
+
+        if (isset($data['user']) && $data['user']) {
+            $entity->setUser($this->cast('Mapper\User', $data['user']));
+        }
+
         $this->persist($entity);
 
         $tagsPart = explode(',', $data['tags']);
         $entity->getTags()->clear();
+        $this->flush();
         foreach ($tagsPart as $tag) {
             $tag = trim($tag);
             $tagEntity = $this->findOne('DeviceTag', array('name' => $tag));
@@ -213,7 +228,6 @@ class Device extends Controller
                 $tagEntity = new \Entity\DeviceTag();
                 $tagEntity->setName($tag);
                 $this->persist($tagEntity);
-                $this->flush();
 
             }
 
@@ -276,7 +290,7 @@ class Device extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('device'));
+        $builder->setFormatter(new BasicGridFormatter('device',$this->isAllow(1)));
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\Device'
@@ -294,7 +308,8 @@ class Device extends Controller
         $builder->addColumn('Name', 'name');
         $builder->addColumn('Serial number', 'serialNumber');
         $builder->addColumn('Type', 'type');
-        $builder->addColumn('Location', 'location');
+        $builder->addColumn('Symbol', 'symbol');
+        $builder->addColumn('Location', array('location','user'));
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
         return $builder;
     }
@@ -330,6 +345,7 @@ class Device extends Controller
         $builder->removeField('updatedAt');
         $builder->removeField('createdAt');
         $builder->removeField('state');
+        $builder->removeField('symbol');
 
         $builder->addField(new FileField(array(
             'name' => 'photo'
@@ -359,6 +375,7 @@ class Device extends Controller
 
         if ($entity) {
             $builder->removeField('location');
+            $builder->removeField('user');
             $builder->addField(new TextField(array(
                 'name' => 'serialNumber'
             , 'label' => 'Serial number'

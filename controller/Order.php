@@ -50,7 +50,7 @@ class Order extends Controller
 	private function createGrid()
 	{
 		$builder = $this->getService('grid')->create();
-		$builder->setFormatter(new BasicGridFormatter('order'));//prefix
+		$builder->setFormatter(new BasicGridFormatter('order',$this->isAllow(11)));
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
 			, 'Entity\Order'
@@ -180,6 +180,7 @@ class Order extends Controller
 
 		//set new location on device
 		$entity->getDevice()->setLocation($this->getUser()->getLocation());
+		$entity->getDevice()->setUser($this->getUser());
 		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 1));
 
 		$this->flush();

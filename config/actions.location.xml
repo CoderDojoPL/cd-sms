@@ -6,7 +6,9 @@
 		<route pattern="\/location"/>
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
-
+		<permission functionality="4" />
+		<permission functionality="5" />
+		<permission functionality="6" />
 	</action>
 
 	<action controller="Location" method="add">
@@ -14,6 +16,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<log action="2" />
+		<permission functionality="4" />
 	</action>
 
 	<action controller="Location" method="edit">
@@ -22,6 +25,7 @@
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/location\/edit\/([0-9]+)$" mapper="Mapper\Location"/>
 		<log action="3" />
+		<permission functionality="5" />
 	</action>
 	
 	<action controller="Location" method="removeConfirm">
@@ -29,6 +33,7 @@
 		<authenticate redirect="/login" />
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/location\/remove\/([0-9]+)$" mapper="Mapper\Location"/>
+		<permission functionality="6" />
 	</action>
 
 	<action controller="Location" method="remove">
@@ -37,6 +42,7 @@
 		<presenter class="Library\Twig\Presenter\Twig"/>
 		<argument storage="url" name="id" pattern="^\/location\/remove\/([0-9]+)\/yes$" mapper="Mapper\Location"/>
 		<log action="4" type="GET" />
+		<permission functionality="6" />
 	</action>
 
 </content>

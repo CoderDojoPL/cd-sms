@@ -126,39 +126,46 @@ class Version20150711112810 extends MigrateHelper{
 
 		$this->updateSchema($schema);
 
-		$deviceTypeEntity=new \Entity\DeviceType(1);
-		$deviceTypeEntity->setName('Refill');
-		$this->persist($deviceTypeEntity);
+		$this->executeQuery("INSERT INTO device_types(id,name) VALUES(:id,:name);",array(
+			'id'=>1
+			,'name'=>'Refill'
+		));
 
-		$deviceTypeEntity=new \Entity\DeviceType(2);
-		$deviceTypeEntity->setName('Hardware');
-		$this->persist($deviceTypeEntity);
+		$this->executeQuery("INSERT INTO device_types(id,name) VALUES(:id,:name)",array(
+			'id'=>2
+			,'name'=>'Hardware'
+		));
 
-		$deviceStateEntity=new \Entity\DeviceState(1);
-		$deviceStateEntity->setName('Available');
-		$this->persist($deviceStateEntity);
+		$this->executeQuery("INSERT INTO device_states(id,name) VALUES(:id,:name)",array(
+			'id'=>1
+			,'name'=>'Available'
+		));
 
-		$deviceStateEntity=new \Entity\DeviceState(2);
-		$deviceStateEntity->setName('Busy');
-		$this->persist($deviceStateEntity);
+		$this->executeQuery("INSERT INTO device_states(id,name) VALUES(:id,:name)",array(
+			'id'=>2
+			,'name'=>'Busy'
+		));
 
-		$deviceStateEntity=new \Entity\DeviceState(3);
-		$deviceStateEntity->setName('In service');
-		$this->persist($deviceStateEntity);
+		$this->executeQuery("INSERT INTO device_states(id,name) VALUES(:id,:name)",array(
+			'id'=>3
+			,'name'=>'In service'
+		));
 
-		$orderStateEntity=new \Entity\OrderState(1);
-		$orderStateEntity->setName('Open');
-		$this->persist($orderStateEntity);
+		$this->executeQuery("INSERT INTO order_states(id,name) VALUES(:id,:name)",array(
+			'id'=>1
+			,'name'=>'Open'
+		));
 
-		$orderStateEntity=new \Entity\OrderState(2);
-		$orderStateEntity->setName('In progress');
-		$this->persist($orderStateEntity);
+		$this->executeQuery("INSERT INTO order_states(id,name) VALUES(:id,:name)", array(
+			'id'=>2
+			,'name'=>'In progress'
+		));
 
-		$orderStateEntity=new \Entity\OrderState(3);
-		$orderStateEntity->setName('Closed');
-		$this->persist($orderStateEntity);
+		$this->executeQuery("INSERT INTO order_states(id,name) VALUES(:id,:name)",array(
+			'id'=>3
+			,'name'=>'Closed'
+		));
 
-		$this->flush();
 		$this->commitTransaction();
 
 	}

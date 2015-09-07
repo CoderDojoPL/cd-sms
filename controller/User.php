@@ -66,7 +66,6 @@ class User extends Controller
 		$builder->addColumn('Email', 'email');
 		$builder->addColumn('First Name', 'firstName');
 		$builder->addColumn('Last Name', 'lastName');
-		$builder->addColumn('Test concat', array('firstName','lastName'));
 		$builder->addColumn('Location', 'location');
 //        $builder->render();
 
@@ -118,6 +117,9 @@ class User extends Controller
         $emailField->setTag('readonly',true);
         $emailField->setRequired(false);
 
+		$builder->getField('location')->setRequired(true);
+		$builder->getField('role')->setRequired(true);
+
 		if ($entity) {
 			$helper = $this->getService('form.helper');
 			$data = $helper->entityToArray($entity);
@@ -140,6 +142,7 @@ class User extends Controller
 		$entity->setFirstName($data['firstName']);
 		$entity->setLastName($data['lastName']);
 		$entity->setLocation($this->cast('Mapper\Location', $data['location']));
+		$entity->setRole($this->cast('Mapper\Role', $data['role']));
 		$this->persist($entity);
 	}
 

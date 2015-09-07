@@ -74,6 +74,11 @@ class DeviceLog
 	protected $location;
 
 	/**
+	 * @Column(name="user_id",type="integer",nullable=true)
+	 **/
+	protected $user;
+
+	/**
 	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
 	 **/
 	protected $warrantyExpirationDate;
@@ -105,6 +110,11 @@ class DeviceLog
      * @Column(name="removed",type="boolean")
      **/
     protected $removed;
+
+	/**
+	 * @Column(type="text")
+	 **/
+	protected $symbol;
 
     public function __construct(){
         $this->setCreatedAt(new \DateTime());
@@ -246,6 +256,26 @@ class DeviceLog
 	/**
 	 * @return mixed
 	 */
+	public function getUser()
+	{
+		return $this->user;
+	}
+
+	/**
+	 * @param mixed $user
+	 */
+	public function setUser($user)
+	{
+	    if($user){
+            $user=$user->getId();
+        }
+
+		$this->user = $user;
+	}
+
+	/**
+	 * @return mixed
+	 */
 	public function getWarrantyExpirationDate()
 	{
 		return $this->warrantyExpirationDate;
@@ -341,4 +371,22 @@ class DeviceLog
     {
         return $this->removed;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getSymbol()
+	{
+		return $this->symbol;
+	}
+
+	/**
+	 * @param mixed $symbol
+	 */
+	public function setSymbol($symbol)
+	{
+		$this->symbol = $symbol;
+	}
+
+
 }

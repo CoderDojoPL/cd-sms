@@ -15,7 +15,7 @@ require_once __DIR__ . '/../common/WebTestCaseHelper.php';
 use Common\WebTestCaseHelper;
 use Entity\Location;
 use Entity\User;
-
+use Entity\Role;
 /**
  * @package Test
  * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
@@ -327,12 +327,20 @@ class LocationTest extends WebTestCaseHelper
         $location->setEmail('email@email.pl');
         $this->persist($location);
 
+        $role=new Role();
+        $role->setName('Admin');
+        foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+            $role->getFunctionalities()->add($functionality);
+        }
+
+        $this->persist($role);
 
         $user = new User();
         $user->setEmail('test@coderdojo.org.pl');
         $user->setFirstName('first name');
         $user->setLastName('last name');
         $user->setLocation($location);
+        $user->setRole($role);
         $this->persist($user);
 
 

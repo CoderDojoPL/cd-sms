@@ -28,16 +28,18 @@ class Version20150718171510 extends MigrateHelper{
 
 		if(!$locations){
 			$this->beginTransaction();
-			$location=new \Entity\Location();
-			$location->setName('Main');
-			$location->setCity('?');
-			$location->setStreet('?');
-			$location->setPostal('?');
-			$location->setNumber('?');
-			$location->setPhone('?');
-			$location->setEmail('?');
-			$this->persist($location);
-			$this->flush();
+
+				$this->executeQuery('INSERT INTO locations('.($this->getDriver()=='pdo_pgsql'?'id,':'').'name,city,street,postal,number,phone,email,created_at,updated_at) VALUES('.($this->getDriver()=='pdo_pgsql'?"nextval('locations_id_seq'),":'').':name,:city,:street,:postal,:number,:phone,:email,now(),now());',array(
+					'name'=>'Main'
+					,'city'=>'?'
+					,'street'=>'?'
+					,'postal'=>'?'
+					,'number'=>'?'
+					,'phone'=>'?'
+					,'email'=>'?'
+				));
+
+
 			$this->commitTransaction();
 		}
 

@@ -33,6 +33,6 @@ class RequiredArgumentException extends Exception{
 	 * @since 0.1.0
 	 */
 	public function __construct($position,$name){
-		parent::__construct(100+$position,'Wymagany argument "'.$name.'".');
+		parent::__construct(100+$position,'Required argument "'.$name.'".');
 	}
 }

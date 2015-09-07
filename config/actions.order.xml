@@ -6,6 +6,10 @@
         <route pattern="\/order"/>
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
+        <permission functionality="10" />
+        <permission functionality="11" />
+        <permission functionality="12" />
+        <permission functionality="13" />
 
     </action>
 
@@ -13,6 +17,7 @@
         <route pattern="\/order\/add"/>
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
+        <permission functionality="11" />
     </action>
 
     <action controller="Order" method="addApply">
@@ -20,6 +25,7 @@
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
         <log action="10" />
+        <permission functionality="11" />
 
     </action>
 
@@ -28,6 +34,8 @@
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
         <argument storage="url" name="id" pattern="^\/order\/show\/([0-9]+)$" mapper="Mapper\Order"/>
+        <permission functionality="12" />
+        <permission functionality="13" />
     </action>
 
     <action controller="Order" method="fetch">
@@ -36,6 +44,7 @@
         <presenter class="Library\Twig\Presenter\Twig"/>
         <argument storage="url" name="id" pattern="^\/order\/fetch\/([0-9]+)$" mapper="Mapper\Order"/>
         <log action="11" type="GET" />
+        <permission functionality="12" />
     </action>
 
     <action controller="Order" method="close">
@@ -44,6 +53,7 @@
         <presenter class="Library\Twig\Presenter\Twig"/>
         <argument storage="url" name="id" pattern="^\/order\/close\/([0-9]+)$" mapper="Mapper\Order"/>
         <log action="12" type="GET" />
+        <permission functionality="13" />
     </action>
 
 </content>

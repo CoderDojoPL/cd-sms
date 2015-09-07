@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <action controller="Role" method="index">
+        <route pattern="\/role"/>
+        <authenticate redirect="/login"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <permission functionality="8" />
+        <permission functionality="9" />
+
+    </action>
+
+    <action controller="Role" method="add">
+        <route pattern="\/role\/add"/>
+        <authenticate redirect="/login"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <log action="15"/>
+        <permission functionality="8" />
+    </action>
+
+    <action controller="Role" method="edit">
+        <route pattern="^\/role\/edit\/([0-9]+)$"/>
+        <authenticate redirect="/login"/>
+        <presenter class="Library\Twig\Presenter\Twig"/>
+        <argument storage="url" name="id" pattern="^\/role\/edit\/([0-9]+)$" mapper="Mapper\Role"/>
+        <log action="16"/>
+        <permission functionality="9" />
+    </action>
+
+</content>

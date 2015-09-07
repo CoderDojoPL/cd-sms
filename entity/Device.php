@@ -49,7 +49,7 @@ class Device
 
 	/**
 	 * @ManyToOne(targetEntity="DeviceType")
-	 * @JoinColumn(name="type_id", referencedColumnName="id")
+	 * @JoinColumn(name="type_id", referencedColumnName="id",nullable=false)
 	 **/
 	private $type;
 
@@ -91,6 +91,12 @@ class Device
 	protected $location;
 
 	/**
+	 * @ManyToOne(targetEntity="User")
+	 * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
+	 **/
+	protected $user;
+
+	/**
 	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
 	 **/
 	protected $warrantyExpirationDate;
@@ -104,6 +110,11 @@ class Device
 	 * @Column(name="note",type="text",nullable=true)
 	 **/
 	protected $note;
+
+	/**
+	 * @Column(type="text")
+	 **/
+	protected $symbol;
 
 	/**
 	 * @return mixed
@@ -256,6 +267,22 @@ class Device
 	/**
 	 * @return mixed
 	 */
+	public function getUser()
+	{
+		return $this->user;
+	}
+
+	/**
+	 * @param mixed $user
+	 */
+	public function setUser($user)
+	{
+		$this->user = $user;
+	}
+
+	/**
+	 * @return mixed
+	 */
 	public function getWarrantyExpirationDate()
 	{
 		return $this->warrantyExpirationDate;
@@ -302,6 +329,21 @@ class Device
 		$this->note = $note;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getSymbol()
+	{
+		return $this->symbol;
+	}
+
+	/**
+	 * @param mixed $symbol
+	 */
+	public function setSymbol($symbol)
+	{
+		$this->symbol = $symbol;
+	}
 
 	public function __toString()
 	{

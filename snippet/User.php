@@ -39,4 +39,19 @@ class User {
 
 	}
 
+	public function isAllow(Controller $controller,$requiredFunctionality){
+		$user=$this->getUser($controller);
+		if(!$user->getRole()){
+			return false;
+		}
+		foreach($user->getRole()->getFunctionalities() as $functionality){
+			if($functionality->getId()==$requiredFunctionality){
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
 }

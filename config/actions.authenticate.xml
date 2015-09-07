@@ -45,4 +45,11 @@
 		<log action="13" />
 	</action>
 
+	<action controller="Authenticate" method="apiLogin" >
+		<authenticate incognito="true" session-redirect="/" />
+		<route pattern="\/rest\/login\.json" />
+		<presenter class="Presenter\RESTJson" />
+		<argument storage="post" name="token" validator="Arbor\Validator\Text" />
+	</action>
+
 </content>
