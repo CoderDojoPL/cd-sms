@@ -67,6 +67,7 @@ class OrderTest extends WebTestCaseHelper
 		$device->setDimensions('10x10x10');
 		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
+		$device->setSymbol('?');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setLocation($location);
 
@@ -191,6 +192,7 @@ class OrderTest extends WebTestCaseHelper
 		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$device->setSymbol('?');
 		$device->setLocation($location);
 
 		$this->persist($device);
@@ -206,6 +208,7 @@ class OrderTest extends WebTestCaseHelper
 		$deviceOtherLocation->setWeight('10kg');
 		$deviceOtherLocation->setSerialNumber('Device serial number');
 		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$deviceOtherLocation->setSymbol('?');
 		$deviceOtherLocation->setLocation($otherLocation);
 
 		$this->persist($deviceOtherLocation);
@@ -341,6 +344,7 @@ class OrderTest extends WebTestCaseHelper
 		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$device->setSymbol('?');
 		$device->setLocation($location);
 
 		$this->persist($device);
@@ -356,6 +360,7 @@ class OrderTest extends WebTestCaseHelper
 		$deviceOtherLocation->setWeight('10kg');
 		$deviceOtherLocation->setSerialNumber('Device serial number');
 		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$deviceOtherLocation->setSymbol('?');
 		$deviceOtherLocation->setLocation($otherLocation);
 
 		$this->persist($deviceOtherLocation);
@@ -430,6 +435,7 @@ class OrderTest extends WebTestCaseHelper
 		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$device->setSymbol('?');
 		$device->setLocation($location);
 
 		$this->persist($device);
@@ -495,6 +501,61 @@ class OrderTest extends WebTestCaseHelper
 
 	}
 
+	public function testFetchByOwner()
+	{
+
+		$em = $this->getService('doctrine')->getEntityManager();
+
+
+		$deviceTag = new DeviceTag();
+		$deviceTag->setName('DeviceTag name');
+		$this->persist($deviceTag);
+
+		$device = new Device();
+		$device->setName('Device name');
+		$device->setPhoto('Device.photo.jpg');
+		$device->getTags()->add($deviceTag);
+		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$device->setDimensions('10x10x10');
+		$device->setWeight('10kg');
+		$device->setSerialNumber('Device serial number');
+		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+		$device->setSymbol('?');
+		$device->setLocation($this->user->getLocation());
+
+		$this->persist($device);
+
+		$order = new Order();
+		$order->setOwner($this->user);
+		$order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
+		$order->setDevice($device);
+
+		$this->persist($order);
+
+		$this->flush();
+
+
+		$session = $this->createSession();
+		$session->set('user.id', $this->user->getId());
+
+		$client = $this->createClient($session);
+		$client->loadPage('/order/show/' . $order->getId());
+
+		$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+
+		$timeLines = $client->findElements('.timeline-entry');
+
+		$this->assertCount(1, $timeLines, 'Invalid number steps');
+
+		$this->assertFalse($timeLines[0]->hasElement('a'),'Redundant fetch button');
+
+		$client->loadPage('/order/fetch/' . $order->getId());
+
+		$this->assertEquals(500, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+
+	}
+
 	public function testCloseByPerformer()
 	{
 
@@ -525,6 +586,7 @@ class OrderTest extends WebTestCaseHelper
 		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+		$device->setSymbol('?');
 		$device->setLocation($location);
 
 		$this->persist($device);
@@ -623,6 +685,7 @@ class OrderTest extends WebTestCaseHelper
 		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+		$device->setSymbol('?');
 		$device->setLocation($location1);
 
 		$this->persist($device);
@@ -690,7 +753,7 @@ class OrderTest extends WebTestCaseHelper
 		$this->assertEquals($now->format('Y-m-d'), $order->getClosedAt()->format('Y-m-d'), 'Invalid fetched at');
 
 		$device = $em->getRepository('Entity\Device')->findOneById($device->getId());
-		$this->assertEquals(1, $device->getState()->getId(), 'Invalid device state');
+		$this->assertEquals(2, $device->getState()->getId(), 'Invalid device state');
 		$this->assertEquals($location2->getId(), $device->getLocation()->getId(), 'Invalid device state');
 
 	}

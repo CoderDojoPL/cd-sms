@@ -16,6 +16,7 @@ use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
+use Exception\OrderBelongToUserException;
 use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
@@ -148,6 +149,10 @@ class Order extends Controller
 			throw new OrderAllreadyFetchedException();
 		}
 
+		if ($entity->getOwner()->getId() == $this->getUser()->getId()) {
+			throw new OrderBelongToUserException();
+		}
+
 		$entity->setPerformer($this->getUser());
 		$entity->setState($this->cast('Mapper\OrderState', 2));
 		$entity->setFetchedAt(new \DateTime());
@@ -181,7 +186,7 @@ class Order extends Controller
 		//set new location on device
 		$entity->getDevice()->setLocation($this->getUser()->getLocation());
 		$entity->getDevice()->setUser($this->getUser());
-		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 1));
+		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 2));
 
 		$this->flush();
 

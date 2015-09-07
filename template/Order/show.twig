@@ -41,7 +41,7 @@
                       <img src="{{entity.device.photo}}" alt="{{entity.device.name}}" />
                   </div>
                       {%endif%}
-                    {%if entity.state.id==1 %}
+                    {%if entity.state.id==1 and isOwner!=1 %}
                         <p><a href="/order/fetch/{{entity.id}}" class="btn btn-primary" role="button">Fetch</a></p>
                     {%endif%}
             </div>
