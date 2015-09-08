@@ -64,6 +64,7 @@ class DeviceMyTest extends WebTestCaseHelper
         $devices[0]->setSerialNumber('Device serial number');
         $devices[0]->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $devices[0]->setUser($this->user);
+        $devices[0]->setSymbol('ABC');
         $devices[0]->setLocation($this->user->getLocation());
 
         $this->persist($devices[0]);
@@ -77,6 +78,7 @@ class DeviceMyTest extends WebTestCaseHelper
         $devices[1]->setSerialNumber('Device serial number');
         $devices[1]->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $devices[1]->setUser($this->user);
+        $devices[1]->setSymbol('ABC');
         $devices[1]->setLocation($this->user->getLocation());
 
         $this->persist($devices[1]);
@@ -91,6 +93,7 @@ class DeviceMyTest extends WebTestCaseHelper
         $device3->setSerialNumber('Device serial number');
         $device3->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device3->setUser($otherUser);
+        $device3->setSymbol('ABC');
         $device3->setLocation($otherUser->getLocation());
 
         $this->persist($device3);
@@ -156,6 +159,7 @@ class DeviceMyTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device->setUser($this->user);
+        $device->setSymbol('abc');
         $device->setLocation($this->user->getLocation());
 
         $this->persist($device);
@@ -186,6 +190,7 @@ class DeviceMyTest extends WebTestCaseHelper
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device->setUser($this->user);
+        $device->setSymbol('ABC');
         $device->setLocation($this->user->getLocation());
 
         $this->persist($device);
