@@ -116,7 +116,12 @@ class DeviceLog
 	 **/
 	protected $symbol;
 
-    public function __construct(){
+	/**
+	 * @Column(name="hire_expiration_date",type="datetime",nullable=true)
+	 **/
+	protected $hireExpirationDate;
+
+	public function __construct(){
         $this->setCreatedAt(new \DateTime());
         $this->setRemoved(false);
     }
@@ -388,5 +393,20 @@ class DeviceLog
 		$this->symbol = $symbol;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getHireExpirationDate()
+	{
+		return $this->hireExpirationDate;
+	}
+
+	/**
+	 * @param mixed $hireExpirationDate
+	 */
+	public function setHireExpirationDate($hireExpirationDate)
+	{
+		$this->hireExpirationDate = $hireExpirationDate;
+	}
 
 }
