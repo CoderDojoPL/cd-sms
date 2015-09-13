@@ -166,11 +166,12 @@ class Order extends Controller
 	 * Close order workflow
 	 *
 	 * @param \Entity\Order $entity
+	 * @param string $bind
 	 * @return mixed
 	 * @throws OrderNotFetchedException
 	 * @throws YouAreNotOwnerException
 	 */
-	public function close($entity)
+	public function close($entity,$bind)
 	{
 		if ($entity->getState()->getId() != 2) {
 			throw new OrderNotFetchedException();
@@ -185,7 +186,18 @@ class Order extends Controller
 
 		//set new location on device
 		$entity->getDevice()->setLocation($this->getUser()->getLocation());
-		$entity->getDevice()->setUser($this->getUser());
+
+		if($bind=='me'){
+			$expirationDate=new \DateTime();
+			$expirationDate->add(new \DateInterval('P14D'));
+
+			$entity->getDevice()->setUser($this->getUser());
+			$entity->getDevice()->setHireExpirationDate($expirationDate);
+		}
+		else{
+			$entity->getDevice()->setUser(null);
+			$entity->getDevice()->setHireExpirationDate(null);
+		}
 		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 2));
 
 		$this->flush();

@@ -62,7 +62,13 @@
                 <div class="timeline-label">
                     <h2>{{entity.performer}} <span>fetched order</span></h2>
                     {%if entity.state.id==2 and isOwner %}
-                        <p><a href="/order/close/{{entity.id}}" class="btn btn-primary" role="button">Close</a></p>
+                        <p>
+                            <label>Close and bind to:</label>
+                            <div class="btn-group" role="group">
+                                <a href="/order/close/{{ entity.id }}/me" class="btn btn-default">Me</a>
+                                <a href="/order/close/{{ entity.id }}/location" class="btn btn-default">My location</a>
+                            </div>
+                        </p>
                     {%endif%}
 
                 </div>

@@ -1,0 +1,22 @@
+
+{% extends "base_logged.twig" %}
+
+{%block body%}
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="/device/location">Devices</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Location
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <DIV class="row">
+                    {{grid|raw}}
+                </DIV>
+                <!-- /.row -->
+{%endblock%}

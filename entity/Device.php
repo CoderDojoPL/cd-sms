@@ -124,6 +124,11 @@ class Device
         return $this;
     }
 
+    /**
+     * @Column(name="hire_expiration_date",type="datetime",nullable=true)
+     **/
+    protected $hireExpirationDate;
+
     public function __construct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
@@ -312,6 +317,22 @@ class Device
     public function setSymbol($symbol)
     {
         $this->symbol = $symbol;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHireExpirationDate()
+    {
+        return $this->hireExpirationDate;
+    }
+
+    /**
+     * @param mixed $hireExpirationDate
+     */
+    public function setHireExpirationDate($hireExpirationDate)
+    {
+        $this->hireExpirationDate = $hireExpirationDate;
     }
 
     public function __toString()

@@ -29,7 +29,9 @@ class FreeColumnFormatter extends ActionColumnFormatter
 
         $type=$data[1];
         if ($type==2) {
-            $this->buttons[]='free';
+            if (($key = array_search('free', $this->buttons)) === false) {
+                $this->buttons[]='free';
+            }
         } else {
             if (($key = array_search('free', $this->buttons)) !== false) {
                 unset($this->buttons[$key]);

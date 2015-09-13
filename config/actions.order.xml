@@ -48,10 +48,11 @@
     </action>
 
     <action controller="Order" method="close">
-        <route pattern="^\/order\/close\/([0-9]+)$"/>
+        <route pattern="^\/order\/close\/([0-9]+)\/(me|location)$"/>
         <authenticate redirect="/login"/>
         <presenter class="Library\Twig\Presenter\Twig"/>
-        <argument storage="url" name="id" pattern="^\/order\/close\/([0-9]+)$" mapper="Mapper\Order"/>
+        <argument storage="url" name="id" pattern="^\/order\/close\/([0-9]+)\/.*$" mapper="Mapper\Order"/>
+        <argument storage="url" name="bind" pattern="^\/order\/close\/[0-9]+\/(.+)$" />
         <log action="12" type="GET" />
         <permission functionality="13" />
     </action>
