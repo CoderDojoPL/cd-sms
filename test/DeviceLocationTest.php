@@ -59,8 +59,6 @@ class DeviceLocationTest extends WebTestCaseHelper
         $devices[0]->setPhoto('Device.photo.jpg');
         $devices[0]->getTags()->add($deviceTag);
         $devices[0]->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $devices[0]->setDimensions('10x10x10');
-        $devices[0]->setWeight('10kg');
         $devices[0]->setSerialNumber('Device serial number');
         $devices[0]->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $devices[0]->setSymbol('REF1');
@@ -72,8 +70,6 @@ class DeviceLocationTest extends WebTestCaseHelper
         $devices[1]->setPhoto('Device.photo.jpg');
         $devices[1]->getTags()->add($deviceTag);
         $devices[1]->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $devices[1]->setDimensions('10x10x10');
-        $devices[1]->setWeight('10kg');
         $devices[1]->setSerialNumber('Device serial number');
         $devices[1]->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $devices[1]->setSymbol('REF1');
@@ -86,8 +82,6 @@ class DeviceLocationTest extends WebTestCaseHelper
         $device3->setPhoto('Device.photo.jpg');
         $device3->getTags()->add($deviceTag);
         $device3->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device3->setDimensions('10x10x10');
-        $device3->setWeight('10kg');
         $device3->setSerialNumber('Device serial number');
         $device3->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device3->setUser($otherUser);
@@ -101,8 +95,6 @@ class DeviceLocationTest extends WebTestCaseHelper
         $device4->setPhoto('Device.photo.jpg');
         $device4->getTags()->add($deviceTag);
         $device4->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device4->setDimensions('10x10x10');
-        $device4->setWeight('10kg');
         $device4->setSerialNumber('Device serial number');
         $device4->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device4->setUser($otherUser);
@@ -166,8 +158,6 @@ class DeviceLocationTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
-        $device->setWeight('10kg');
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device->setUser($this->user);
@@ -197,8 +187,6 @@ class DeviceLocationTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
-        $device->setWeight('10kg');
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device->setUser($this->user);

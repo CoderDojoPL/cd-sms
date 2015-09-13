@@ -64,8 +64,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setSymbol('?');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
@@ -188,8 +186,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setSymbol('?');
@@ -204,8 +200,6 @@ class OrderTest extends WebTestCaseHelper
 		$deviceOtherLocation->getTags()->add($deviceTag);
 		$deviceOtherLocation->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$deviceOtherLocation->setDimensions('10x10x10');
-		$deviceOtherLocation->setWeight('10kg');
 		$deviceOtherLocation->setSerialNumber('Device serial number');
 		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$deviceOtherLocation->setSymbol('?');
@@ -340,8 +334,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setSymbol('?');
@@ -356,8 +348,6 @@ class OrderTest extends WebTestCaseHelper
 		$deviceOtherLocation->getTags()->add($deviceTag);
 		$deviceOtherLocation->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$deviceOtherLocation->setDimensions('10x10x10');
-		$deviceOtherLocation->setWeight('10kg');
 		$deviceOtherLocation->setSerialNumber('Device serial number');
 		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$deviceOtherLocation->setSymbol('?');
@@ -431,8 +421,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setSymbol('?');
@@ -517,8 +505,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
 		$device->setSymbol('?');
@@ -582,8 +568,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
 		$device->setSymbol('?');
@@ -704,8 +688,6 @@ class OrderTest extends WebTestCaseHelper
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setDimensions('10x10x10');
-		$device->setWeight('10kg');
 		$device->setSerialNumber('Device serial number');
 		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
 		$device->setSymbol('?');
