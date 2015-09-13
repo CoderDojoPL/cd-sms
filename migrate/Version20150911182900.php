@@ -16,7 +16,7 @@ use Common\MigrateHelper;
 
 /**
  * @package Migrate
- * @author Slawek Mowak (s.nowak@coderdojo.org.pl)
+ * @author Michal Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class Version20150911182900 extends MigrateHelper
 {
@@ -37,6 +37,11 @@ class Version20150911182900 extends MigrateHelper
 
         $this->updateSchema($schema);
 
+        $this->executeQuery("INSERT INTO functionalities(id,name,description) VALUES(:id,:name,:description)",array(
+            'id'=>15
+            ,'name'=>'Hire date prolongation'
+            ,'description'=>''
+        ));
 
         $this->commitTransaction();
 
@@ -59,6 +64,14 @@ class Version20150911182900 extends MigrateHelper
         $this->updateSchema($schema);
 
         $this->commitTransaction();
+
+        $this->executeQuery("DELETE FROM roles_functionalities WHERE functionality_id=:id",array(
+            'id'=>15
+        ));
+
+        $this->executeQuery("DELETE FROM functionalities WHERE id=:id",array(
+            'id'=>15
+        ));
 
     }
 
