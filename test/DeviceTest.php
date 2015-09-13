@@ -286,7 +286,7 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
-        $this->assertCount(11, $fields, 'Invalid number fields');
+        $this->assertCount(10, $fields, 'Invalid number fields');
 
         $fields[7]->setData('0');
         //check required fields
@@ -297,29 +297,27 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
-        $this->assertCount(11, $fields, 'Invalid number fields');
+        $this->assertCount(10, $fields, 'Invalid number fields');
         $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');//name
         $this->assertFalse($fields[1]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');//warranty
         $this->assertFalse($fields[2]->getParent()->hasElement('label'), 'Redundant error message for price');//price
-        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for hire expiration date');
-        $this->assertFalse($fields[4]->getParent()->hasElement('label'), 'Redundant error message for photo');//price
-        $this->assertEquals('Value can not empty', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
+        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for photo');//price
+        $this->assertEquals('Value can not empty', $fields[4]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
 
 
-        $this->assertFalse($fields[7]->getParent()->hasElement('label'), 'Redundant error message for note');
-        $this->assertEquals('Value can not empty', $fields[8]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
-        $this->assertEquals('Value can not empty', $fields[9]->getParent()->getElement('label')->getText(), 'Invalid error message for location');
-        $this->assertFalse($fields[10]->getParent()->hasElement('label'), 'Redundant error message for user');
+        $this->assertFalse($fields[6]->getParent()->hasElement('label'), 'Redundant error message for note');
+        $this->assertEquals('Value can not empty', $fields[7]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
+        $this->assertEquals('Value can not empty', $fields[8]->getParent()->getElement('label')->getText(), 'Invalid error message for location');
+        $this->assertFalse($fields[9]->getParent()->hasElement('label'), 'Redundant error message for user');
 
         $fields[0]->setData('Name test');
         $fields[1]->setData('2015-01-01');
         $fields[2]->setData('20.32');
-        $fields[3]->setData('2015-01-01');
-        $fields[5]->setData('tag 1,tag 2');
-        $fields[6]->setData('0');
-        $fields[7]->setData('Note');
-        $fields[8]->setData('1');//Refill
-        $fields[9]->setData($location->getId());
+        $fields[4]->setData('tag 1,tag 2');
+        $fields[5]->setData('0');
+        $fields[6]->setData('Note');
+        $fields[7]->setData('1');//Refill
+        $fields[8]->setData($location->getId());
 
         $form->submit();
         //count = 0
@@ -327,9 +325,9 @@ class DeviceTest extends WebTestCaseHelper
 
         $form = $client->getElement('form');
         $fields = $form->getFields();
-        $this->assertEquals('Value is too small.', $fields[6]->getParent()->getElement('label')->getText(), 'Invalid error message for counts');
+        $this->assertEquals('Value is too small.', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for counts');
 
-        $fields[6]->setData('2');
+        $fields[5]->setData('2');
         $form->submit();
         //all data oK
 
@@ -476,28 +474,27 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
-        $this->assertCount(9, $fields, 'Invalid number fields');
+        $this->assertCount(8, $fields, 'Invalid number fields');
 
 
         $this->assertEquals('Device name', $fields[0]->getData(), 'Invalid value for name');
         $this->assertEquals('2015-01-01', $fields[1]->getData(), 'Invalid value for warranty expiration date');
         $this->assertEquals('12.05', $fields[2]->getData(), 'Invalid value for price');
         $this->assertEquals('', $fields[3]->getData(), 'Invalid value for photo');
-        $this->assertEquals('DeviceTag name', $fields[5]->getData(), 'Invalid value for tags');
-        $this->assertEquals('Device serial number', $fields[6]->getData(), 'Invalid value for serial number');
-        $this->assertEquals('Note', $fields[7]->getData(), 'Invalid value for note');
-        $this->assertEquals('1', $fields[8]->getData(), 'Invalid value for type');
+        $this->assertEquals('DeviceTag name', $fields[4]->getData(), 'Invalid value for tags');
+        $this->assertEquals('Device serial number', $fields[5]->getData(), 'Invalid value for serial number');
+        $this->assertEquals('Note', $fields[6]->getData(), 'Invalid value for note');
+        $this->assertEquals('1', $fields[7]->getData(), 'Invalid value for type');
 
 
         $fields[0]->setData('');
         $fields[1]->setData('');
         $fields[2]->setData('');
-//        $fields[3]->setData('');
+        $fields[3]->setData('');
         $fields[4]->setData('');
         $fields[5]->setData('');
         $fields[6]->setData('');
         $fields[7]->setData('');
-        $fields[8]->setData('');
         $form->submit();
 
 
@@ -505,26 +502,25 @@ class DeviceTest extends WebTestCaseHelper
         $fields = $form->getFields();
 
 
-        $this->assertCount(9, $fields, 'Invalid number fields');
+        $this->assertCount(8, $fields, 'Invalid number fields');
         $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
 
         $this->assertFalse($fields[1]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');
         $this->assertFalse($fields[2]->getParent()->hasElement('label'), 'Redundant error message for price');
-        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for hire date');
-        $this->assertFalse($fields[4]->getParent()->hasElement('label'), 'Redundant error message for photo');
-        $this->assertEquals('Value can not empty', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
-        $this->assertEquals('Value can not empty', $fields[6]->getParent()->getElement('label')->getText(), 'Invalid error message for serial number');
+        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for photo');
+        $this->assertEquals('Value can not empty', $fields[4]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
+        $this->assertEquals('Value can not empty', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for serial number');
 
-        $this->assertFalse($fields[7]->getParent()->hasElement('label'), 'Redundant error message for note');
-        $this->assertEquals('Value can not empty', $fields[8]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
+        $this->assertFalse($fields[6]->getParent()->hasElement('label'), 'Redundant error message for note');
+        $this->assertEquals('Value can not empty', $fields[7]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
 
         $fields[0]->setData('Name edit');
         $fields[1]->setData('2016-01-01');
         $fields[2]->setData('5.32');
-        $fields[5]->setData('tag 1,tag 2');
-        $fields[6]->setData('serial number');
-        $fields[7]->setData('note edit');
-        $fields[8]->setData('2');
+        $fields[4]->setData('tag 1,tag 2');
+        $fields[5]->setData('serial number');
+        $fields[6]->setData('note edit');
+        $fields[7]->setData('2');
 
         $form->submit();
 

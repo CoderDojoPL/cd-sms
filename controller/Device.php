@@ -346,12 +346,13 @@ class Device extends Controller
         $builder->removeField('createdAt');
         $builder->removeField('state');
         $builder->removeField('symbol');
+        $builder->removeField('hireExpirationDate');
 
         $builder->addField(new FileField(array(
             'name' => 'photo'
-        , 'label' => 'Photo'
-        , 'accept' => 'image/*'
-        , 'maxSize' => 1048576
+            , 'label' => 'Photo'
+            , 'accept' => 'image/*'
+            , 'maxSize' => 1048576
         )));
 
 //        $dimensionsField = $builder->getField('dimensions');
