@@ -191,8 +191,8 @@ class Device extends Controller
         $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
         /* @var $deviceType \Entity\DeviceType */
         $entity->setName($data['name']);
-        $entity->setDimensions($data['dimensions']);
-        $entity->setWeight($data['weight']);
+//        $entity->setDimensions($data['dimensions']);
+//        $entity->setWeight($data['weight']);
         $entity->setType($deviceType);
         $entity->setSerialNumber($serialNumber);
         $entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
@@ -207,7 +207,7 @@ class Device extends Controller
             $entity->setLocation($this->cast('Mapper\Location', $data['location']));
             $current = $deviceType->getCurrent();
             $prefix = $deviceType->getSymbolPrefix();
-            $entity->setSymbol($prefix.++$current);
+            $entity->setSymbol($prefix . ++$current);
             $deviceType->setCurrent($current);
         }
 
@@ -290,7 +290,7 @@ class Device extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('device',$this->isAllow(1)));
+        $builder->setFormatter(new BasicGridFormatter('device', $this->isAllow(1)));
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\Device'
@@ -309,7 +309,7 @@ class Device extends Controller
         $builder->addColumn('Serial number', 'serialNumber');
         $builder->addColumn('Type', 'type');
         $builder->addColumn('Symbol', 'symbol');
-        $builder->addColumn('Location', array('location','user'));
+        $builder->addColumn('Location', array('location', 'user'));
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
         return $builder;
     }
@@ -354,13 +354,13 @@ class Device extends Controller
         , 'maxSize' => 1048576
         )));
 
-        $dimensionsField = $builder->getField('dimensions');
-        $dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');
-        $dimensionsField->setTag('placeholder', '{Width}x{Height}x{Depth}');
-        // $dimensionsField->setValue('1x1x1');
-        $dimensionsField = $builder->getField('weight');
-        $dimensionsField->setPattern('^[0-9]+([\.\,]{1}[0-9]{1}){0,1}kg$');
-        $dimensionsField->setTag('placeholder', '{Weight}kg');
+//        $dimensionsField = $builder->getField('dimensions');
+//        $dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');
+//        $dimensionsField->setTag('placeholder', '{Width}x{Height}x{Depth}');
+//        // $dimensionsField->setValue('1x1x1');
+//        $dimensionsField = $builder->getField('weight');
+//        $dimensionsField->setPattern('^[0-9]+([\.\,]{1}[0-9]{1}){0,1}kg$');
+//        $dimensionsField->setTag('placeholder', '{Weight}kg');
 
         $builder->removeField('tags');
 

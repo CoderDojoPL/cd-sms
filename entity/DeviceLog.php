@@ -42,16 +42,6 @@ class DeviceLog
 	private $type;
 
 	/**
-	 * @Column(type="string")
-	 **/
-	protected $dimensions;
-
-	/**
-	 * @Column(type="string")
-	 **/
-	protected $weight;
-
-	/**
 	 * @Column(name="serial_number",type="string")
 	 **/
 	protected $serialNumber;
@@ -197,28 +187,6 @@ class DeviceLog
 	public function getType()
 	{
 		return $this->type;
-	}
-
-	public function setDimensions($dimensions)
-	{
-		$this->dimensions = $dimensions;
-		return $this;
-	}
-
-	public function getDimensions()
-	{
-		return $this->dimensions;
-	}
-
-	public function setWeight($weight)
-	{
-		$this->weight = $weight;
-		return $this;
-	}
-
-	public function getWeight()
-	{
-		return $this->weight;
 	}
 
 	public function setSerialNumber($serialNumber)
