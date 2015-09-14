@@ -66,7 +66,7 @@ class CheckHireDate extends Command{
         <br/>Location: ".$record->getLocation()->__toString()."
         <br/>User: ".$record->getUser()->__toString()."
         <br/>Expiration date: ".$record->getHireExpirationDate()->format('Y-m-d')."
-        Click <a href='".rtrim($config->getHost(),'/')."/device/prolongation/".$record->getId()."'>here</a> to prolongation";
+        <br/>Click <a href='".rtrim($config->getHost(),'/')."/device/prolongation/".$record->getId()."'>here</a> to prolongation";
         foreach($users as $user){
             $this->sendEmail($user->getEmail(),$subject,$body);
             $this->writeLn("Sended email to ".$user->__toString()." for device ".$record->__toString());

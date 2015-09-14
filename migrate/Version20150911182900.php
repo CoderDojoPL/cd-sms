@@ -43,6 +43,11 @@ class Version20150911182900 extends MigrateHelper
             ,'description'=>''
         ));
 
+        $this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)", array(
+            'id' => 20,
+            'name' => 'Prolongation hire date for device'
+        ));
+
         $this->commitTransaction();
 
     }
@@ -71,6 +76,14 @@ class Version20150911182900 extends MigrateHelper
 
         $this->executeQuery("DELETE FROM functionalities WHERE id=:id",array(
             'id'=>15
+        ));
+
+        $this->executeQuery("DELETE FROM logs WHERE log_action_id in (:id)", array(
+            'id' => 20
+        ));
+
+        $this->executeQuery("DELETE FROM log_actions WHERE id in (:id)", array(
+            'id' => 20
         ));
 
     }

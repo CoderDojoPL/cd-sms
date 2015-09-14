@@ -23,6 +23,7 @@ use Arbor\Component\Form\FileField;
 use Common\ImageColumnFormatter;
 use Doctrine\Common\Version;
 use Entity\DeviceType;
+use Exception\DeviceNotFoundException;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\BasicDataManager;
@@ -302,7 +303,7 @@ class Device extends Controller
             $query['page'] = 1;
         }
 
-        if (!isset($query['sort'])) {
+        if (isset($query['sort'])) {
             $builder->setSortColumn($query['sort']);
         }
 
@@ -402,6 +403,32 @@ class Device extends Controller
 
         return $builder;
 
+    }
+
+    /**
+     * Prolongation device hire date
+     *
+     * @param \Entity\Device $entity
+     * @return mixed
+     * @throws DeviceNotFoundException
+     */
+    public function prolongation($entity)
+    {
+        if ($entity->getLocation()->getId() != $this->getUser()->getLocation()->getId()
+        || !$entity->getHireExpirationDate() || !$entity->getUser()) {
+            throw new DeviceNotFoundException();
+        }
+
+        $hireDate=$entity->getHireExpirationDate();
+        $hireDate->sub(new \DateInterval('P2D'));
+
+        if($hireDate > new \DateTime()){
+            throw new DeviceNotFoundException();
+        }
+        $now=new \DateTime();
+        $now->add(new \DateInterval('P14D'));
+        $entity->setHireExpirationDate($now);
+        $this->flush();
     }
 
 }
