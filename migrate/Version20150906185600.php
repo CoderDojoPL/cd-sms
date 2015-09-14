@@ -16,7 +16,7 @@ use Common\MigrateHelper;
 
 /**
  * @package Migrate
- * @author Slawek Mowak (s.nowak@coderdojo.org.pl)
+ * @author Slawek Nowak (s.nowak@coderdojo.org.pl)
  */
 class Version20150906185600 extends MigrateHelper
 {
