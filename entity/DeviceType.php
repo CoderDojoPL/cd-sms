@@ -23,6 +23,7 @@ class DeviceType
     /**
      * @Id
      * @Column(type="integer")
+     * @GeneratedValue
      **/
     protected $id;
 
@@ -41,9 +42,9 @@ class DeviceType
      **/
     protected $current;
 
-    public function __construct($id)
+    public function __construct()
     {
-        $this->id = $id;
+        $this->setCurrent(0);//FIXME: check if this is necessary
     }
 
     public function getId()

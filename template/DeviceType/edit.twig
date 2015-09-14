@@ -1,0 +1,21 @@
+{% extends _request.isAjax ? "base_blank.twig" : "base_logged.twig" %}
+
+{%block body%}
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="/devicetype">Device types</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Edit
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <DIV class="row">
+                    {{form|raw}}
+                </DIV>
+                <!-- /.row -->
+{%endblock%}
