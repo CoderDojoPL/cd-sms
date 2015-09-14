@@ -301,6 +301,11 @@ class Device extends Controller
         if (!isset($query['page'])) {
             $query['page'] = 1;
         }
+
+        if (!isset($query['sort'])) {
+            $builder->setSortColumn($query['sort']);
+        }
+
         $builder->setPage($query['page']);
 
         $builder->addColumn('#', 'id');
@@ -346,21 +351,14 @@ class Device extends Controller
         $builder->removeField('createdAt');
         $builder->removeField('state');
         $builder->removeField('symbol');
+        $builder->removeField('hireExpirationDate');
 
         $builder->addField(new FileField(array(
             'name' => 'photo'
-        , 'label' => 'Photo'
-        , 'accept' => 'image/*'
-        , 'maxSize' => 1048576
+            , 'label' => 'Photo'
+            , 'accept' => 'image/*'
+            , 'maxSize' => 1048576
         )));
-
-//        $dimensionsField = $builder->getField('dimensions');
-//        $dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');
-//        $dimensionsField->setTag('placeholder', '{Width}x{Height}x{Depth}');
-//        // $dimensionsField->setValue('1x1x1');
-//        $dimensionsField = $builder->getField('weight');
-//        $dimensionsField->setPattern('^[0-9]+([\.\,]{1}[0-9]{1}){0,1}kg$');
-//        $dimensionsField->setTag('placeholder', '{Weight}kg');
 
         $builder->removeField('tags');
 

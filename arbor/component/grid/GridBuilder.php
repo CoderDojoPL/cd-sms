@@ -31,11 +31,12 @@ class GridBuilder{
 	private $limit=10;
 	private $page=1;
 	private $columns=array();
+	private $sortColumn;
 
 	/**
 	 * Set formatter with html rule pattern
 	 *
-	 * @param Arbor\Component\Grid\GridFormatter $formatter
+	 * @param \Arbor\Component\Grid\GridFormatter $formatter
 	 * @since 0.17.0
 	 */
 	public function setFormatter(GridFormatter $formatter){
@@ -45,7 +46,7 @@ class GridBuilder{
 	/**
 	 * Set formatter with html rule pattern
 	 *
-	 * @param Arbor\Component\Grid\GridDataManager $dataManager
+	 * @param \Arbor\Component\Grid\GridDataManager $dataManager
 	 * @since 0.17.0
 	 */
 	public function setDataManager(GridDataManager $dataManager){
@@ -55,7 +56,7 @@ class GridBuilder{
 	/**
 	 * Get DataManager
 	 *
-	 * @return Arbor\Component\Grid\GridDataManager
+	 * @return \Arbor\Component\Grid\GridDataManager
 	 * @since 0.18.0
 	 */
 	public function getDataManager(){
@@ -112,6 +113,10 @@ class GridBuilder{
 		$this->page=$page;
 	}
 
+	public function setSortColumn($index){
+		$this->sortColumn=$index;
+	}
+
 	/**
 	 * Add column
 	 *
@@ -139,7 +144,7 @@ class GridBuilder{
 	public function render(){
 
 		return $this->formatter->render($this->columns,$this->dataManager->getRecords($this->limit,$this->page)
-			,$this->dataManager->getTotalCount(),$this->limit,$this->page);
+			,$this->dataManager->getTotalCount(),$this->limit,$this->page,$this->sortColumn);
 	}
 
 

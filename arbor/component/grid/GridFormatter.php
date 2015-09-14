@@ -31,8 +31,9 @@ interface GridFormatter{
 	 * @param int $totalCount - max records count
 	 * @param int $limit - count records on page
 	 * @param int $page - current pag number
+	 * @param int $sort index column to sort
 	 * @since 0.17.0
 	 */
-	public function render($columns,$records,$totalCount,$limit,$page);
+	public function render($columns,$records,$totalCount,$limit,$page,$sort);
 
 }

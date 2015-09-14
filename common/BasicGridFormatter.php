@@ -33,9 +33,9 @@ class BasicGridFormatter implements GridFormatter{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function render($columns,$records,$totalCount,$limit,$page){
+	public function render($columns,$records,$totalCount,$limit,$page,$sort){
 
-		$html=$this->renderHead($columns);
+		$html=$this->renderHead($columns,$sort);
 		$html.=$this->renderBody($records,$columns);
 		$html.=$this->renderFoot($totalCount,$limit,$page,count($columns));
 		return $html;
@@ -45,14 +45,17 @@ class BasicGridFormatter implements GridFormatter{
 	 * Generate head grid in html tags
 	 *
 	 * @param array $columns to display in grid
+	 * @param int $sort
 	 * @return string
 	 */
-	private function renderHead($columns){
+	private function renderHead($columns,$sort){
+		$index=1;
 		$html='<table class="table">
 					<thead>
 						<tr>';
 		foreach($columns as $column){
-			$html.='<th>'.$column['label'].'</th>';
+
+			$html.='<th><a href="?sort='.($index++).'">'.$column['label'].'</a></th>';
 		}
 
 		$html.='</tr>
