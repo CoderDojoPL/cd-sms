@@ -84,7 +84,7 @@ class DeviceLocation extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
+        $builder = $this->getService('grid')->create($this->getRequest());
         $builder->setFormatter(new BasicGridFormatter('device'));
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
@@ -94,11 +94,6 @@ class DeviceLocation extends Controller
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
-        $builder->setPage($query['page']);
 
         $builder->addColumn('#', 'id');
         $builder->addColumn('Name', 'name');

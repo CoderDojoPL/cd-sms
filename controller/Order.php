@@ -50,7 +50,7 @@ class Order extends Controller
 	 */
 	private function createGrid()
 	{
-		$builder = $this->getService('grid')->create();
+		$builder = $this->getService('grid')->create($this->getRequest());
 		$builder->setFormatter(new BasicGridFormatter('order',$this->isAllow(11)));
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
@@ -58,11 +58,6 @@ class Order extends Controller
 		));
 
 		$builder->setLimit(10);
-		$query = $this->getRequest()->getQuery();
-		if (!isset($query['page'])) {
-			$query['page'] = 1;
-		}
-		$builder->setPage($query['page']);
 
 		$builder->addColumn('#', 'id');
 		$builder->addColumn('Device', 'device');

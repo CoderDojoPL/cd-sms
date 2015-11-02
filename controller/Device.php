@@ -290,7 +290,8 @@ class Device extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
+
+        $builder = $this->getService('grid')->create($this->getRequest());
         $builder->setFormatter(new BasicGridFormatter('device', $this->isAllow(1)));
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
@@ -298,24 +299,14 @@ class Device extends Controller
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
 
-        if (isset($query['sort'])) {
-            $builder->setSortColumn($query['sort']);
-        }
-
-        $builder->setPage($query['page']);
-
-        $builder->addColumn('#', 'id');
+        $builder->addColumn('#', 'id',null,'id');
         $builder->addColumn('Photo', 'photo', new ImageColumnFormatter());
-        $builder->addColumn('Name', 'name');
-        $builder->addColumn('Serial number', 'serialNumber');
-        $builder->addColumn('Type', 'type');
-        $builder->addColumn('Symbol', 'symbol');
-        $builder->addColumn('Location', array('location', 'user'));
+        $builder->addColumn('Name', 'name',null,'name');
+        $builder->addColumn('Serial number', 'serialNumber',null,'serialNumber');
+        $builder->addColumn('Type', 'type',null,'type');
+        $builder->addColumn('Symbol', 'symbol',null,'symbol');
+        $builder->addColumn('Location', array('location', 'user'),null,'location');
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
         return $builder;
     }

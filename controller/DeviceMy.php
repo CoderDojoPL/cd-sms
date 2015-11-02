@@ -94,8 +94,8 @@ class DeviceMy extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('device'));
+        $builder = $this->getService('grid')->create($this->getRequest());
+        $builder->setFormatter(new BasicGridFormatter('device/my'));
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
             ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.user=:user ORDER BY i.id'
@@ -104,11 +104,6 @@ class DeviceMy extends Controller
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
-        $builder->setPage($query['page']);
 
         $builder->addColumn('#', 'id');
         $builder->addColumn('Name', 'name');

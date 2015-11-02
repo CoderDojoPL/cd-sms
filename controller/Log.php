@@ -50,7 +50,7 @@ class Log extends Controller
 	 */
 	private function createGrid()
 	{
-		$builder = $this->getService('grid')->create();
+		$builder = $this->getService('grid')->create($this->getRequest());
 		$builder->setFormatter(new BasicGridFormatter('log',false));//prefix
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()

@@ -37,7 +37,7 @@ class BasicGridFormatter implements GridFormatter{
 
 		$html=$this->renderHead($columns,$sort);
 		$html.=$this->renderBody($records,$columns);
-		$html.=$this->renderFoot($totalCount,$limit,$page,count($columns));
+		$html.=$this->renderFoot($totalCount,$limit,$page,count($columns),$sort);
 		return $html;
 	}
 
@@ -49,13 +49,13 @@ class BasicGridFormatter implements GridFormatter{
 	 * @return string
 	 */
 	private function renderHead($columns,$sort){
-		$index=1;
+		$index=0;
 		$html='<table class="table">
 					<thead>
 						<tr>';
 		foreach($columns as $column){
-
-			$html.='<th><a href="?sort='.($index++).'">'.$column['label'].'</a></th>';
+			$html.='<th>'.($column['sort']?'<a href="?sort='.($index).'">':'').$column['label'].($column['sort']?'</a>':'').'</th>';
+			$index++;
 		}
 
 		$html.='</tr>
@@ -99,7 +99,7 @@ class BasicGridFormatter implements GridFormatter{
 	 * @param int $colspan for html tags
 	 * @return string
 	 */
-	private function renderFoot($count,$limit,$page,$colspan){
+	private function renderFoot($count,$limit,$page,$colspan,$sort){
 		$html='<tfoot>
 					<tr>
 					<td colspan="'.$colspan.'" class="text-center">
@@ -118,7 +118,7 @@ class BasicGridFormatter implements GridFormatter{
 						    if($pages==0)
 						    	$pages=1;
 						    for($i=1; $i <=$pages; $i++){
-						    	$html.='<li><a href="/'.$this->prefix.'?page='.$i.'">'.$i.'</a></li>';
+						    	$html.='<li><a href="/'.$this->prefix.'?page='.$i.'&sort='.$sort.'">'.$i.'</a></li>';
 						    }
 
 						      $html.='<li>

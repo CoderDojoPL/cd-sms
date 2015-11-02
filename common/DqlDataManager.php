@@ -36,7 +36,7 @@ class DqlDataManager implements GridDataManager{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRecords($limit,$page){
+	public function getRecords($limit,$page,$sort=null){
 		$result=array();
 
         $records=$this->entityManager->createQuery(

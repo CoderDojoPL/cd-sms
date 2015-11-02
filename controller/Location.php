@@ -49,7 +49,7 @@ class Location extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
+        $builder = $this->getService('grid')->create($this->getRequest());
         $builder->setFormatter(new BasicGridFormatter('location',$this->isAllow(4)));//prefix
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
@@ -57,17 +57,12 @@ class Location extends Controller
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
-        $builder->setPage($query['page']);
 
-        $builder->addColumn('#', 'id');
-        $builder->addColumn('Name', 'name');
-        $builder->addColumn('City', 'city');
-        $builder->addColumn('Street', 'street');
-        $builder->addColumn('Number', 'number');
+        $builder->addColumn('#', 'id',null,'id');
+        $builder->addColumn('Name', 'name',null,'name');
+        $builder->addColumn('City', 'city',null,'city');
+        $builder->addColumn('Street', 'street',null,'street');
+        $builder->addColumn('Number', 'number',null,'number');
 
 //        $builder->addColumn('Serial number','serialNumber');
 //        $builder->addColumn('Type','type');

@@ -48,7 +48,7 @@ class User extends Controller
 	 */
 	private function createGrid()
 	{
-		$builder = $this->getService('grid')->create();
+		$builder = $this->getService('grid')->create($this->getRequest());
 		$builder->setFormatter(new BasicGridFormatter('user', false));//prefix
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
@@ -56,17 +56,12 @@ class User extends Controller
 		));
 
 		$builder->setLimit(10);
-		$query = $this->getRequest()->getQuery();
-		if (!isset($query['page'])) {
-			$query['page'] = 1;
-		}
-		$builder->setPage($query['page']);
 
-		$builder->addColumn('#', 'id');
-		$builder->addColumn('Email', 'email');
-		$builder->addColumn('First Name', 'firstName');
-		$builder->addColumn('Last Name', 'lastName');
-		$builder->addColumn('Location', 'location');
+		$builder->addColumn('#', 'id',null,'id');
+		$builder->addColumn('Email', 'email',null,'email');
+		$builder->addColumn('First Name', 'firstName',null,'firstName');
+		$builder->addColumn('Last Name', 'lastName',null,'lastName');
+		$builder->addColumn('Location', 'location',null,'location');
 //        $builder->render();
 
 		$builder->addColumn('Action', 'id', new ActionColumnFormatter('user', array('edit')));
