@@ -40,7 +40,7 @@ class DqlDataManager implements GridDataManager{
 		$result=array();
 
         $records=$this->entityManager->createQuery(
-                $this->dql
+                $this->dql.' ORDER BY i.'.$sort
 		)
 			->setParameters($this->vars)
 			->setMaxResults($limit)

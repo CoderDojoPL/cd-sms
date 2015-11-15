@@ -24,16 +24,16 @@ use Entity\DeviceTag;
 class DeviceLocationTest extends WebTestCaseHelper
 {
 
-    public function testIndexUnautheticate()
-    {
-
-        $client = $this->createClient();
-        $url = $client->loadPage('/device/location')
-            ->getUrl();
-
-        $this->assertEquals('/login', $url);
-
-    }
+//    public function testIndexUnautheticate()
+//    {
+//
+//        $client = $this->createClient();
+//        $url = $client->loadPage('/device/location')
+//            ->getUrl();
+//
+//        $this->assertEquals('/login', $url);
+//
+//    }
 
     public function testIndex()
     {
@@ -144,88 +144,88 @@ class DeviceLocationTest extends WebTestCaseHelper
 
     }
 
-    public function testFreeUnautheticate()
-    {
-
-        $em = $this->getService('doctrine')->getEntityManager();
-
-        $deviceTag = new DeviceTag();
-        $deviceTag->setName('DeviceTag name');
-        $this->persist($deviceTag);
-
-        $device = new Device();
-        $device->setName('Device name');
-        $device->setPhoto('Device.photo.jpg');
-        $device->getTags()->add($deviceTag);
-        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-        $device->setUser($this->user);
-        $device->setLocation($this->user->getLocation());
-        $device->setSymbol('REF1');
-
-        $this->persist($device);
-        $this->flush();
-        $client = $this->createClient();
-        $url = $client->loadPage('/device/location/free/' . $device->getId())->getUrl();
-
-        $this->assertEquals('/login', $url);
-
-    }
-
-    public function testFreeRemove()
-    {
-
-        $em = $this->getService('doctrine')->getEntityManager();
-
-        $deviceTag = new DeviceTag();
-        $deviceTag->setName('DeviceTag name');
-        $this->persist($deviceTag);
-
-        $device = new Device();
-        $device->setName('Device name');
-        $device->setPhoto('Device.photo.jpg');
-        $device->getTags()->add($deviceTag);
-        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-        $device->setUser($this->user);
-        $device->setLocation($this->user->getLocation());
-        $device->setSymbol('REF1');
-
-        $this->persist($device);
-        $this->flush();
-
-        $session = $this->createSession();
-        $session->set('user.id', $this->user->getId());
-
-        $client = $this->createClient($session);
-        $client->loadPage('/device/location/free/' . $device->getId());
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
-
-        $panelBody = $client->getElement('.panel-body');
-        $buttons = $panelBody->findElements('a');
-
-
-        $this->assertCount(2, $buttons, 'Invalid number buttons');
-
-        $this->assertEquals('Yes', $buttons[0]->getText(), 'Invalid text button YES');
-
-        $this->assertEquals('No', $buttons[1]->getText(), 'Invalid text button NO');
-
-
-        $buttons[1]->click();
-
-        $this->assertEquals('/device/location', $client->getUrl(), 'Invalid url button NO.');
-
-        $buttons[0]->click();
-
-        $this->assertEquals('/device/location', $client->getUrl(), 'Invalid url button YES.');
-
-        $em->clear();
-        $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
-
-        $this->assertEquals(1,$device->getState()->getId(),'Invalid device state.');
-    }
+//    public function testFreeUnautheticate()
+//    {
+//
+//        $em = $this->getService('doctrine')->getEntityManager();
+//
+//        $deviceTag = new DeviceTag();
+//        $deviceTag->setName('DeviceTag name');
+//        $this->persist($deviceTag);
+//
+//        $device = new Device();
+//        $device->setName('Device name');
+//        $device->setPhoto('Device.photo.jpg');
+//        $device->getTags()->add($deviceTag);
+//        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+//        $device->setSerialNumber('Device serial number');
+//        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+//        $device->setUser($this->user);
+//        $device->setLocation($this->user->getLocation());
+//        $device->setSymbol('REF1');
+//
+//        $this->persist($device);
+//        $this->flush();
+//        $client = $this->createClient();
+//        $url = $client->loadPage('/device/location/free/' . $device->getId())->getUrl();
+//
+//        $this->assertEquals('/login', $url);
+//
+//    }
+//
+//    public function testFreeRemove()
+//    {
+//
+//        $em = $this->getService('doctrine')->getEntityManager();
+//
+//        $deviceTag = new DeviceTag();
+//        $deviceTag->setName('DeviceTag name');
+//        $this->persist($deviceTag);
+//
+//        $device = new Device();
+//        $device->setName('Device name');
+//        $device->setPhoto('Device.photo.jpg');
+//        $device->getTags()->add($deviceTag);
+//        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+//        $device->setSerialNumber('Device serial number');
+//        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+//        $device->setUser($this->user);
+//        $device->setLocation($this->user->getLocation());
+//        $device->setSymbol('REF1');
+//
+//        $this->persist($device);
+//        $this->flush();
+//
+//        $session = $this->createSession();
+//        $session->set('user.id', $this->user->getId());
+//
+//        $client = $this->createClient($session);
+//        $client->loadPage('/device/location/free/' . $device->getId());
+//
+//        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+//
+//        $panelBody = $client->getElement('.panel-body');
+//        $buttons = $panelBody->findElements('a');
+//
+//
+//        $this->assertCount(2, $buttons, 'Invalid number buttons');
+//
+//        $this->assertEquals('Yes', $buttons[0]->getText(), 'Invalid text button YES');
+//
+//        $this->assertEquals('No', $buttons[1]->getText(), 'Invalid text button NO');
+//
+//
+//        $buttons[1]->click();
+//
+//        $this->assertEquals('/device/location', $client->getUrl(), 'Invalid url button NO.');
+//
+//        $buttons[0]->click();
+//
+//        $this->assertEquals('/device/location', $client->getUrl(), 'Invalid url button YES.');
+//
+//        $em->clear();
+//        $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
+//
+//        $this->assertEquals(1,$device->getState()->getId(),'Invalid device state.');
+//    }
 }

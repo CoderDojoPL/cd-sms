@@ -107,7 +107,7 @@ class BasicGridFormatter implements GridFormatter{
 						<nav>
 						  <ul class="pagination">
 						    <li>
-						      <a href="/'.$this->prefix.'?page='.($page-1>0?$page-1:1).'" aria-label="Previous">
+						      <a href="/'.$this->prefix.'?page='.($page-1>0?$page-1:1).'&sort='.$sort.'" aria-label="Previous">
 						        <span aria-hidden="true">&laquo;</span>
 						      </a>
 						    </li>';
@@ -122,7 +122,7 @@ class BasicGridFormatter implements GridFormatter{
 						    }
 
 						      $html.='<li>
-						      <a href="/'.$this->prefix.'?page='.($page+1<$pages?$page+1:$pages).'" aria-label="Next">
+						      <a href="/'.$this->prefix.'?page='.($page+1<$pages?$page+1:$pages).'&sort='.$sort.'" aria-label="Next">
 						        <span aria-hidden="true">&raquo;</span>
 						      </a>
 						    </li>

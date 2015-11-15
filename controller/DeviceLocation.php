@@ -85,21 +85,21 @@ class DeviceLocation extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create($this->getRequest());
-        $builder->setFormatter(new BasicGridFormatter('device'));
+        $builder->setFormatter(new BasicGridFormatter('device/location'));
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
-            ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.location=:location and i.user is null ORDER BY i.id'
+            ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.location=:location and i.user is null'
             ,'SELECT count(i) as c FROM Entity\Device i WHERE i.location=:location and i.user is null'
             ,array('location'=>$this->getUser()->getLocation())
         ));
 
         $builder->setLimit(10);
 
-        $builder->addColumn('#', 'id');
-        $builder->addColumn('Name', 'name');
-        $builder->addColumn('Serial number', 'serialNumber');
-        $builder->addColumn('Type', 'type');
-        $builder->addColumn('State', 'state');
+        $builder->addColumn('#', 'id',null,'id');
+        $builder->addColumn('Name', 'name',null,'name');
+        $builder->addColumn('Serial number', 'serialNumber',null,'serialNumber');
+        $builder->addColumn('Type', 'type',null,'type');
+        $builder->addColumn('State', 'state',null,'state');
         $builder->addColumn('Action', array('id','stateId'),new FreeColumnFormatter('device/location'));
         return $builder;
     }

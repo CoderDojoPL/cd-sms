@@ -18,7 +18,7 @@ namespace Arbor\Component\Grid;
 use Arbor\Component\Grid\GridFormatter;
 use Arbor\Component\Grid\GridDataManager;
 use Arbor\Component\Grid\BasicColumnFormatter;
-use Arbor\Provider\Request;
+use Arbor\Core\RequestProvider;
 
 /**
  * Generator grid. Support for mapping data, pagination and generate html code.
@@ -34,17 +34,17 @@ class GridBuilder{
 	private $columns=array();
 
 	/**
-	 * @var Request $request
+	 * @var RequestProvider $request
 	 */
 	private $request;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Request $request
+	 * @param RequestProvider $request
 	 * @since 0.20.0
 	 */
-	public function __construct(Request $request){
+	public function __construct(RequestProvider $request){
 		$this->request=$request;
 	}
 

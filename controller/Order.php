@@ -59,11 +59,11 @@ class Order extends Controller
 
 		$builder->setLimit(10);
 
-		$builder->addColumn('#', 'id');
-		$builder->addColumn('Device', 'device');
-		$builder->addColumn('Owner', 'owner');
-		$builder->addColumn('State', 'state');
-		$builder->addColumn('Date', 'createdAt');
+		$builder->addColumn('#', 'id',null,'id');
+		$builder->addColumn('Device', 'device',null,'device');
+		$builder->addColumn('Owner', 'owner',null,'owner');
+		$builder->addColumn('State', 'state',null,'state');
+		$builder->addColumn('Date', 'createdAt',null,'createdAt');
 
 		$builder->addColumn('Action', 'id', new ActionColumnFormatter('order', array('show')));
 		return $builder;
