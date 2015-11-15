@@ -18,6 +18,7 @@ namespace Arbor\Component\Grid;
 use Arbor\Component\Grid\GridFormatter;
 use Arbor\Component\Grid\GridDataManager;
 use Arbor\Component\Grid\BasicColumnFormatter;
+use Arbor\Core\RequestProvider;
 
 /**
  * Generator grid. Support for mapping data, pagination and generate html code.
@@ -33,9 +34,24 @@ class GridBuilder{
 	private $columns=array();
 
 	/**
+	 * @var RequestProvider $request
+	 */
+	private $request;
+
+	/**
+	 * Constructor
+	 *
+	 * @param RequestProvider $request
+	 * @since 0.20.0
+	 */
+	public function __construct(RequestProvider $request){
+		$this->request=$request;
+	}
+
+	/**
 	 * Set formatter with html rule pattern
 	 *
-	 * @param Arbor\Component\Grid\GridFormatter $formatter
+	 * @param \Arbor\Component\Grid\GridFormatter $formatter
 	 * @since 0.17.0
 	 */
 	public function setFormatter(GridFormatter $formatter){
@@ -45,7 +61,7 @@ class GridBuilder{
 	/**
 	 * Set formatter with html rule pattern
 	 *
-	 * @param Arbor\Component\Grid\GridDataManager $dataManager
+	 * @param \Arbor\Component\Grid\GridDataManager $dataManager
 	 * @since 0.17.0
 	 */
 	public function setDataManager(GridDataManager $dataManager){
@@ -55,7 +71,7 @@ class GridBuilder{
 	/**
 	 * Get DataManager
 	 *
-	 * @return Arbor\Component\Grid\GridDataManager
+	 * @return \Arbor\Component\Grid\GridDataManager
 	 * @since 0.18.0
 	 */
 	public function getDataManager(){
@@ -79,7 +95,17 @@ class GridBuilder{
 	 * @since 0.18.0
 	 */
 	public function getRecords(){
-		return $this->dataManager->getRecords($this->limit,$this->page);
+		$query=$this->request->getQuery();
+		$sort=null;
+		if(isset($query['sort']) && isset($this->columns[$query['sort']])){
+			$sort=$this->columns[$query['sort']]['sort'];
+		}
+		if (isset($query['page'])) {
+			$this->page=$query['page'];
+		}
+
+
+		return $this->dataManager->getRecords($this->limit,$this->page,$sort);
 	}
 
 	/**
@@ -117,17 +143,19 @@ class GridBuilder{
 	 *
 	 * @param string $label - column name
 	 * @param string|array $keys - mapped keys for record
+	 * @param string $sort - sort by column
 	 * @since 0.17.0
 	 */
-	public function addColumn($label,$keys,$formatter=null){
-		if(!$formatter){			
+	public function addColumn($label,$keys,$formatter=null,$sort=null){
+		if(!$formatter){
 			$formatter=new BasicColumnFormatter();
 		}
 
 		if(!is_array($keys)){
 			$keys=array($keys);
 		}
-		$this->columns[]=array('label'=>$label,'keys'=>$keys,'formatter'=>$formatter);
+
+		$this->columns[]=array('label'=>$label,'keys'=>$keys,'formatter'=>$formatter,'sort'=>$sort);
 	}
 
 	/**
@@ -137,9 +165,15 @@ class GridBuilder{
 	 * @since 0.17.0
 	 */
 	public function render(){
+		$sort=0;
+		$query=$this->request->getQuery();
+		if(isset($query['sort']) && isset($this->columns[$query['sort']])){
+			$sort=$query['sort'];
+		}
 
-		return $this->formatter->render($this->columns,$this->dataManager->getRecords($this->limit,$this->page)
-			,$this->dataManager->getTotalCount(),$this->limit,$this->page);
+		return $this->formatter->render($this->columns
+			,$this->getRecords()
+			,$this->dataManager->getTotalCount(),$this->limit,$this->page,$sort);
 	}
 
 
@@ -149,4 +183,5 @@ class GridBuilder{
 	public function __toString(){
 		return $this->render();
 	}
+
 }

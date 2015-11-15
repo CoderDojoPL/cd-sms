@@ -94,27 +94,22 @@ class DeviceMy extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('device'));
+        $builder = $this->getService('grid')->create($this->getRequest());
+        $builder->setFormatter(new BasicGridFormatter('device/my'));
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
-            ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.user=:user ORDER BY i.id'
+            ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.user=:user'
             ,'SELECT count(i) as c FROM Entity\Device i WHERE i.user=:user'
             ,array('user'=>$this->getUser())
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
-        $builder->setPage($query['page']);
 
-        $builder->addColumn('#', 'id');
-        $builder->addColumn('Name', 'name');
-        $builder->addColumn('Serial number', 'serialNumber');
-        $builder->addColumn('Type', 'type');
-        $builder->addColumn('State', 'state');
+        $builder->addColumn('#', 'id',null,'id');
+        $builder->addColumn('Name', 'name',null,'name');
+        $builder->addColumn('Serial number', 'serialNumber',null,'serialNumber');
+        $builder->addColumn('Type', 'type',null,'type');
+        $builder->addColumn('State', 'state',null,'state');
         $builder->addColumn('Action', array('id','stateId'),new FreeColumnFormatter('device/my'));
         return $builder;
     }

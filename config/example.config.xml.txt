@@ -12,5 +12,10 @@
     <variable name="prod.google.clientSecret" value="api google" />
     <variable name="prod.google.redirectUri" value="api google" />
 
+	<variable name="mail.host" value="mail.example.com" />
+	<variable name="mail.ssl" value="false" />
+	<variable name="mail.port" value="587" />
+	<variable name="mail.username" value="user@example.com" />
+	<variable name="mail.password" value="password" />
 
 </content>

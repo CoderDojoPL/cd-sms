@@ -50,7 +50,7 @@ class Log extends Controller
 	 */
 	private function createGrid()
 	{
-		$builder = $this->getService('grid')->create();
+		$builder = $this->getService('grid')->create($this->getRequest());
 		$builder->setFormatter(new BasicGridFormatter('log',false));//prefix
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
@@ -64,12 +64,12 @@ class Log extends Controller
 		}
 		$builder->setPage($query['page']);
 
-		$builder->addColumn('#', 'id');
-		$builder->addColumn('Action', 'action');
-		$builder->addColumn('User', 'user');
-		$builder->addColumn('Date', 'createdAt');
-		$builder->addColumn('Success', array('isSuccess','failMessage'),new LogSuccessColumnFormatter());
-		$builder->addColumn('Modified entities', 'countModifiedEntities');
+		$builder->addColumn('#', 'id',null,'id');
+		$builder->addColumn('Action', 'action',null,'action');
+		$builder->addColumn('User', 'user',null,'user');
+		$builder->addColumn('Date', 'createdAt',null,'createdAt');
+		$builder->addColumn('Success', array('isSuccess','failMessage'),new LogSuccessColumnFormatter(),'failMessage');
+		$builder->addColumn('Modified entities', 'countModifiedEntities',null,'countModifiedEntities');
 
 		$builder->addColumn('Action', 'id', new ActionColumnFormatter('log', array('show')));
 		return $builder;
@@ -106,10 +106,6 @@ class Log extends Controller
 		,dlc.name as _name
 		,dlo.photo
 		,dlc.photo as _photo
-		,dlo.dimensions
-		,dlc.dimensions as _dimensions
-		,dlo.weight
-		,dlc.weight as _weight
 		,dlo.serial_number
 		,dlc.serial_number as _serial_number
 		,dlo.warranty_expiration_date
@@ -139,8 +135,6 @@ class Log extends Controller
 		,ll.name as location
 		,dl.name
 		,dl.photo
-		,dl.dimensions
-		,dl.weight
 		,dl.serial_number
 		,dl.warranty_expiration_date
 		,dl.price
@@ -159,8 +153,6 @@ class Log extends Controller
 		,ll.name as location
 		,dl.name
 		,dl.photo
-		,dl.dimensions
-		,dl.weight
 		,dl.serial_number
 		,dl.warranty_expiration_date
 		,dl.price

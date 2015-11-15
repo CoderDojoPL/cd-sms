@@ -64,8 +64,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
-        $device->setWeight('10kg');
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
@@ -147,8 +145,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
-        $device->setWeight('10kg');
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
@@ -192,8 +188,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
-        $device->setWeight('10kg');
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
@@ -292,7 +286,7 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
-        $this->assertCount(12, $fields, 'Invalid number fields');
+        $this->assertCount(10, $fields, 'Invalid number fields');
 
         $fields[7]->setData('0');
         //check required fields
@@ -303,34 +297,39 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
+        $this->assertCount(10, $fields, 'Invalid number fields');
+        $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');//name
+        $this->assertFalse($fields[1]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');//warranty
+        $this->assertFalse($fields[2]->getParent()->hasElement('label'), 'Redundant error message for price');//price
+        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for photo');//price
+        $this->assertEquals('Value can not empty', $fields[4]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
 
-        $this->assertCount(12, $fields, 'Invalid number fields');
-        $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
-        $this->assertEquals('Value can not empty', $fields[1]->getParent()->getElement('label')->getText(), 'Invalid error message for dimensions');
-        $this->assertEquals('Value can not empty', $fields[2]->getParent()->getElement('label')->getText(), 'Invalid error message for weight');
 
-        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');
-        $this->assertFalse($fields[4]->getParent()->hasElement('label'), 'Redundant error message for price');
-        $this->assertFalse($fields[5]->getParent()->hasElement('label'), 'Redundant error message for photo');
-        $this->assertEquals('Value can not empty', $fields[6]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
-        $this->assertEquals('Value is too small.', $fields[7]->getParent()->getElement('label')->getText(), 'Invalid error message for counts');
-
-        $this->assertFalse($fields[8]->getParent()->hasElement('label'), 'Redundant error message for note');
-        $this->assertEquals('Value can not empty', $fields[9]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
-        $this->assertEquals('Value can not empty', $fields[10]->getParent()->getElement('label')->getText(), 'Invalid error message for location');
+        $this->assertFalse($fields[6]->getParent()->hasElement('label'), 'Redundant error message for note');
+        $this->assertEquals('Value can not empty', $fields[7]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
+        $this->assertEquals('Value can not empty', $fields[8]->getParent()->getElement('label')->getText(), 'Invalid error message for location');
+        $this->assertFalse($fields[9]->getParent()->hasElement('label'), 'Redundant error message for user');
 
         $fields[0]->setData('Name test');
-        $fields[1]->setData('10x10x10');
-        $fields[2]->setData('10kg');
-        $fields[3]->setData('2015-01-01');
-        $fields[4]->setData('20.32');
-        $fields[6]->setData('tag 1,tag 2');
-        $fields[7]->setData('2');
-        $fields[8]->setData('Note');
-        $fields[9]->setData('1');//Refill
-        $fields[10]->setData($location->getId());
+        $fields[1]->setData('2015-01-01');
+        $fields[2]->setData('20.32');
+        $fields[4]->setData('tag 1,tag 2');
+        $fields[5]->setData('0');
+        $fields[6]->setData('Note');
+        $fields[7]->setData('1');//Refill
+        $fields[8]->setData($location->getId());
 
         $form->submit();
+        //count = 0
+        $this->assertEquals('/device/add', $client->getUrl(), 'Invalid url form incorrect submit form');
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields();
+        $this->assertEquals('Value is too small.', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for counts');
+
+        $fields[5]->setData('2');
+        $form->submit();
+        //all data oK
 
         $this->assertEquals('/device/add/serialNumber', $client->getUrl(), 'Invalid url form after submit');
 
@@ -361,8 +360,6 @@ class DeviceTest extends WebTestCaseHelper
 
         for ($i = 0; $i < count($devices); $i++) {
             $this->assertEquals('Name test', $devices[$i]->getName(), 'Invalid device name');
-            $this->assertEquals('10x10x10', $devices[$i]->getDimensions(), 'Invalid device dimensions');
-            $this->assertEquals('10kg', $devices[$i]->getWeight(), 'Invalid device weight');
             $this->assertEquals('2015-01-01', $devices[$i]->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
             $this->assertEquals(20.32, $devices[$i]->getPrice(), 'Invalid device price');
             $this->assertEquals('Note', $devices[$i]->getNote(), 'Invalid device note');
@@ -408,8 +405,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
-        $device->setWeight('10kg');
         $device->setSerialNumber('Device serial number');
         $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $device->setLocation($location);
@@ -454,9 +449,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setDimensions('10x10x10');
         $device->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
-        $device->setWeight('10kg');
         $device->setPrice(12.05);
         $device->setNote('Note');
         $device->setSerialNumber('Device serial number');
@@ -481,19 +474,17 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields();
 
-        $this->assertCount(10, $fields, 'Invalid number fields');
+        $this->assertCount(8, $fields, 'Invalid number fields');
 
 
         $this->assertEquals('Device name', $fields[0]->getData(), 'Invalid value for name');
-        $this->assertEquals('10x10x10', $fields[1]->getData(), 'Invalid value for dmiesions');
-        $this->assertEquals('10kg', $fields[2]->getData(), 'Invalid value for weight');
-        $this->assertEquals('2015-01-01', $fields[3]->getData(), 'Invalid value for warranty expiration date');
-        $this->assertEquals('12.05', $fields[4]->getData(), 'Invalid value for price');
-        $this->assertEquals('', $fields[5]->getData(), 'Invalid value for photo');
-        $this->assertEquals('DeviceTag name', $fields[6]->getData(), 'Invalid value for tags');
-        $this->assertEquals('Device serial number', $fields[7]->getData(), 'Invalid value for serial number');
-        $this->assertEquals('Note', $fields[8]->getData(), 'Invalid value for note');
-        $this->assertEquals('1', $fields[9]->getData(), 'Invalid value for type');
+        $this->assertEquals('2015-01-01', $fields[1]->getData(), 'Invalid value for warranty expiration date');
+        $this->assertEquals('12.05', $fields[2]->getData(), 'Invalid value for price');
+        $this->assertEquals('', $fields[3]->getData(), 'Invalid value for photo');
+        $this->assertEquals('DeviceTag name', $fields[4]->getData(), 'Invalid value for tags');
+        $this->assertEquals('Device serial number', $fields[5]->getData(), 'Invalid value for serial number');
+        $this->assertEquals('Note', $fields[6]->getData(), 'Invalid value for note');
+        $this->assertEquals('1', $fields[7]->getData(), 'Invalid value for type');
 
 
         $fields[0]->setData('');
@@ -501,10 +492,9 @@ class DeviceTest extends WebTestCaseHelper
         $fields[2]->setData('');
         $fields[3]->setData('');
         $fields[4]->setData('');
+        $fields[5]->setData('');
         $fields[6]->setData('');
         $fields[7]->setData('');
-        $fields[8]->setData('');
-        $fields[9]->setData('');
         $form->submit();
 
 
@@ -512,30 +502,25 @@ class DeviceTest extends WebTestCaseHelper
         $fields = $form->getFields();
 
 
-        $this->assertCount(10, $fields, 'Invalid number fields');
+        $this->assertCount(8, $fields, 'Invalid number fields');
         $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
-        $this->assertEquals('Value can not empty', $fields[1]->getParent()->getElement('label')->getText(), 'Invalid error message for dimensions');
-        $this->assertEquals('Value can not empty', $fields[2]->getParent()->getElement('label')->getText(), 'Invalid error message for weight');
 
-        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');
-        $this->assertFalse($fields[4]->getParent()->hasElement('label'), 'Redundant error message for price');
-        $this->assertFalse($fields[5]->getParent()->hasElement('label'), 'Redundant error message for photo');
-        $this->assertEquals('Value can not empty', $fields[6]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
-        $this->assertEquals('Value can not empty', $fields[7]->getParent()->getElement('label')->getText(), 'Invalid error message for serial number');
+        $this->assertFalse($fields[1]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');
+        $this->assertFalse($fields[2]->getParent()->hasElement('label'), 'Redundant error message for price');
+        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for photo');
+        $this->assertEquals('Value can not empty', $fields[4]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
+        $this->assertEquals('Value can not empty', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for serial number');
 
-        $this->assertFalse($fields[8]->getParent()->hasElement('label'), 'Redundant error message for note');
-        $this->assertEquals('Value can not empty', $fields[9]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
-
+        $this->assertFalse($fields[6]->getParent()->hasElement('label'), 'Redundant error message for note');
+        $this->assertEquals('Value can not empty', $fields[7]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
 
         $fields[0]->setData('Name edit');
-        $fields[1]->setData('2x3x4');
-        $fields[2]->setData('2kg');
-        $fields[3]->setData('2016-01-01');
-        $fields[4]->setData('5.32');
-        $fields[6]->setData('tag 1,tag 2');
-        $fields[7]->setData('serial number');
-        $fields[8]->setData('note edit');
-        $fields[9]->setData('2');
+        $fields[1]->setData('2016-01-01');
+        $fields[2]->setData('5.32');
+        $fields[4]->setData('tag 1,tag 2');
+        $fields[5]->setData('serial number');
+        $fields[6]->setData('note edit');
+        $fields[7]->setData('2');
 
         $form->submit();
 
@@ -545,8 +530,6 @@ class DeviceTest extends WebTestCaseHelper
         $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
 
         $this->assertEquals('Name edit', $device->getName(), 'Invalid device name');
-        $this->assertEquals('2x3x4', $device->getDimensions(), 'Invalid device dimensions');
-        $this->assertEquals('2kg', $device->getWeight(), 'Invalid device weight');
         $this->assertEquals('2016-01-01', $device->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
         $this->assertEquals(5.32, $device->getPrice(), 'Invalid device price');
         $this->assertEquals('note edit', $device->getNote(), 'Invalid device note');

@@ -17,6 +17,7 @@ use Arbor\Provider\Response;
 use Common\BasicFormFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Exception\InvalidAuthEmailException;
+use Library\Google\Service\Google;
 
 /**
  * Authenticate user with Google OAuth2 API
@@ -32,8 +33,6 @@ class Authenticate extends Controller
 	 * Set location for user
 	 *
 	 * @return array
-	 * @throws \Arbor\Exception\UserNotFoundException
-	 * @throws \Arbor\Exception\ValueNotFoundException
 	 */
 	public function setLocation()
 	{
@@ -55,8 +54,6 @@ class Authenticate extends Controller
 	 * Main page after logged
 	 *
 	 * @return array
-	 * @throws \Arbor\Exception\UserNotFoundException
-	 * @throws \Arbor\Exception\ValueNotFoundException
 	 */
 	public function index()
 	{
@@ -90,11 +87,12 @@ class Authenticate extends Controller
 	 */
 	public function apiLogin($token)
 	{
+		/**
+		 * @var Google $googleService
+		 */
 		$googleService = $this->getService('google');
 		$client = $googleService->getClient();
-
 		$session = $this->getRequest()->getSession();
-
 		$client->setAccessToken($token);
 
 		$session->set('access.token', $client->getAccessToken());

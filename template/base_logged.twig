@@ -19,6 +19,7 @@
     <link href="/css/bootstrap-timeline.css" rel="stylesheet">
     <link href="/css/ekko-lightbox.min.css" rel="stylesheet">
     <link href="/css/select2.min.css" rel="stylesheet">
+    <link href="/css/datepicker.css" rel="stylesheet">
     <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
 
 
@@ -54,6 +55,9 @@
                             {% if isAllow([1,2,3]) %}
                                 <li><a href="/device">Devices</a></li>
                             {% endif %}
+                            {% if isAllow([16]) %}
+                                <li><a href="/devicetype">Device types</a></li>
+                            {% endif %}
                             {% if isAllow([4,5,6]) %}
                                 <li><a href="/location">Locations</a></li>
                             {% endif %}
@@ -71,6 +75,7 @@
                        aria-expanded="false">Devices <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/device/my">My</a></li>
+                        <li><a href="/device/location">Location</a></li>
                     </ul>
                 </li>
                 {% if isAllow([10,11,12,13]) %}
@@ -118,6 +123,7 @@
 <script src="/js/bootstrap-tagsinput.min.js"></script>
 <script src="/js/ekko-lightbox.min.js"></script>
 <script src="/js/select2.full.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
 <script src="/js/app.js"></script>
 
 

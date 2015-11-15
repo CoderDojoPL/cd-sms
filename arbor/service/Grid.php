@@ -17,6 +17,7 @@ namespace Arbor\Service;
 
 use Arbor\Contener\ServiceConfig;
 use Arbor\Component\Grid\GridBuilder;
+use Arbor\Core\RequestProvider;
 
 /**
  * Service to construct and support grid
@@ -35,10 +36,11 @@ class Grid{
 
 	/**
 	 * create instance builder
+	 * @param RequestProvider $request
 	 * @since 0.17.0
 	 */
-	public function create(){
-		return new GridBuilder();
+	public function create(RequestProvider $request){
+		return new GridBuilder($request);
 	}
 
 }

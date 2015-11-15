@@ -42,16 +42,6 @@ class DeviceLog
 	private $type;
 
 	/**
-	 * @Column(type="string")
-	 **/
-	protected $dimensions;
-
-	/**
-	 * @Column(type="string")
-	 **/
-	protected $weight;
-
-	/**
 	 * @Column(name="serial_number",type="string")
 	 **/
 	protected $serialNumber;
@@ -116,7 +106,12 @@ class DeviceLog
 	 **/
 	protected $symbol;
 
-    public function __construct(){
+	/**
+	 * @Column(name="hire_expiration_date",type="datetime",nullable=true)
+	 **/
+	protected $hireExpirationDate;
+
+	public function __construct(){
         $this->setCreatedAt(new \DateTime());
         $this->setRemoved(false);
     }
@@ -197,28 +192,6 @@ class DeviceLog
 	public function getType()
 	{
 		return $this->type;
-	}
-
-	public function setDimensions($dimensions)
-	{
-		$this->dimensions = $dimensions;
-		return $this;
-	}
-
-	public function getDimensions()
-	{
-		return $this->dimensions;
-	}
-
-	public function setWeight($weight)
-	{
-		$this->weight = $weight;
-		return $this;
-	}
-
-	public function getWeight()
-	{
-		return $this->weight;
 	}
 
 	public function setSerialNumber($serialNumber)
@@ -388,5 +361,20 @@ class DeviceLog
 		$this->symbol = $symbol;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getHireExpirationDate()
+	{
+		return $this->hireExpirationDate;
+	}
+
+	/**
+	 * @param mixed $hireExpirationDate
+	 */
+	public function setHireExpirationDate($hireExpirationDate)
+	{
+		$this->hireExpirationDate = $hireExpirationDate;
+	}
 
 }

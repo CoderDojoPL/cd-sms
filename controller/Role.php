@@ -48,7 +48,7 @@ class Role extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
+        $builder = $this->getService('grid')->create($this->getRequest());
         $builder->setFormatter(new BasicGridFormatter('role',$this->isAllow(8)));//prefix
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
@@ -56,14 +56,9 @@ class Role extends Controller
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
-        $builder->setPage($query['page']);
 
-        $builder->addColumn('#', 'id');
-        $builder->addColumn('Name', 'name');
+        $builder->addColumn('#', 'id',null,'id');
+        $builder->addColumn('Name', 'name',null,'name');
 //        $builder->render();
 
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('role', array('edit')));

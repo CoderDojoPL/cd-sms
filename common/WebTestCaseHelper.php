@@ -41,8 +41,8 @@ class WebTestCaseHelper extends WebTestCase{
 	 * Configure enviorment.
 	 */
 	protected function setUp(){
-echo		$this->executeCommand('migrate:downgrade');
-echo		$this->executeCommand('migrate:update');
+		$this->executeCommand('migrate:downgrade');
+		$this->executeCommand('migrate:update');
 
 		$em=$this->getService('doctrine')->getEntityManager();
 

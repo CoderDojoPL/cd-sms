@@ -16,6 +16,7 @@ use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
+use Exception\OrderBelongToUserException;
 use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
@@ -49,7 +50,7 @@ class Order extends Controller
 	 */
 	private function createGrid()
 	{
-		$builder = $this->getService('grid')->create();
+		$builder = $this->getService('grid')->create($this->getRequest());
 		$builder->setFormatter(new BasicGridFormatter('order',$this->isAllow(11)));
 		$builder->setDataManager(new BasicDataManager(
 			$this->getDoctrine()->getEntityManager()
@@ -57,17 +58,12 @@ class Order extends Controller
 		));
 
 		$builder->setLimit(10);
-		$query = $this->getRequest()->getQuery();
-		if (!isset($query['page'])) {
-			$query['page'] = 1;
-		}
-		$builder->setPage($query['page']);
 
-		$builder->addColumn('#', 'id');
-		$builder->addColumn('Device', 'device');
-		$builder->addColumn('Owner', 'owner');
-		$builder->addColumn('State', 'state');
-		$builder->addColumn('Date', 'createdAt');
+		$builder->addColumn('#', 'id',null,'id');
+		$builder->addColumn('Device', 'device',null,'device');
+		$builder->addColumn('Owner', 'owner',null,'owner');
+		$builder->addColumn('State', 'state',null,'state');
+		$builder->addColumn('Date', 'createdAt',null,'createdAt');
 
 		$builder->addColumn('Action', 'id', new ActionColumnFormatter('order', array('show')));
 		return $builder;
@@ -148,6 +144,10 @@ class Order extends Controller
 			throw new OrderAllreadyFetchedException();
 		}
 
+		if ($entity->getOwner()->getId() == $this->getUser()->getId()) {
+			throw new OrderBelongToUserException();
+		}
+
 		$entity->setPerformer($this->getUser());
 		$entity->setState($this->cast('Mapper\OrderState', 2));
 		$entity->setFetchedAt(new \DateTime());
@@ -161,11 +161,12 @@ class Order extends Controller
 	 * Close order workflow
 	 *
 	 * @param \Entity\Order $entity
+	 * @param string $bind
 	 * @return mixed
 	 * @throws OrderNotFetchedException
 	 * @throws YouAreNotOwnerException
 	 */
-	public function close($entity)
+	public function close($entity,$bind)
 	{
 		if ($entity->getState()->getId() != 2) {
 			throw new OrderNotFetchedException();
@@ -180,8 +181,19 @@ class Order extends Controller
 
 		//set new location on device
 		$entity->getDevice()->setLocation($this->getUser()->getLocation());
-		$entity->getDevice()->setUser($this->getUser());
-		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 1));
+
+		if($bind=='me'){
+			$expirationDate=new \DateTime();
+			$expirationDate->add(new \DateInterval('P14D'));
+
+			$entity->getDevice()->setUser($this->getUser());
+			$entity->getDevice()->setHireExpirationDate($expirationDate);
+		}
+		else{
+			$entity->getDevice()->setUser(null);
+			$entity->getDevice()->setHireExpirationDate(null);
+		}
+		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 2));
 
 		$this->flush();
 

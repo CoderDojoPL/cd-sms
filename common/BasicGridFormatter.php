@@ -33,11 +33,11 @@ class BasicGridFormatter implements GridFormatter{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function render($columns,$records,$totalCount,$limit,$page){
+	public function render($columns,$records,$totalCount,$limit,$page,$sort){
 
-		$html=$this->renderHead($columns);
+		$html=$this->renderHead($columns,$sort);
 		$html.=$this->renderBody($records,$columns);
-		$html.=$this->renderFoot($totalCount,$limit,$page,count($columns));
+		$html.=$this->renderFoot($totalCount,$limit,$page,count($columns),$sort);
 		return $html;
 	}
 
@@ -45,14 +45,17 @@ class BasicGridFormatter implements GridFormatter{
 	 * Generate head grid in html tags
 	 *
 	 * @param array $columns to display in grid
+	 * @param int $sort
 	 * @return string
 	 */
-	private function renderHead($columns){
+	private function renderHead($columns,$sort){
+		$index=0;
 		$html='<table class="table">
 					<thead>
 						<tr>';
 		foreach($columns as $column){
-			$html.='<th>'.$column['label'].'</th>';
+			$html.='<th>'.($column['sort']?'<a href="?sort='.($index).'">':'').$column['label'].($column['sort']?'</a>':'').'</th>';
+			$index++;
 		}
 
 		$html.='</tr>
@@ -96,7 +99,7 @@ class BasicGridFormatter implements GridFormatter{
 	 * @param int $colspan for html tags
 	 * @return string
 	 */
-	private function renderFoot($count,$limit,$page,$colspan){
+	private function renderFoot($count,$limit,$page,$colspan,$sort){
 		$html='<tfoot>
 					<tr>
 					<td colspan="'.$colspan.'" class="text-center">
@@ -104,7 +107,7 @@ class BasicGridFormatter implements GridFormatter{
 						<nav>
 						  <ul class="pagination">
 						    <li>
-						      <a href="/'.$this->prefix.'?page='.($page-1>0?$page-1:1).'" aria-label="Previous">
+						      <a href="/'.$this->prefix.'?page='.($page-1>0?$page-1:1).'&sort='.$sort.'" aria-label="Previous">
 						        <span aria-hidden="true">&laquo;</span>
 						      </a>
 						    </li>';
@@ -115,11 +118,11 @@ class BasicGridFormatter implements GridFormatter{
 						    if($pages==0)
 						    	$pages=1;
 						    for($i=1; $i <=$pages; $i++){
-						    	$html.='<li><a href="/'.$this->prefix.'?page='.$i.'">'.$i.'</a></li>';
+						    	$html.='<li><a href="/'.$this->prefix.'?page='.$i.'&sort='.$sort.'">'.$i.'</a></li>';
 						    }
 
 						      $html.='<li>
-						      <a href="/'.$this->prefix.'?page='.($page+1<$pages?$page+1:$pages).'" aria-label="Next">
+						      <a href="/'.$this->prefix.'?page='.($page+1<$pages?$page+1:$pages).'&sort='.$sort.'" aria-label="Next">
 						        <span aria-hidden="true">&raquo;</span>
 						      </a>
 						    </li>

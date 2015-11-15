@@ -45,6 +45,7 @@ use Arbor\Exception\ServiceNotFoundException;
  *
  * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.1.0
+ * @version 0.20.0
  */
 class Root{
 	

@@ -23,6 +23,7 @@ use Arbor\Component\Form\FileField;
 use Common\ImageColumnFormatter;
 use Doctrine\Common\Version;
 use Entity\DeviceType;
+use Exception\DeviceNotFoundException;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\BasicDataManager;
@@ -191,8 +192,8 @@ class Device extends Controller
         $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
         /* @var $deviceType \Entity\DeviceType */
         $entity->setName($data['name']);
-        $entity->setDimensions($data['dimensions']);
-        $entity->setWeight($data['weight']);
+//        $entity->setDimensions($data['dimensions']);
+//        $entity->setWeight($data['weight']);
         $entity->setType($deviceType);
         $entity->setSerialNumber($serialNumber);
         $entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
@@ -207,7 +208,7 @@ class Device extends Controller
             $entity->setLocation($this->cast('Mapper\Location', $data['location']));
             $current = $deviceType->getCurrent();
             $prefix = $deviceType->getSymbolPrefix();
-            $entity->setSymbol($prefix.++$current);
+            $entity->setSymbol($prefix . ++$current);
             $deviceType->setCurrent($current);
         }
 
@@ -289,27 +290,23 @@ class Device extends Controller
      */
     private function createGrid()
     {
-        $builder = $this->getService('grid')->create();
-        $builder->setFormatter(new BasicGridFormatter('device',$this->isAllow(1)));
+
+        $builder = $this->getService('grid')->create($this->getRequest());
+        $builder->setFormatter(new BasicGridFormatter('device', $this->isAllow(1)));
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\Device'
         ));
 
         $builder->setLimit(10);
-        $query = $this->getRequest()->getQuery();
-        if (!isset($query['page'])) {
-            $query['page'] = 1;
-        }
-        $builder->setPage($query['page']);
 
-        $builder->addColumn('#', 'id');
+        $builder->addColumn('#', 'id',null,'id');
         $builder->addColumn('Photo', 'photo', new ImageColumnFormatter());
-        $builder->addColumn('Name', 'name');
-        $builder->addColumn('Serial number', 'serialNumber');
-        $builder->addColumn('Type', 'type');
-        $builder->addColumn('Symbol', 'symbol');
-        $builder->addColumn('Location', array('location','user'));
+        $builder->addColumn('Name', 'name',null,'name');
+        $builder->addColumn('Serial number', 'serialNumber',null,'serialNumber');
+        $builder->addColumn('Type', 'type',null,'type');
+        $builder->addColumn('Symbol', 'symbol',null,'symbol');
+        $builder->addColumn('Location', array('location', 'user'),null,'location');
         $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
         return $builder;
     }
@@ -346,21 +343,14 @@ class Device extends Controller
         $builder->removeField('createdAt');
         $builder->removeField('state');
         $builder->removeField('symbol');
+        $builder->removeField('hireExpirationDate');
 
         $builder->addField(new FileField(array(
             'name' => 'photo'
-        , 'label' => 'Photo'
-        , 'accept' => 'image/*'
-        , 'maxSize' => 1048576
+            , 'label' => 'Photo'
+            , 'accept' => 'image/*'
+            , 'maxSize' => 1048576
         )));
-
-        $dimensionsField = $builder->getField('dimensions');
-        $dimensionsField->setPattern('^([0-9]+([\.\,]{1}[0-9]{1}){0,1}x){2}[0-9]+([\.\,]{1}[0-9]{1}){0,1}$');
-        $dimensionsField->setTag('placeholder', '{Width}x{Height}x{Depth}');
-        // $dimensionsField->setValue('1x1x1');
-        $dimensionsField = $builder->getField('weight');
-        $dimensionsField->setPattern('^[0-9]+([\.\,]{1}[0-9]{1}){0,1}kg$');
-        $dimensionsField->setTag('placeholder', '{Weight}kg');
 
         $builder->removeField('tags');
 
@@ -404,6 +394,32 @@ class Device extends Controller
 
         return $builder;
 
+    }
+
+    /**
+     * Prolongation device hire date
+     *
+     * @param \Entity\Device $entity
+     * @return mixed
+     * @throws DeviceNotFoundException
+     */
+    public function prolongation($entity)
+    {
+        if ($entity->getLocation()->getId() != $this->getUser()->getLocation()->getId()
+        || !$entity->getHireExpirationDate() || !$entity->getUser()) {
+            throw new DeviceNotFoundException();
+        }
+
+        $hireDate=$entity->getHireExpirationDate();
+        $hireDate->sub(new \DateInterval('P2D'));
+
+        if($hireDate > new \DateTime()){
+            throw new DeviceNotFoundException();
+        }
+        $now=new \DateTime();
+        $now->add(new \DateInterval('P14D'));
+        $entity->setHireExpirationDate($now);
+        $this->flush();
     }
 
 }

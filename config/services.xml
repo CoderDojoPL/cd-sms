@@ -26,7 +26,30 @@
 		 />
 
 	</service>
-	
+
+	<service name="swiftmailer" class="Library\Swiftmailer\Service\Swiftmailer">
+		<config enviorment="prod"
+				host="{mail.host}"
+				port="{mail.port}"
+				ssl="{mail.ssl}"
+				username="{mail.username}"
+				password="{mail.password}" />
+		<config enviorment="dev"
+				host="{mail.host}"
+				port="{mail.port}"
+				ssl="{mail.ssl}"
+				username="{mail.username}"
+				password="{mail.password}" />
+		<config enviorment="test"
+				host="{mail.host}"
+				port="{mail.port}"
+				ssl="{mail.ssl}"
+				username="{mail.username}"
+				password="{mail.password}" />
+
+		<argument type='SessionProvider' />
+	</service>
+
 	<service name="validator" class="Arbor\Service\Validator" />
 	<service name="mapper" class="Arbor\Service\Mapper" />
 	<service name="form" class="Arbor\Service\Form" />
@@ -50,5 +73,17 @@
 		 />
 
 	</service>
-	
+
+	<service name="config" class="Service\Config">
+		<config enviorment="prod"
+				host="{www.host}"
+				senderEmailAddress="{mail.fromAddress}"/>
+		<config enviorment="dev"
+				host="{www.host}"
+				senderEmailAddress="{mail.fromAddress}"/>
+		<config enviorment="test"
+				host="{www.host}"
+				senderEmailAddress="{mail.fromAddress}"/>
+	</service>
+
 </content>

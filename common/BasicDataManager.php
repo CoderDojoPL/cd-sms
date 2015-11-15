@@ -40,11 +40,13 @@ class BasicDataManager implements GridDataManager{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRecords($limit,$page){
+	public function getRecords($limit,$page,$sort=null){
 		$result=array();
-
+		if(!$sort){
+			$sort='id';
+		}
         $records=$this->entityManager->createQuery(
-                'SELECT i FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'').' ORDER BY i.id'
+                'SELECT i FROM '.$this->storage.' i '.($this->condition?'WHERE '.$this->condition:'').' ORDER BY i.'.$sort
 		)
 			->setParameters($this->vars)
 			->setMaxResults($limit)

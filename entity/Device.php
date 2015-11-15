@@ -21,340 +21,330 @@ namespace Entity;
 class Device
 {
 
-	/**
-	 * @Id
-	 * @Column(type="integer")
-	 * @GeneratedValue
-	 **/
-	protected $id;
+    /**
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     **/
+    protected $id;
 
-	/**
-	 * @Column(type="string")
-	 **/
-	protected $name;
+    /**
+     * @Column(type="string")
+     **/
+    protected $name;
 
-	/**
-	 * @Column(type="string",nullable=true)
-	 **/
-	protected $photo;
+    /**
+     * @Column(type="string",nullable=true)
+     **/
+    protected $photo;
 
-	/**
-	 * @ManyToMany(targetEntity="DeviceTag")
-	 * @JoinTable(name="devices_tags",
-	 *      joinColumns={@JoinColumn(name="device_id", referencedColumnName="id",onDelete="CASCADE")},
-	 *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id",onDelete="CASCADE")}
-	 *      )
-	 **/
-	private $tags;
+    /**
+     * @ManyToMany(targetEntity="DeviceTag")
+     * @JoinTable(name="devices_tags",
+     *      joinColumns={@JoinColumn(name="device_id", referencedColumnName="id",onDelete="CASCADE")},
+     *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id",onDelete="CASCADE")}
+     *      )
+     **/
+    private $tags;
 
-	/**
-	 * @ManyToOne(targetEntity="DeviceType")
-	 * @JoinColumn(name="type_id", referencedColumnName="id",nullable=false)
-	 **/
-	private $type;
-
-	/**
-	 * @Column(type="string")
-	 **/
-	protected $dimensions;
-
-	/**
-	 * @Column(type="string")
-	 **/
-	protected $weight;
-
-	/**
-	 * @Column(name="serial_number",type="string")
-	 **/
-	protected $serialNumber;
-
-	/**
-	 * @Column(name="created_at",type="datetime")
-	 **/
-	protected $createdAt;
-
-	/**
-	 * @Column(name="updated_at",type="datetime")
-	 **/
-	protected $updatedAt;
-
-	/**
-	 * @ManyToOne(targetEntity="DeviceState")
-	 * @JoinColumn(name="state_id", referencedColumnName="id",nullable=false)
-	 **/
-	protected $state;
-
-	/**
-	 * @ManyToOne(targetEntity="Location")
-	 * @JoinColumn(name="location_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
-	 **/
-	protected $location;
-
-	/**
-	 * @ManyToOne(targetEntity="User")
-	 * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
-	 **/
-	protected $user;
-
-	/**
-	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
-	 **/
-	protected $warrantyExpirationDate;
-
-	/**
-	 * @Column(name="price",type="decimal",scale=2,nullable=true)
-	 **/
-	protected $price;
-
-	/**
-	 * @Column(name="note",type="text",nullable=true)
-	 **/
-	protected $note;
-
-	/**
-	 * @Column(type="text")
-	 **/
-	protected $symbol;
-
-	/**
-	 * @return mixed
-	 */
-	public function getState()
-	{
-		return $this->state;
-	}
-
-	/**
-	 * @param mixed $state
-	 */
-	public function setState($state)
-	{
-		$this->state = $state;
-		return $this;
-	}
-
-	public function __construct()
-	{
-		$this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->setCreatedAt(new \DateTime());
-		$this->setUpdatedAt(new \DateTime());
-	}
-
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	public function setName($name)
-	{
-		$this->name = $name;
-		return $this;
-	}
-
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	public function setPhoto($photo)
-	{
-		$this->photo = $photo;
-		return $this;
-	}
-
-	public function getPhoto()
-	{
-		$prefix = '';
-		if ($this->photo) {
-			$prefix = '/uploaded/device/photo/';
-		}
-		return $prefix . $this->photo;
-	}
-
-	public function setTags($tags)
-	{
-		$this->tags = $tags;
-		return $this;
-	}
-
-	public function getTags()
-	{
-		return $this->tags;
-	}
-
-	public function setType($type)
-	{
-		$this->type = $type;
-		return $this;
-	}
-
-	public function getType()
-	{
-		return $this->type;
-	}
-
-	public function setDimensions($dimensions)
-	{
-		$this->dimensions = $dimensions;
-		return $this;
-	}
-
-	public function getDimensions()
-	{
-		return $this->dimensions;
-	}
-
-	public function setWeight($weight)
-	{
-		$this->weight = $weight;
-		return $this;
-	}
-
-	public function getWeight()
-	{
-		return $this->weight;
-	}
-
-	public function setSerialNumber($serialNumber)
-	{
-		$this->serialNumber = $serialNumber;
-		return $this;
-	}
-
-	public function getSerialNumber()
-	{
-		return $this->serialNumber;
-	}
-
-	public function setcreatedAt($createdAt)
-	{
-		$this->createdAt = $createdAt;
-		return $this;
-	}
-
-	public function getCreatedAt()
-	{
-		return $this->createdAt;
-	}
-
-	public function setUpdatedAt($updatedAt)
-	{
-		$this->updatedAt = $updatedAt;
-		return $this;
-	}
-
-	public function getUpdatedAt()
-	{
-		return $this->updatedAt;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getLocation()
-	{
-		return $this->location;
-	}
-
-	/**
-	 * @param mixed $location
-	 */
-	public function setLocation($location)
-	{
-		$this->location = $location;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getUser()
-	{
-		return $this->user;
-	}
-
-	/**
-	 * @param mixed $user
-	 */
-	public function setUser($user)
-	{
-		$this->user = $user;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getWarrantyExpirationDate()
-	{
-		return $this->warrantyExpirationDate;
-	}
-
-	/**
-	 * @param mixed $warrantyExpirationDate
-	 */
-	public function setWarrantyExpirationDate($warrantyExpirationDate)
-	{
-		$this->warrantyExpirationDate = $warrantyExpirationDate;
-	}
+    /**
+     * @ManyToOne(targetEntity="DeviceType")
+     * @JoinColumn(name="type_id", referencedColumnName="id",nullable=false)
+     **/
+    private $type;
 
 
-	/**
-	 * @return mixed
-	 */
-	public function getPrice()
-	{
-		return $this->price;
-	}
+    /**
+     * @Column(name="serial_number",type="string")
+     **/
+    protected $serialNumber;
 
-	/**
-	 * @param mixed $price
-	 */
-	public function setPrice($price)
-	{
-		$this->price = $price;
-	}
+    /**
+     * @Column(name="created_at",type="datetime")
+     **/
+    protected $createdAt;
 
-	/**
-	 * @return mixed
-	 */
-	public function getNote()
-	{
-		return $this->note;
-	}
+    /**
+     * @Column(name="updated_at",type="datetime")
+     **/
+    protected $updatedAt;
 
-	/**
-	 * @param mixed $note
-	 */
-	public function setNote($note)
-	{
-		$this->note = $note;
-	}
+    /**
+     * @ManyToOne(targetEntity="DeviceState")
+     * @JoinColumn(name="state_id", referencedColumnName="id",nullable=false)
+     **/
+    protected $state;
 
-	/**
-	 * @return mixed
-	 */
-	public function getSymbol()
-	{
-		return $this->symbol;
-	}
+    /**
+     * @ManyToOne(targetEntity="Location")
+     * @JoinColumn(name="location_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
+     **/
+    protected $location;
 
-	/**
-	 * @param mixed $symbol
-	 */
-	public function setSymbol($symbol)
-	{
-		$this->symbol = $symbol;
-	}
+    /**
+     * @ManyToOne(targetEntity="User")
+     * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
+     **/
+    protected $user;
 
-	public function __toString()
-	{
-		return $this->getName() . ' (' . $this->getSerialNumber() . ')';
-	}
+    /**
+     * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
+     **/
+    protected $warrantyExpirationDate;
 
-	/**
-	 * @PreUpdate
-	 */
-	public function postUpdate()
-	{
-		$this->setUpdatedAt(new \DateTime());
-	}
+    /**
+     * @Column(name="price",type="decimal",scale=2,nullable=true)
+     **/
+    protected $price;
+
+    /**
+     * @Column(name="note",type="text",nullable=true)
+     **/
+    protected $note;
+
+    /**
+     * @Column(type="text")
+     **/
+    protected $symbol;
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+
+    /**
+     * @Column(name="hire_expiration_date",type="datetime",nullable=true)
+     **/
+    protected $hireExpirationDate;
+
+    public function __construct()
+    {
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+        return $this;
+    }
+
+    public function getPhoto()
+    {
+        $prefix = '';
+        if ($this->photo) {
+            $prefix = '/uploaded/device/photo/';
+        }
+        return $prefix . $this->photo;
+    }
+
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setSerialNumber($serialNumber)
+    {
+        $this->serialNumber = $serialNumber;
+        return $this;
+    }
+
+    public function getSerialNumber()
+    {
+        return $this->serialNumber;
+    }
+
+    public function setcreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param mixed $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarrantyExpirationDate()
+    {
+        return $this->warrantyExpirationDate;
+    }
+
+    /**
+     * @param mixed $warrantyExpirationDate
+     */
+    public function setWarrantyExpirationDate($warrantyExpirationDate)
+    {
+        $this->warrantyExpirationDate = $warrantyExpirationDate;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param mixed $note
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSymbol()
+    {
+        return $this->symbol;
+    }
+
+    /**
+     * @param mixed $symbol
+     */
+    public function setSymbol($symbol)
+    {
+        $this->symbol = $symbol;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHireExpirationDate()
+    {
+        return $this->hireExpirationDate;
+    }
+
+    /**
+     * @param mixed $hireExpirationDate
+     */
+    public function setHireExpirationDate($hireExpirationDate)
+    {
+        $this->hireExpirationDate = $hireExpirationDate;
+    }
+
+    public function __toString()
+    {
+        return $this->getName() . ' (' . $this->getSerialNumber() . ')';
+    }
+
+    /**
+     * @PreUpdate
+     */
+    public function postUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime());
+    }
 }
