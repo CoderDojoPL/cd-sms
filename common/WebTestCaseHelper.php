@@ -69,7 +69,6 @@ class WebTestCaseHelper extends WebTestCase{
 		$em->persist($user);
 		$this->createLogEntity($user);
 		$em->flush();
-
 		$this->user=$user;
 
 	}
@@ -103,7 +102,6 @@ class WebTestCaseHelper extends WebTestCase{
 	protected function createLogEntity($entity){
 		$logEntityName=get_class($entity).'Log';
 		$logEntity=new $logEntityName();
-		
 		$this->fillLogEntity($entity,$logEntity);
 		$logEntity->setLogLeft($this->log);
 		$em=$this->getService('doctrine')->getEntityManager();
