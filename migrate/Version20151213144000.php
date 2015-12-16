@@ -32,10 +32,10 @@ class Version20151213144000 extends MigrateHelper
         $schema->dropSequence('device_types_id_seq');
         $devices = $schema->getTable('devices');
         $deviceLogs = $schema->getTable('device_logs');
-        $devices->removeForeignKey('FK_11074E9AC54C8C93');
+        // $devices->removeForeignKey('FK_11074E9AC54C8C93');
 
-        $deviceLogs->removeForeignKey('FK_79B61366C54C8C93');
-        $this->updateSchema($schema);
+        // $deviceLogs->removeForeignKey('FK_79B61366C54C8C93');
+        // $this->updateSchema($schema);
 
         $schema = $this->createSchema();
         
