@@ -49,7 +49,7 @@ class Device
 
     /**
      * @ManyToOne(targetEntity="DeviceType")
-     * @JoinColumn(name="type_id", referencedColumnName="id",nullable=false)
+     * @JoinColumn(name="type_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
      **/
     private $type;
 

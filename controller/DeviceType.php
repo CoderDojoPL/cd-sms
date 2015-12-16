@@ -70,8 +70,7 @@ class DeviceType extends Controller
         $builder->addColumn('#', 'id',null,'id');
         $builder->addColumn('Name', 'name',null,'name');
         $builder->addColumn('Symbol', 'symbolPrefix',null,'symbolPrefix');
-        $builder->addColumn('Action', 'id', new ActionColumnFormatter('devicetype', array('edit')));
-//        $builder->addColumn('Action', array('id','stateId'),new FreeColumnFormatter('device/my'));
+        $builder->addColumn('Action', 'id', new ActionColumnFormatter('devicetype', array('edit','remove')));
         return $builder;
     }
 
@@ -171,4 +170,33 @@ class DeviceType extends Controller
 
         return compact('form');
     }
+
+    /**
+     * Method for create PHP confirm remove screen
+     *
+     * @param \Entity\DeviceType $entity
+     * @return array
+     */
+    public function removeConfirm($entity)
+    {
+        return compact('entity');
+    }
+
+    /**
+     * Removing device type from database
+     *
+     * @param \Entity\DeviceType $entity
+     * @return Response
+     */
+    public function remove($entity)
+    {
+        $this->getDoctrine()->getEntityManager()->remove($entity);
+        $this->flush();
+
+        $response = new Response();
+        $response->redirect('/devicetype');
+        return $response;
+
+    }
+
 }
