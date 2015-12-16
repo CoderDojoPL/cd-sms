@@ -12,10 +12,14 @@ require_once __DIR__ . '/../common/WebTestCaseHelper.php';
 
 use Common\WebTestCaseHelper;
 use Entity\DeviceType;
+use Entity\Location;
+use Entity\Device;
+use Entity\DeviceTag;
 
 /**
  * @package Test
  * @author Sławek Nowak (s.nowak@coderdojo.org.pl)
+ * @author Michał Tomczak (m.tomczak@coderdojo.org.pl)
  */
 class DeviceTypeTest extends WebTestCaseHelper
 {
@@ -52,10 +56,16 @@ class DeviceTypeTest extends WebTestCaseHelper
         $actionButtons = $td[3]->findElements('a');
         $footerTr = $client->getElement('table')->getElement('tfoot')->findElements('tr');
         $addButton = $footerTr[1]->getElement('a');
-        $this->assertCount(1, $actionButtons, 'Invalid number action buttons in grid');
+        $this->assertCount(2, $actionButtons, 'Invalid number action buttons in grid');
+
         $this->assertEquals('Edit', $actionButtons[0]->getText(), 'Invalid label for edit button');
         $actionButtons[0]->click();
         $this->assertEquals('/devicetype/edit/' . $devicetype->getId(), $client->getUrl(), 'Invalid edit url');
+
+        $this->assertEquals('Remove', $actionButtons[1]->getText(), 'Invalid label for remove button');
+        $actionButtons[1]->click();
+        $this->assertEquals('/devicetype/remove/' . $devicetype->getId(), $client->getUrl(), 'Invalid remove url');
+
 
         $addButton->click();
         $this->assertEquals('/devicetype/add', $client->getUrl(), 'Invalid add url');
@@ -150,4 +160,129 @@ class DeviceTypeTest extends WebTestCaseHelper
         $deviceType = $em->getRepository('Entity\DeviceType')->findOneBy(array('id' => $deviceType->getId()));
         $this->assertEquals('New name', $deviceType->getName(), 'Invalid device name');
     }
+
+
+    public function testRemoveUnautheticate()
+    {
+
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $deviceType=new DeviceType();
+        $deviceType->setName('Test type');
+        $deviceType->setSymbolPrefix('TEST');
+        $this->persist($deviceType);
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($deviceType);
+        $device->setSerialNumber('Device serial number');
+        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $device->setLocation($location);
+        $device->setSymbol($deviceType->getSymbolPrefix().'1');
+
+        $this->persist($device);
+
+
+        $this->flush();
+        $client = $this->createClient();
+        $url = $client->loadPage('/devicetype/remove/' . $deviceType->getId())
+            ->getUrl();
+
+        $this->assertEquals('/login', $url);
+
+    }
+
+    public function testRemove()
+    {
+
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $deviceType=new DeviceType();
+        $deviceType->setName('Test type');
+        $deviceType->setSymbolPrefix('TEST');
+        $this->persist($deviceType);
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($deviceType);
+        $device->setSerialNumber('Device serial number');
+        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $device->setLocation($location);
+        $device->setSymbol($deviceType->getSymbolPrefix().'1');
+
+        $this->persist($device);
+
+
+
+        $this->flush();
+
+        $session = $this->createSession();
+        $session->set('user.id', $this->user->getId());
+
+        $client = $this->createClient($session);
+        $client->loadPage('/devicetype/remove/' . $deviceType->getId());
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+
+        $panelBody = $client->getElement('.panel-body');
+        $buttons = $panelBody->findElements('a');
+
+
+        $this->assertCount(2, $buttons, 'Invalid number buttons');
+
+        $this->assertEquals('Yes', $buttons[0]->getText(), 'Invalid text button YES');
+
+        $this->assertEquals('No', $buttons[1]->getText(), 'Invalid text button NO');
+
+
+        $buttons[1]->click();
+
+        $this->assertEquals('/devicetype', $client->getUrl(), 'Invalid url button NO.');
+
+        $buttons[0]->click();
+
+        $this->assertEquals('/devicetype', $client->getUrl(), 'Invalid url button YES.');
+
+
+        //check removed in database
+        $this->assertCount(2, $em->getRepository('Entity\DeviceType')->findAll());
+        $this->assertCount(0, $em->getRepository('Entity\Device')->findAll());
+    }
+
 }

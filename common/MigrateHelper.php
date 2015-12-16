@@ -20,7 +20,6 @@ use Arbor\Core\Container;
  */
 abstract class MigrateHelper{
 	protected $container;
-	private $schema;
 
 	/**
 	 * Method executed when update project
@@ -29,7 +28,6 @@ abstract class MigrateHelper{
 	 */
 	public final function up(Container $container){
 		$this->container=$container;
-		$this->schema=$this->createSchema();
 		$this->update($container);
 
 	}
@@ -41,7 +39,6 @@ abstract class MigrateHelper{
 	 */
 	public final function down(Container $container){
 		$this->container=$container;
-		$this->schema=$this->createSchema();
 		$this->downgrade($container);
 
 	}
@@ -53,7 +50,6 @@ abstract class MigrateHelper{
 	 */
 	protected function createSchema(){
 		$manager=$this->container->getDoctrine()->getEntityManager();
-
 		$schemaManager=$manager->getConnection()->getSchemaManager();
 
 		return $schemaManager->createSchema();
@@ -68,13 +64,14 @@ abstract class MigrateHelper{
 	protected function updateSchema($schema){
 		$manager=$this->container->getDoctrine()->getEntityManager();
         $comparator = new \Doctrine\DBAL\Schema\Comparator();
-        $fromSchema=$this->schema;
+        $fromSchema=$this->createSchema();
         $schemaDiff = $comparator->compare($fromSchema, $schema);
         $platform=$manager->getConnection()->getDatabasePlatform();
         $sqls=$schemaDiff->toSql($platform);
     	foreach($sqls as $sql){
 			$manager->getConnection()->exec($sql);
     	}
+
 
 	}
 

@@ -36,8 +36,7 @@ class DeviceLog
 	protected $photo;
 
 	/**
-	 * @ManyToOne(targetEntity="DeviceType")
-	 * @JoinColumn(name="type_id", referencedColumnName="id")
+	 * @Column(name="type_id",type="integer",nullable=false)
 	 **/
 	private $type;
 
@@ -185,6 +184,10 @@ class DeviceLog
 
 	public function setType($type)
 	{
+	    if($type){
+            $type=$type->getId();
+        }
+
 		$this->type = $type;
 		return $this;
 	}

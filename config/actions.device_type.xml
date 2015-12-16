@@ -25,4 +25,21 @@
         <permission functionality="16" />
     </action>
 
+    <action controller="DeviceType" method="removeConfirm" >
+        <route pattern="^\/devicetype\/remove\/([0-9]+)$" />
+        <authenticate redirect="/login" />
+        <presenter class="Library\Twig\Presenter\Twig" />
+        <argument storage="url" name="id" pattern="^\/devicetype\/remove\/([0-9]+)$" mapper="Mapper\DeviceType" />
+        <permission functionality="16" />
+    </action>
+
+    <action controller="DeviceType" method="remove" >
+        <route pattern="^\/devicetype\/remove\/([0-9]+)\/yes$" />
+        <authenticate redirect="/login" />
+        <presenter class="Library\Twig\Presenter\Twig" />
+        <argument storage="url" name="id" pattern="^\/devicetype\/remove\/([0-9]+)\/yes$" mapper="Mapper\DeviceType" />
+        <log action="9" type="GET" />
+        <permission functionality="16" />
+    </action>
+
 </content>
