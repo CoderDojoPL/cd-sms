@@ -54,7 +54,7 @@ class BasicGridFormatter implements GridFormatter{
 					<thead>
 						<tr>';
 		foreach($columns as $column){
-			$html.='<th>'.($column['sort']?'<a href="?sort='.($index).'">':'').$column['label'].($column['sort']?'</a>':'').'</th>';
+			$html.='<th>'.($column->isSortable()?'<a href="?sort='.($index).'">':'').$column->getLabel().($column->isSortable()?'</a>':'').'</th>';
 			$index++;
 		}
 
@@ -77,10 +77,10 @@ class BasicGridFormatter implements GridFormatter{
 			$html.='<tr>';
 			foreach($columns as $column){
 				$records=array();
-				foreach($column['keys'] as $key){
+				foreach($column->getKeys() as $key){
 					$records[]=$record[$key];
 				}
-				$html.='<td>'.$column['formatter']->render($records).'</td>';
+				$html.='<td>'.$column->getFormatter()->render($records).'</td>';
 			}
 
 			$html.='</tr>';

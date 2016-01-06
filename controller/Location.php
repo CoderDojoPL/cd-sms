@@ -20,6 +20,7 @@ use Common\LocationIndexColumnFormatter;
 use Exception\UnableToDeleteOwnLocationException;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Component\Form\EmailField;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class Location
@@ -58,15 +59,13 @@ class Location extends Controller
 
         $builder->setLimit(10);
 
-        $builder->addColumn('#', 'id',null,'id');
-        $builder->addColumn('Name', 'name',null,'name');
-        $builder->addColumn('City', 'city',null,'city');
-        $builder->addColumn('Street', 'street',null,'street');
-        $builder->addColumn('Number', 'number',null,'number');
+        $builder->addColumn(new Column('id','#'));
+        $builder->addColumn(new Column('name','Name'));
+        $builder->addColumn(new Column('city','City'));
+        $builder->addColumn(new Column('street','Street'));
+        $builder->addColumn(new Column('number','Number'));
 
-//        $builder->addColumn('Serial number','serialNumber');
-//        $builder->addColumn('Type','type');
-        $builder->addColumn('Action', 'id', new LocationIndexColumnFormatter('location', array('edit', 'remove'), $this->getUser()));
+        $builder->addColumn(new Column('id','Action', new LocationIndexColumnFormatter('location', array('edit', 'remove'), $this->getUser()),array()));
         return $builder;
     }
 

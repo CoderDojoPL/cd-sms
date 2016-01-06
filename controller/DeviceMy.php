@@ -27,6 +27,7 @@ use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\DqlDataManager;
 use Exception\OrderNotBusyException;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class DeviceMy
@@ -95,7 +96,7 @@ class DeviceMy extends Controller
     private function createGrid()
     {
         $builder = $this->getService('grid')->create($this->getRequest());
-        $builder->setFormatter(new BasicGridFormatter('device/my'));
+        $builder->setFormatter(new BasicGridFormatter('device/my',false));
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
             ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.user=:user'
@@ -105,12 +106,12 @@ class DeviceMy extends Controller
 
         $builder->setLimit(10);
 
-        $builder->addColumn('#', 'id',null,'id');
-        $builder->addColumn('Name', 'name',null,'name');
-        $builder->addColumn('Serial number', 'serialNumber',null,'serialNumber');
-        $builder->addColumn('Type', 'type',null,'type');
-        $builder->addColumn('State', 'state',null,'state');
-        $builder->addColumn('Action', array('id','stateId'),new FreeColumnFormatter('device/my'));
+        $builder->addColumn(new Column('id','#'));
+        $builder->addColumn(new Column('name','Name'));
+        $builder->addColumn(new Column('serialNumber','Serial number'));
+        $builder->addColumn(new Column('type','Type'));
+        $builder->addColumn(new Column('state','State'));
+        $builder->addColumn(new Column(array('id','stateId'),'Action',new FreeColumnFormatter('device/my'),array()));
         return $builder;
     }
 

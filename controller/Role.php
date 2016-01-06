@@ -18,6 +18,7 @@ use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class Role
@@ -57,11 +58,10 @@ class Role extends Controller
 
         $builder->setLimit(10);
 
-        $builder->addColumn('#', 'id',null,'id');
-        $builder->addColumn('Name', 'name',null,'name');
-//        $builder->render();
+        $builder->addColumn(new Column('id','#'));
+        $builder->addColumn(new Column('name','Name'));
 
-        $builder->addColumn('Action', 'id', new ActionColumnFormatter('role', array('edit')));
+        $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('role', array('edit')),array()));
         return $builder;
     }
 

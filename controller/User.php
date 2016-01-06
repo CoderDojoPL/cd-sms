@@ -18,6 +18,7 @@ use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
 use Library\Doctrine\Form\DoctrineDesigner;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class User
@@ -57,14 +58,13 @@ class User extends Controller
 
 		$builder->setLimit(10);
 
-		$builder->addColumn('#', 'id',null,'id');
-		$builder->addColumn('Email', 'email',null,'email');
-		$builder->addColumn('First Name', 'firstName',null,'firstName');
-		$builder->addColumn('Last Name', 'lastName',null,'lastName');
-		$builder->addColumn('Location', 'location',null,'location');
-//        $builder->render();
+		$builder->addColumn(new Column('id','#'));
+		$builder->addColumn(new Column('email','Email'));
+		$builder->addColumn(new Column('firstName','First Name'));
+		$builder->addColumn(new Column('lastName','Last Name'));
+		$builder->addColumn(new Column('location','Location'));
 
-		$builder->addColumn('Action', 'id', new ActionColumnFormatter('user', array('edit')));
+		$builder->addColumn(new Column('id','Action', new ActionColumnFormatter('user', array('edit')),array()));
 		return $builder;
 	}
 

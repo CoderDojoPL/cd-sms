@@ -20,6 +20,7 @@ use Exception\OrderBelongToUserException;
 use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class Order
@@ -59,13 +60,13 @@ class Order extends Controller
 
 		$builder->setLimit(10);
 
-		$builder->addColumn('#', 'id',null,'id');
-		$builder->addColumn('Device', 'device',null,'device');
-		$builder->addColumn('Owner', 'owner',null,'owner');
-		$builder->addColumn('State', 'state',null,'state');
-		$builder->addColumn('Date', 'createdAt',null,'createdAt');
+		$builder->addColumn(new Column('id','#'));
+		$builder->addColumn(new Column('device','Device'));
+		$builder->addColumn(new Column('owner','Owner'));
+		$builder->addColumn(new Column('state','State'));
+		$builder->addColumn(new Column('createdAt','Date'));
 
-		$builder->addColumn('Action', 'id', new ActionColumnFormatter('order', array('show')));
+		$builder->addColumn(new Column('id','Action', new ActionColumnFormatter('order', array('show')),array()));
 		return $builder;
 	}
 

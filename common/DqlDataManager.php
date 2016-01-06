@@ -38,9 +38,12 @@ class DqlDataManager implements GridDataManager{
 	 */
 	public function getRecords($limit,$page,$sort=null){
 		$result=array();
+		if(!$sort){
+			$sort=array('id');
+		}
 
         $records=$this->entityManager->createQuery(
-                $this->dql.' ORDER BY i.'.$sort
+                $this->dql.' ORDER BY i.'.implode(',',$sort)
 		)
 			->setParameters($this->vars)
 			->setMaxResults($limit)

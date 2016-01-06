@@ -28,6 +28,7 @@ use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\DqlDataManager;
 use Exception\OrderNotBusyException;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class DeviceType
@@ -67,10 +68,10 @@ class DeviceType extends Controller
 
         $builder->setLimit(10);
 
-        $builder->addColumn('#', 'id',null,'id');
-        $builder->addColumn('Name', 'name',null,'name');
-        $builder->addColumn('Symbol', 'symbolPrefix',null,'symbolPrefix');
-        $builder->addColumn('Action', 'id', new ActionColumnFormatter('devicetype', array('edit','remove')));
+        $builder->addColumn(new Column('id','#'));
+        $builder->addColumn(new Column('name','Name'));
+        $builder->addColumn(new Column('symbolPrefix','Symbol'));
+        $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('devicetype', array('edit','remove')),array()));
         return $builder;
     }
 

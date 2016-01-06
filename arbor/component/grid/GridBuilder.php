@@ -17,7 +17,7 @@ namespace Arbor\Component\Grid;
 
 use Arbor\Component\Grid\GridFormatter;
 use Arbor\Component\Grid\GridDataManager;
-use Arbor\Component\Grid\BasicColumnFormatter;
+use Arbor\Component\Grid\Column;
 use Arbor\Core\RequestProvider;
 
 /**
@@ -98,7 +98,7 @@ class GridBuilder{
 		$query=$this->request->getQuery();
 		$sort=null;
 		if(isset($query['sort']) && isset($this->columns[$query['sort']])){
-			$sort=$this->columns[$query['sort']]['sort'];
+			$sort=$this->columns[$query['sort']]->getSortKeys();
 		}
 		if (isset($query['page'])) {
 			$this->page=$query['page'];
@@ -141,21 +141,11 @@ class GridBuilder{
 	/**
 	 * Add column
 	 *
-	 * @param string $label - column name
-	 * @param string|array $keys - mapped keys for record
-	 * @param string $sort - sort by column
+	 * @param Column $column
 	 * @since 0.17.0
 	 */
-	public function addColumn($label,$keys,$formatter=null,$sort=null){
-		if(!$formatter){
-			$formatter=new BasicColumnFormatter();
-		}
-
-		if(!is_array($keys)){
-			$keys=array($keys);
-		}
-
-		$this->columns[]=array('label'=>$label,'keys'=>$keys,'formatter'=>$formatter,'sort'=>$sort);
+	public function addColumn(Column $column){
+		$this->columns[]=$column;
 	}
 
 	/**

@@ -27,6 +27,7 @@ use Exception\DeviceNotFoundException;
 use Library\Doctrine\Form\DoctrineDesigner;
 use Arbor\Provider\Response;
 use Common\BasicDataManager;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class Device
@@ -300,14 +301,14 @@ class Device extends Controller
 
         $builder->setLimit(10);
 
-        $builder->addColumn('#', 'id',null,'id');
-        $builder->addColumn('Photo', 'photo', new ImageColumnFormatter());
-        $builder->addColumn('Name', 'name',null,'name');
-        $builder->addColumn('Serial number', 'serialNumber',null,'serialNumber');
-        $builder->addColumn('Type', 'type',null,'type');
-        $builder->addColumn('Symbol', 'symbol',null,'symbol');
-        $builder->addColumn('Location', array('location', 'user'),null,'location');
-        $builder->addColumn('Action', 'id', new ActionColumnFormatter('device', array('edit', 'remove')));
+        $builder->addColumn(new Column('id','#'));
+        $builder->addColumn(new Column('photo','Photo', new ImageColumnFormatter(),array()));
+        $builder->addColumn(new Column('name','Name'));
+        $builder->addColumn(new Column('serialNumber','Serial number'));
+        $builder->addColumn(new Column('type','Type'));
+        $builder->addColumn(new Column('symbol','Symbol'));
+        $builder->addColumn(new Column(array('location', 'user'),'Location'));
+        $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('device', array('edit', 'remove')),array()));
         return $builder;
     }
 

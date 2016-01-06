@@ -20,6 +20,7 @@ use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
 use Common\LogSuccessColumnFormatter;
+use Arbor\Component\Grid\Column;
 
 /**
  * Class Log
@@ -64,14 +65,14 @@ class Log extends Controller
 		}
 		$builder->setPage($query['page']);
 
-		$builder->addColumn('#', 'id',null,'id');
-		$builder->addColumn('Action', 'action',null,'action');
-		$builder->addColumn('User', 'user',null,'user');
-		$builder->addColumn('Date', 'createdAt',null,'createdAt');
-		$builder->addColumn('Success', array('isSuccess','failMessage'),new LogSuccessColumnFormatter(),'failMessage');
-		$builder->addColumn('Modified entities', 'countModifiedEntities',null,'countModifiedEntities');
+		$builder->addColumn(new Column('id','#'));
+		$builder->addColumn(new Column('action','Action'));
+		$builder->addColumn(new Column('user','User'));
+		$builder->addColumn(new Column('createdAt','Date'));
+		$builder->addColumn(new Column(array('isSuccess','failMessage'),'Success',new LogSuccessColumnFormatter(),'failMessage'));
+		$builder->addColumn(new Column('countModifiedEntities','Modified entities'));
 
-		$builder->addColumn('Action', 'id', new ActionColumnFormatter('log', array('show')));
+		$builder->addColumn(new Column('id','Action', new ActionColumnFormatter('log', array('show')),array()));
 		return $builder;
 	}
 
