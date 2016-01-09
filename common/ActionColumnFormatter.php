@@ -21,7 +21,7 @@ use Arbor\Component\Grid\ColumnFormatter;
 class ActionColumnFormatter implements ColumnFormatter{
 
 	private $prefix;
-	protected $buttons;
+	protected $buttons=array();
 
 	/**
 	 * @param string $prefix - name to generate link urls e.g. order, device
@@ -29,7 +29,19 @@ class ActionColumnFormatter implements ColumnFormatter{
 	 */
 	public function __construct($prefix,$buttons){
 		$this->prefix=$prefix;
-		$this->buttons=$buttons;
+		foreach($buttons as $button){
+			$this->addButton($button,ucfirst($button));
+		}
+	}
+
+	/**
+	 * Add button to column
+	 *
+	 * @param strng $action
+	 * @param string $label
+	 */
+	public function addButton($action,$label){
+		$this->buttons[]=array('action'=>$action,'label'=>$label);
 	}
 
 	/**
@@ -37,17 +49,24 @@ class ActionColumnFormatter implements ColumnFormatter{
 	 */
 	public function render($data){
 		$html='';
-		$action='';
-		$icon='';
 		foreach($this->buttons as $button){
-			$action=$button;
-			$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
-
-			$html.='<a type="button" '.$href.' class="btn btn-default btn-xs">'.ucfirst($action).'</a>';
-
+			$html.=$this->renderButton($button['action'],$button['label'],$data);
 		}
-
 		return $html;
+	}
+
+	/**
+	 * Generate html for button
+	 *
+	 * @param string $action
+	 * @param string $label
+	 * @param array $data
+	 * @return string html code
+	 */
+	protected function renderButton($action,$label,$data){
+		$href='href="/'.$this->prefix.'/'.$action.'/'.$data[0].'"';
+
+		return '<a type="button" '.$href.' class="btn btn-default btn-xs">'.$label.'</a>';
 
 	}
 

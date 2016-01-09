@@ -20,6 +20,7 @@ use Arbor\Core\RequestProvider;
 use Arbor\Exception\HeaderNotFoundException;
 use Arbor\Core\Enviorment;
 use Arbor\Root;
+use Arbor\Core\Autoloader;
 use Arbor\Core\FileUploaded;
 use Arbor\Exception\FileNotUploadedException;
 
@@ -76,7 +77,8 @@ class Request implements RequestProvider{
 
 
 	public function execute(){
-		$root=new Root($this->enviorment->isDebug(),$this->enviorment->isSilent(),$this->enviorment->getName()); //FIXME wygląda że trzeba będzie tak wywoływać testy funkcjonalne
+		$autoloader=new Autoloader();
+		$root=new Root($autoloader,$this->enviorment->isDebug(),$this->enviorment->isSilent(),$this->enviorment->getName()); //FIXME wygląda że trzeba będzie tak wywoływać testy funkcjonalne
 		return $root->executeRequestTest($this);
 	}
 

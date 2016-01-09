@@ -13,12 +13,16 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-require_once __DIR__.'/../arbor/Root.php';
+require_once __DIR__.'/../arbor/core/Autoloader.php';
+
+$autoloader=new Arbor\Core\Autoloader();
+
 $env='prod';
 $debug=false;
 if(file_exists(__DIR__.'/../dev')){
 	$env='dev';
 	$debug=true;
 }
-$root=new Arbor\Root($debug,false,$env);
+
+$root=new Arbor\Root($autoloader,$debug,false,$env);
 $root->executeRequest();

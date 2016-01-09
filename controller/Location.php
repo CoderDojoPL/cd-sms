@@ -65,7 +65,7 @@ class Location extends Controller
         $builder->addColumn(new Column('street','Street'));
         $builder->addColumn(new Column('number','Number'));
 
-        $builder->addColumn(new Column('id','Action', new LocationIndexColumnFormatter('location', array('edit', 'remove'), $this->getUser()),array()));
+        $builder->addColumn(new Column('id','Action', new LocationIndexColumnFormatter('location', array('edit'), $this->getUser()),array()));
         return $builder;
     }
 

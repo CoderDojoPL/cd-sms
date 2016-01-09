@@ -21,7 +21,7 @@ use Arbor\Core\Enviorment;
 use Arbor\Test\BrowserEmulator;
 use Arbor\Provider\Session;
 
-require __DIR__.'/../Root.php';
+require __DIR__.'/../core/Autoloader.php';
 
 /**
  * Helper for functionalit web test
@@ -51,7 +51,8 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase{
 	 * @since 0.1.0
 	 */
 	public function __construct(){
-		$this->root=new Root(true,true,'test');
+		$autoloader=new Autoloader();
+		$this->root=new Root($autoloader,true,true,'test');
 		$this->enviorment=new Enviorment(true,true,'test');
 	}
 

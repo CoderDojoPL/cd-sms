@@ -19,25 +19,32 @@ namespace Common;
 class FreeColumnFormatter extends ActionColumnFormatter
 {
 
-    public function __construct($prefix)
+    /**
+     * Construct
+     *
+     * @param string $prefix url prefix
+     */
+    public function __construct($prefix,$buttons=array())
     {
-        parent::__construct($prefix, array('free'));
+        parent::__construct($prefix,$buttons);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function render($data)
     {
-
+        $html='';
         $type=$data[1];
         if ($type==2) {
-            if (($key = array_search('free', $this->buttons)) === false) {
-                $this->buttons[]='free';
-            }
-        } else {
-            if (($key = array_search('free', $this->buttons)) !== false) {
-                unset($this->buttons[$key]);
-            }
+            $html.=$this->renderButton('free','Free',$data);
         }
-        return parent::render($data);
 
+        foreach($this->buttons as $button){
+            $html.=$this->renderButton($button['action'],$button['label'],$data);
+        }
+
+
+        return $html;
     }
 }

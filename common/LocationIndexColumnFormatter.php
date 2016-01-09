@@ -26,14 +26,17 @@ class LocationIndexColumnFormatter extends ActionColumnFormatter
 
     public function render($data)
     {
-        if ($data[0] == $this->user->getLocation()->getId()) {
-            if (($key = array_search('remove', $this->buttons)) !== false) {
-                unset($this->buttons[$key]);
-            }
-        } else {
-            $this->buttons = $this->origButtons;
-        }
-        return parent::render($data);
 
+        $html='';
+
+        foreach($this->buttons as $button){
+            $html.=$this->renderButton($button['action'],$button['label'],$data);
+        }
+
+        if ($data[0] != $this->user->getLocation()->getId()) {
+            $html.=$this->renderButton('remove','Remove',$data);
+        }
+
+        return $html;
     }
 }

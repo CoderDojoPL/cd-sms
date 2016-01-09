@@ -15,8 +15,6 @@
 
 namespace Arbor;
 
-require __DIR__.'/core/Autoloader.php';
-
 use Arbor\Core\Autoloader;
 use Arbor\Contener\GlobalConfig;
 use Arbor\Contener\RequestConfig;
@@ -55,8 +53,8 @@ class Root{
 	private $eventManager;
 	private $router;
 
-	public function __construct($debug,$silent,$name){
-		$this->autoloader=new Autoloader();
+	public function __construct($autoloader,$debug,$silent,$name){
+		$this->autoloader=$autoloader;
 		$enviorment=new Enviorment($debug,$silent,$name);
 		$this->executeResources=new ExecuteResources();
 		$this->executeResources->registerEnviorment($enviorment);

@@ -86,7 +86,37 @@ class DeviceMy extends Controller
 
     }
 
+    /**
+     * View with form config for assign device
+     *
+     * @param \Entity\Device $entity
+     * @return array
+     */
+    public function assignConfirm($entity)
+    {
+        return compact('entity');
+    }
 
+    /**
+     * Assign device to my location
+     *
+     * @param \Entity\Device $entity
+     * @return Response
+     */
+    public function assign($entity)
+    {
+        if ($entity->getUser()->getId() != $this->getUser()->getId()) {
+            throw new YouAreNotOwnerException();
+        }
+
+        $entity->setUser(null);
+        $this->flush();
+
+        $response = new Response();
+        $response->redirect('/device/my');
+        return $response;
+
+    }
     /**
      * Creates grid for display devices list
      *
@@ -111,7 +141,10 @@ class DeviceMy extends Controller
         $builder->addColumn(new Column('serialNumber','Serial number'));
         $builder->addColumn(new Column('type','Type'));
         $builder->addColumn(new Column('state','State'));
-        $builder->addColumn(new Column(array('id','stateId'),'Action',new FreeColumnFormatter('device/my'),array()));
+
+        $freeColumn=new FreeColumnFormatter('device/my');
+        $freeColumn->addButton('assign','Assign to location');
+        $builder->addColumn(new Column(array('id','stateId'),'Action',$freeColumn,array()));
         return $builder;
     }
 
