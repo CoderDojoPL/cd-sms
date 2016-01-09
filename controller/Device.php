@@ -193,11 +193,10 @@ class Device extends Controller
         $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
         /* @var $deviceType \Entity\DeviceType */
         $entity->setName($data['name']);
-//        $entity->setDimensions($data['dimensions']);
-//        $entity->setWeight($data['weight']);
         $entity->setType($deviceType);
         $entity->setSerialNumber($serialNumber);
         $entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
+        $entity->setPurchaseDate($data['purchaseDate'] ? new \DateTime($data['purchaseDate']) : NULL);
         $entity->setNote($data['note']);
         $entity->setPrice($data['price'] ? $data['price'] : NULL);
 

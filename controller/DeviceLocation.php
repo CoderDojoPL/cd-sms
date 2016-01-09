@@ -18,6 +18,7 @@ use Arbor\Provider\Response;
 use Common\DqlDataManager;
 use Exception\OrderNotBusyException;
 use Arbor\Component\Grid\Column;
+use Exception\AlreadyHasOwnerException;
 
 /**
  * Class DeviceLocation
@@ -76,6 +77,43 @@ class DeviceLocation extends Controller
 
     }
 
+    /**
+     * View with form config for assign device
+     *
+     * @param \Entity\Device $entity
+     * @return array
+     */
+    public function assignConfirm($entity)
+    {
+        return compact('entity');
+    }
+
+    /**
+     * Assign device to me
+     *
+     * @param \Entity\Device $entity
+     * @return Response
+     */
+    public function assign($entity)
+    {
+
+        if($entity->getLocation()->getId()!=$this->getUser()->getId()){
+            throw new DeviceNotFoundException();
+        }
+
+        if ($entity->getUser()) {
+            throw new AlreadyHasOwnerException();
+        }
+
+        $entity->setUser($this->getUser());
+        $this->flush();
+
+        $response = new Response();
+        $response->redirect('/device/location');
+        return $response;
+
+    }
+
 
     /**
      * Creates grid for display devices list
@@ -101,8 +139,11 @@ class DeviceLocation extends Controller
         $builder->addColumn(new Column('serialNumber','Serial number'));
         $builder->addColumn(new Column('type','Type'));
         $builder->addColumn(new Column('state','State'));
-        $builder->addColumn(new Column(array('id','stateId'),'Action',new FreeColumnFormatter('device/location'),array()));
-        $builder->render();
+
+        $freeColumn=new FreeColumnFormatter('device/location');
+        $freeColumn->addButton('assign','Assign to me');
+
+        $builder->addColumn(new Column(array('id','stateId'),'Action',$freeColumn,array()));
         return $builder;
     }
 

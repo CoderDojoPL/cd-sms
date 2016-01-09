@@ -93,6 +93,11 @@ class Device
     protected $warrantyExpirationDate;
 
     /**
+     * @Column(name="purchase_date",type="datetime",nullable=true)
+     **/
+    protected $purchaseDate;
+
+    /**
      * @Column(name="price",type="decimal",scale=2,nullable=true)
      **/
     protected $price;
@@ -270,6 +275,21 @@ class Device
         $this->warrantyExpirationDate = $warrantyExpirationDate;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPurchaseDate()
+    {
+        return $this->purchaseDate;
+    }
+
+    /**
+     * @param mixed $PurchaseDate
+     */
+    public function setPurchaseDate($purchaseDate)
+    {
+        $this->purchaseDate = $purchaseDate;
+    }
 
     /**
      * @return mixed
