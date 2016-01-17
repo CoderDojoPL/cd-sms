@@ -41,41 +41,9 @@ class DeviceLog
 	private $type;
 
 	/**
-	 * @Column(name="serial_number",type="string")
-	 **/
-	protected $serialNumber;
-
-	/**
 	 * @Column(name="created_at",type="datetime")
 	 **/
 	protected $createdAt;
-
-
-	/**
-	 * @ManyToOne(targetEntity="DeviceState")
-	 * @JoinColumn(name="state_id", referencedColumnName="id",nullable=false)
-	 **/
-	protected $state;
-
-	/**
-	 * @Column(name="location_id",type="integer",nullable=false)
-	 **/
-	protected $location;
-
-	/**
-	 * @Column(name="user_id",type="integer",nullable=true)
-	 **/
-	protected $user;
-
-	/**
-	 * @Column(name="warranty_expiration_date",type="datetime",nullable=true)
-	 **/
-	protected $warrantyExpirationDate;
-
-    /**
-     * @Column(name="purchase_date",type="datetime",nullable=true)
-     **/
-    protected $purchaseDate;
 
 	/**
 	 * @Column(name="price",type="decimal",scale=2,nullable=true)
@@ -105,37 +73,10 @@ class DeviceLog
      **/
     protected $removed;
 
-	/**
-	 * @Column(type="text")
-	 **/
-	protected $symbol;
-
-	/**
-	 * @Column(name="hire_expiration_date",type="datetime",nullable=true)
-	 **/
-	protected $hireExpirationDate;
-
 	public function __construct(){
         $this->setCreatedAt(new \DateTime());
         $this->setRemoved(false);
     }
-
-	/**
-	 * @return mixed
-	 */
-	public function getState()
-	{
-		return $this->state;
-	}
-
-	/**
-	 * @param mixed $state
-	 */
-	public function setState($state)
-	{
-		$this->state = $state;
-		return $this;
-	}
 
 	public function getId()
 	{
@@ -202,90 +143,6 @@ class DeviceLog
 		return $this->type;
 	}
 
-	public function setSerialNumber($serialNumber)
-	{
-		$this->serialNumber = $serialNumber;
-		return $this;
-	}
-
-	public function getSerialNumber()
-	{
-		return $this->serialNumber;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getLocation()
-	{
-
-		return $this->location;
-	}
-
-	/**
-	 * @param mixed $location
-	 */
-	public function setLocation($location)
-	{
-	    if($location){
-            $location=$location->getId();
-        }
-
-		$this->location = $location;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getUser()
-	{
-		return $this->user;
-	}
-
-	/**
-	 * @param mixed $user
-	 */
-	public function setUser($user)
-	{
-	    if($user){
-            $user=$user->getId();
-        }
-
-		$this->user = $user;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getWarrantyExpirationDate()
-	{
-		return $this->warrantyExpirationDate;
-	}
-
-	/**
-	 * @param mixed $warrantyExpirationDate
-	 */
-	public function setWarrantyExpirationDate($warrantyExpirationDate)
-	{
-		$this->warrantyExpirationDate = $warrantyExpirationDate;
-	}
-
-    /**
-     * @return mixed
-     */
-    public function getPurchaseDate()
-    {
-        return $this->purchaseDate;
-    }
-
-    /**
-     * @param mixed $PurchaseDate
-     */
-    public function setPurchaseDate($purchaseDate)
-    {
-        $this->purchaseDate = $purchaseDate;
-    }
-
 	/**
 	 * @return mixed
 	 */
@@ -321,7 +178,7 @@ class DeviceLog
 
 	public function __toString()
 	{
-		return $this->getName() . ' (' . $this->getSerialNumber() . ')';
+		return $this->getName();
 	}
 
     public function setCreatedAt($createdAt)
@@ -367,37 +224,5 @@ class DeviceLog
     {
         return $this->removed;
     }
-
-	/**
-	 * @return mixed
-	 */
-	public function getSymbol()
-	{
-		return $this->symbol;
-	}
-
-	/**
-	 * @param mixed $symbol
-	 */
-	public function setSymbol($symbol)
-	{
-		$this->symbol = $symbol;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getHireExpirationDate()
-	{
-		return $this->hireExpirationDate;
-	}
-
-	/**
-	 * @param mixed $hireExpirationDate
-	 */
-	public function setHireExpirationDate($hireExpirationDate)
-	{
-		$this->hireExpirationDate = $hireExpirationDate;
-	}
 
 }

@@ -19,6 +19,8 @@ use Common\DqlDataManager;
 use Exception\OrderNotBusyException;
 use Arbor\Component\Grid\Column;
 use Exception\AlreadyHasOwnerException;
+use Exception\DeviceNotFoundException;
+
 
 /**
  * Class DeviceLocation

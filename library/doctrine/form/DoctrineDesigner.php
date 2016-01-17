@@ -141,7 +141,7 @@ class DoctrineDesigner implements Designer{
 
 		}
 
-		$collection=$this->entityToCollection($targetEntity->findAll(),!$formField->isMultiple());
+		$collection=static::entityToCollection($targetEntity->findAll(),!$formField->isMultiple());
 		$formField->setCollection($collection);
 
 
@@ -149,7 +149,7 @@ class DoctrineDesigner implements Designer{
 
 	}
 
-	private function entityToCollection($entity,$appendEmptyRecord){
+	public static function entityToCollection($entity,$appendEmptyRecord){
 		$values=array();
 		if($appendEmptyRecord){
 			$values[]=array('value'=>'','label'=>'Select...');			

@@ -9,6 +9,7 @@
     <snippet class="Library\Doctrine\Snippet\Doctrine" method="flush" />
     <snippet class="Library\Doctrine\Snippet\Doctrine" method="persist" />
     <snippet class="Library\Doctrine\Snippet\Doctrine" method="executeQuery" />
+    <snippet class="Library\Doctrine\Snippet\Doctrine" method="escape" />
     <snippet class="Arbor\Snippet\Mapper" method="cast" />
     <snippet class="Snippet\User" method="getUser" />
     <snippet class="Snippet\User" method="isAllow" />

@@ -20,6 +20,8 @@ use Arbor\Component\Form\NumberField;
 use Arbor\Component\Form\SelectField;
 use Arbor\Component\Form\CheckboxField;
 use Arbor\Component\Form\FileField;
+use Arbor\Component\Form\DateField;
+use Arbor\Component\Form\TextareaField;
 use Common\ImageColumnFormatter;
 use Doctrine\Common\Version;
 use Entity\DeviceType;
@@ -46,8 +48,7 @@ class Device extends Controller
      */
     public function index()
     {
-        $grid = $this->createGrid();
-        $grid->render();
+        $grid = $this->createGridIndex();
         return compact('grid');
     }
 
@@ -167,54 +168,31 @@ class Device extends Controller
     {
         $conn = $this->getDoctrine()->getEntityManager()->getConnection();
         $conn->beginTransaction();
+        $deviceEntity = $this->createEntity($data);
 
         for ($i = 0; $i < $data['count']; $i++) {
-            $deviceEntity = new \Entity\Device();
-            $this->saveEntity($deviceEntity, $data, $serialNumber[$i], 1);
+            $specimenEntity=new \Entity\DeviceSpecimen();
+            $this->saveSpecimenEntity($deviceEntity,$specimenEntity, $data, $serialNumber[$i]);
         }
-
-
-        $this->flush();
 
         $conn->commit();
 
     }
 
     /**
-     * Save device to database
+     * Create device entity
      *
-     * @param \Entity\Device $entity
-     * @param $data
-     * @param $serialNumber
-     * @param null $state
+     * @param mixed $data
+     * @return \Entity\Device
      */
-    private function saveEntity($entity, $data, $serialNumber, $state = null)
-    {
+    private function createEntity($data){
+        $entity=new \Entity\Device();
         $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
         /* @var $deviceType \Entity\DeviceType */
         $entity->setName($data['name']);
         $entity->setType($deviceType);
-        $entity->setSerialNumber($serialNumber);
-        $entity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
-        $entity->setPurchaseDate($data['purchaseDate'] ? new \DateTime($data['purchaseDate']) : NULL);
         $entity->setNote($data['note']);
         $entity->setPrice($data['price'] ? $data['price'] : NULL);
-
-
-        if ($state)
-            $entity->setState($this->cast('Mapper\DeviceState', $state));
-
-        if (isset($data['location'])) {
-            $entity->setLocation($this->cast('Mapper\Location', $data['location']));
-            $current = $deviceType->getCurrent();
-            $prefix = $deviceType->getSymbolPrefix();
-            $entity->setSymbol($prefix . ++$current);
-            $deviceType->setCurrent($current);
-        }
-
-        if (isset($data['user']) && $data['user']) {
-            $entity->setUser($this->cast('Mapper\User', $data['user']));
-        }
 
         $this->persist($entity);
 
@@ -246,6 +224,39 @@ class Device extends Controller
             copy($data['tmpPhoto'], $dir . $name);
             $entity->setPhoto($name);
         }
+        return $entity;
+    }
+
+    /**
+     * Save device to database
+     *
+     * @param \Entity\Device $entity
+     * @param $data
+     * @param $serialNumber
+     * @param null $state
+     */
+    private function saveSpecimenEntity($deviceEntity,$specimenEntity, $data, $serialNumber)
+    {
+        $specimenEntity->setDevice($deviceEntity);
+        $specimenEntity->setSerialNumber($serialNumber);
+        $specimenEntity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
+        $specimenEntity->setPurchaseDate($data['purchaseDate'] ? new \DateTime($data['purchaseDate']) : NULL);
+
+        if (isset($data['location'])) {//new record
+            $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
+            $specimenEntity->setState($this->cast('Mapper\DeviceState', 1));
+            $specimenEntity->setLocation($this->cast('Mapper\Location', $data['location']));
+            $current = $deviceType->getCurrent();
+            $prefix = $deviceType->getSymbolPrefix();
+            $specimenEntity->setSymbol($prefix . ++$current);
+            $deviceType->setCurrent($current);
+        }
+
+        if (isset($data['user']) && $data['user']) {
+            $specimenEntity->setUser($this->cast('Mapper\User', $data['user']));
+        }
+
+        $this->persist($specimenEntity);
 
     }
 
@@ -268,7 +279,10 @@ class Device extends Controller
                 $data['tmpPhoto'] = $this->saveTmpPhoto($data['photo']);
             }
 
-            $this->saveEntity($device, $data, $data['serialNumber']);
+            $device->setName($data['name']);
+            $device->setNote($data['note']);
+            $device->setPrice($data['price'] ? $data['price'] : NULL);
+
             $this->flush();
             $conn->commit();
 
@@ -278,8 +292,8 @@ class Device extends Controller
             return $response;
 
         }
-
-        return compact('form');
+        $grid=$this->createGridSpecimen($device);
+        return compact('form','grid');
     }
 
     /**
@@ -288,7 +302,7 @@ class Device extends Controller
      * @return mixed
      * @throws \Arbor\Exception\ServiceNotFoundException
      */
-    private function createGrid()
+    private function createGridIndex()
     {
 
         $builder = $this->getService('grid')->create($this->getRequest());
@@ -303,14 +317,36 @@ class Device extends Controller
         $builder->addColumn(new Column('id','#'));
         $builder->addColumn(new Column('photo','Photo', new ImageColumnFormatter(),array()));
         $builder->addColumn(new Column('name','Name'));
-        $builder->addColumn(new Column('serialNumber','Serial number'));
         $builder->addColumn(new Column('type','Type'));
-        $builder->addColumn(new Column('symbol','Symbol'));
-        $builder->addColumn(new Column(array('location', 'user'),'Location'));
         $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('device', array('edit', 'remove')),array()));
         return $builder;
     }
 
+    /**
+     * Creates grid for display device specimens list
+     *
+     * @return mixed
+     * @throws \Arbor\Exception\ServiceNotFoundException
+     */
+    private function createGridSpecimen($deviceEntity)
+    {
+
+        $builder = $this->getService('grid')->create($this->getRequest());
+        $builder->setFormatter(new BasicGridFormatter('device/edit/'.$deviceEntity->getId(), $this->isAllow(1)));
+        $builder->setDataManager(new BasicDataManager(
+            $this->getDoctrine()->getEntityManager()
+            , 'Entity\DeviceSpecimen'
+            ,'i.device='.$this->escape($deviceEntity->getId())
+        ));
+
+        $builder->setLimit(10);
+
+        $builder->addColumn(new Column('id','#'));
+        $builder->addColumn(new Column('serialNumber','Serial number'));
+        $builder->addColumn(new Column('symbol','Symbol'));
+        $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('device/specimen', array('edit', 'remove')),array()));
+        return $builder;
+    }
     /**
      * Create and configure FormBuilder
      *
@@ -336,23 +372,23 @@ class Device extends Controller
     private function createForm($entity = null)
     {
         $builder = $this->createFormBuilder();
-        $builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Device'));
-        $builder->removeField('photo');
-        $builder->removeField('serialNumber');
-        $builder->removeField('updatedAt');
-        $builder->removeField('createdAt');
-        $builder->removeField('state');
-        $builder->removeField('symbol');
-        $builder->removeField('hireExpirationDate');
+        // $builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\Device'));
 
-        $builder->addField(new FileField(array(
-            'name' => 'photo'
-            , 'label' => 'Photo'
-            , 'accept' => 'image/*'
-            , 'maxSize' => 1048576
+        $builder->addField(new TextField(array(
+            'name' => 'name'
+            , 'label' => 'Name'
+            ,'required'=>true
         )));
 
-        $builder->removeField('tags');
+        $builder->addField(new SelectField(array(
+            'name' => 'type'
+            ,'label' => 'Type'
+            ,'required' => true
+            ,'collection'=>DoctrineDesigner::entityToCollection(
+                $this->getDoctrine()->getEntityManager()->getRepository('Entity\DeviceType')->findAll()
+                ,true
+            )
+        )));
 
         $builder->addField(new TextField(array(
             'name' => 'tags'
@@ -361,24 +397,17 @@ class Device extends Controller
         , 'data-role' => 'tagsinput'
         )));
 
-        //TODO set required for photo in global configuration
+        if (!$entity) {
 
-        if ($entity) {
-            $builder->removeField('location');
-            $builder->removeField('user');
-            $builder->addField(new TextField(array(
-                'name' => 'serialNumber'
-            , 'label' => 'Serial number'
-            , 'required' => true
+            $builder->addField(new SelectField(array(
+                'name' => 'location'
+                ,'label' => 'Location'
+                ,'required' => true
+                ,'collection'=>DoctrineDesigner::entityToCollection(
+                    $this->getDoctrine()->getEntityManager()->getRepository('Entity\Location')->findAll()
+                    ,true
+                )
             )));
-
-            $helper = $this->getService('form.helper');
-            $data = $helper->entityToArray($entity, array('Entity\DeviceTag' => 'getName'));
-            $data['tags'] = implode(',', $data['tags']);
-            $builder->setData($data);
-
-
-        } else {
 
             $builder->addField(new NumberField(array(
                 'name' => 'count'
@@ -387,8 +416,58 @@ class Device extends Controller
             , 'value' => 1
             , 'min' => 1
             )));
+
+            $builder->addField(new SelectField(array(
+                'name' => 'user'
+                ,'label' => 'User'
+                ,'collection'=>DoctrineDesigner::entityToCollection(
+                    $this->getDoctrine()->getEntityManager()->getRepository('Entity\User')->findAll()
+                    ,true
+                )
+            )));
+
+            $builder->addField(new DateField(array(
+                'name' => 'warrantyExpirationDate'
+                , 'label' => 'Warranty Expiration Date'
+            )));
+
+            $builder->addField(new DateField(array(
+                'name' => 'purchaseDate'
+                , 'label' => 'Purchase Date'
+            )));
+
         }
 
+
+        $builder->addField(new NumberField(array(
+            'name' => 'price'
+            , 'label' => 'Price'
+        )));
+
+        $builder->addField(new TextareaField(array(
+            'name' => 'note'
+            , 'label' => 'Note'
+        )));
+
+
+        $builder->addField(new FileField(array(
+            'name' => 'photo'
+            , 'label' => 'Photo'
+            , 'accept' => 'image/*'
+            , 'maxSize' => 1048576
+        )));
+
+        //TODO set required for photo in global configuration
+
+        if ($entity) {
+
+            $helper = $this->getService('form.helper');
+            $data = $helper->entityToArray($entity, array('Entity\DeviceTag' => 'getName'));
+            $data['tags'] = implode(',', $data['tags']);
+            $builder->setData($data);
+
+
+        }
 
         $builder->submit($this->getRequest());
 
