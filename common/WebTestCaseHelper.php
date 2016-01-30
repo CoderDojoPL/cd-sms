@@ -15,6 +15,8 @@ require_once __DIR__.'/../arbor/core/WebTestCase.php';
 use Arbor\Core\WebTestCase;
 use Entity\User;
 use Entity\Role;
+use Arbor\Exception\ElementNotFoundException;
+
 /**
  * Test helper.
  *
@@ -129,6 +131,41 @@ class WebTestCaseHelper extends WebTestCase{
 		}
 
 		return $logEntity;
+	}
+
+	/**
+	 * Assert each field
+	 *
+	 * @param array $fields
+	 * @param array $config list with error message
+	 */
+	protected function assertFields($fields,$config){
+		foreach($config as $fName=>$fMessage){
+			if(!isset($fields[$fName])){
+				$this->assertTrue(false,'Field '.$fName.' not found.');
+			}
+			$field=$fields[$fName];
+
+			if($fMessage===null){
+		        $this->assertFalse($field->getParent()->hasElement('label'), 'Redundant error message for '.$fName);
+			}
+			else{
+		        $this->assertTrue($field->getParent()->hasElement('label'), 'Field '.$fName.' is not required.');
+		        $this->assertEquals($fMessage, $field->getParent()->getElement('label')->getText(), 'Invalid error message for '.$fName);
+			}
+		}
+
+	}
+
+	/**
+	 * Check url and status code
+	 *
+	 * @param Arbor\Test\BrowserEmulator $client
+	 * @param string $url
+	 */
+	protected function assertUrl($client,$url){
+		$this->assertEquals(200,$client->getResponse()->getStatusCode(),'Invalid status code for url '.$client->getUrl().'. Content'.$client->getResponse()->getContent());
+        $this->assertEquals($url, $client->getUrl(), 'Invalid url for '.$client->getUrl());
 	}
 
 }

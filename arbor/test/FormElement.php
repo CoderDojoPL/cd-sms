@@ -25,14 +25,22 @@ use Arbor\Exception\InvalidFieldNameException;
 class FormElement extends HTMLElement{
 	
 
-	public function getFields(){
+	public function getFields($assoc=false){
 		$fields=array();
 
 		$fields=array_merge($fields,$this->findElements('input'));
 		$fields=array_merge($fields,$this->findElements('textarea'));
 		$fields=array_merge($fields,$this->findElements('select'));
 
-		return $fields;
+		if(!$assoc){
+			return $fields;
+		}
+
+		$assoc=array();
+		foreach($fields as $field){
+			$assoc[$field->getName()]=$field;
+		}
+		return $assoc;
 	}
 
 	public function getAction(){

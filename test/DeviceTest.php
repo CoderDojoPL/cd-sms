@@ -281,59 +281,61 @@ class DeviceTest extends WebTestCaseHelper
         $client = $this->createClient($session);
         $client->loadPage('/device/add');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+        $this->assertUrl($client,'/device/add');
 
         $form = $client->getElement('form');
-        $fields = $form->getFields();
+        $fields = $form->getFields(true);
 
         $this->assertCount(11, $fields, 'Invalid number fields');
 
-        $fields[7]->setData('0');
+        $fields['count']->setData('0');
         //check required fields
         $form->submit();
 
-        $this->assertEquals('/device/add', $client->getUrl(), 'Invalid url form incorrect submit form');
+        $this->assertUrl($client,'/device/add');
 
         $form = $client->getElement('form');
-        $fields = $form->getFields();
+        $fields = $form->getFields(true);
 
         $this->assertCount(11, $fields, 'Invalid number fields');
-        $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');//name
-        $this->assertFalse($fields[1]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');//warranty
-        $this->assertFalse($fields[2]->getParent()->hasElement('label'), 'Redundant error message for purchase date');
-        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for price');//price
-        $this->assertFalse($fields[4]->getParent()->hasElement('label'), 'Redundant error message for photo');//price
-        $this->assertEquals('Value can not empty', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
 
+        $this->assertFields($fields,array(
+            'name'=>'Value can not empty'
+            ,'tags'=>'Value can not empty'
+            ,'count'=>'Value is too small.'
+            ,'warrantyExpirationDate'=>null
+            ,'purchaseDate'=>null
+            ,'price'=>null
+            ,'photo'=>null
+            ,'note'=>null
+            ,'type'=>'Value can not empty'
+            ,'location'=>'Value can not empty'
+            ,'user'=>null
+        ));
 
-        $this->assertFalse($fields[7]->getParent()->hasElement('label'), 'Redundant error message for note');
-        $this->assertEquals('Value can not empty', $fields[8]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
-        $this->assertEquals('Value can not empty', $fields[9]->getParent()->getElement('label')->getText(), 'Invalid error message for location');
-        $this->assertFalse($fields[10]->getParent()->hasElement('label'), 'Redundant error message for user');
-
-        $fields[0]->setData('Name test');
-        $fields[1]->setData('2015-01-01');
-        $fields[2]->setData('2014-01-01');
-        $fields[3]->setData('20.32');
-        $fields[5]->setData('tag 1,tag 2');
-        $fields[6]->setData('0');
-        $fields[7]->setData('Note');
-        $fields[8]->setData('1');//Refill
-        $fields[9]->setData($location->getId());
+        $fields['name']->setData('Name test');
+        $fields['tags']->setData('tag 1,tag 2');
+        $fields['count']->setData('0');
+        $fields['warrantyExpirationDate']->setData('2015-01-01');
+        $fields['purchaseDate']->setData('2014-01-01');
+        $fields['price']->setData('20.32');
+        $fields['note']->setData('Note');
+        $fields['type']->setData('1');//Refill
+        $fields['location']->setData($location->getId());
 
         $form->submit();
         //count = 0
-        $this->assertEquals('/device/add', $client->getUrl(), 'Invalid url form incorrect submit form');
+        $this->assertUrl($client,'/device/add');
 
         $form = $client->getElement('form');
-        $fields = $form->getFields();
-        $this->assertEquals('Value is too small.', $fields[6]->getParent()->getElement('label')->getText(), 'Invalid error message for counts');
+        $fields = $form->getFields(true);
+        $this->assertFields($fields,array('count'=>'Value is too small.'));
 
-        $fields[6]->setData('2');
+        $fields['count']->setData('2');
         $form->submit();
         //all data oK
 
-        $this->assertEquals('/device/add/serialNumber', $client->getUrl(), 'Invalid url form after submit');
+        $this->assertUrl($client,'/device/add/serialNumber');
 
         $form = $client->getElement('form');
 
@@ -355,30 +357,36 @@ class DeviceTest extends WebTestCaseHelper
 
         $form->submit();
 
-        $this->assertEquals('/device', $client->getUrl(), 'Invalid url form after submited serial number');
+        $this->assertUrl($client,'/device');
 
         $devices = $em->getRepository('Entity\Device')->findAll();
-        $this->assertCount(2, $devices, 'Invalid number devices');
+        $this->assertCount(1, $devices, 'Invalid number devices');
 
-        for ($i = 0; $i < count($devices); $i++) {
-            $this->assertEquals('Name test', $devices[$i]->getName(), 'Invalid device name');
-            $this->assertEquals('2015-01-01', $devices[$i]->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
-            $this->assertEquals('2014-01-01', $devices[$i]->getPurchaseDate()->format('Y-m-d'), 'Invalid device purchase date');
-            $this->assertEquals(20.32, $devices[$i]->getPrice(), 'Invalid device price');
-            $this->assertEquals('Note', $devices[$i]->getNote(), 'Invalid device note');
-            $this->assertEquals(1, $devices[$i]->getType()->getId(), 'Invalid device type');
-            $this->assertEquals($location->getId(), $devices[$i]->getLocation()->getId(), 'Invalid device location');
-            $this->assertEquals('REF'.($i+1), $devices[$i]->getSymbol(), 'Invalid device symbol');
-            $tags = $devices[$i]->getTags();
-            $this->assertCount(2, $tags, 'Invalid count device tags');
+        $device=$devices[0];
+        $this->assertEquals('Name test', $device->getName(), 'Invalid device name');
+        $this->assertEquals(20.32, $device->getPrice(), 'Invalid device price');
+        $this->assertEquals('Note', $device->getNote(), 'Invalid device note');
+        $this->assertEquals(1, $device->getType()->getId(), 'Invalid device type');
+        $tags = $device->getTags();
+        $this->assertCount(2, $tags, 'Invalid count device tags');
 
-            $this->assertTrue(in_array('tag 1', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 1 name');
-            $this->assertTrue(in_array('tag 2', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 2 name');
+        $this->assertTrue(in_array('tag 1', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 1 name');
+        $this->assertTrue(in_array('tag 2', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 2 name');
+
+
+        $deviceSpecimens = $em->getRepository('Entity\DeviceSpecimen')->findAll();
+        $this->assertCount(2, $deviceSpecimens, 'Invalid number device specimens');
+        for($i=0; $i<count($deviceSpecimens); $i++){
+            $this->assertEquals('2015-01-01', $deviceSpecimens[$i]->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
+            $this->assertEquals('2014-01-01', $deviceSpecimens[$i]->getPurchaseDate()->format('Y-m-d'), 'Invalid device purchase date');
+            $this->assertEquals($location->getId(), $deviceSpecimens[$i]->getLocation()->getId(), 'Invalid device location');
+            $this->assertEquals('REF'.($i+1), $deviceSpecimens[$i]->getSymbol(), 'Invalid device symbol');
 
         }
 
-        $this->assertTrue(in_array('serial 1', array($devices[0]->getSerialNumber(), $devices[1]->getSerialNumber())), 'Invalid device serial number 1');
-        $this->assertTrue(in_array('serial 2', array($devices[0]->getSerialNumber(), $devices[1]->getSerialNumber())), 'Invalid device serial number tag 2');
+        $this->assertTrue(in_array('serial 1', array($deviceSpecimens[0]->getSerialNumber(), $deviceSpecimens[1]->getSerialNumber())), 'Invalid device serial number 1');
+        $this->assertTrue(in_array('serial 2', array($deviceSpecimens[0]->getSerialNumber(), $deviceSpecimens[1]->getSerialNumber())), 'Invalid device serial number tag 2');
+
 
     }
 

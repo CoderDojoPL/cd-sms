@@ -43,11 +43,6 @@ class DeviceSpecimenLog
     protected $createdAt;
 
     /**
-     * @Column(name="updated_at",type="datetime")
-     **/
-    protected $updatedAt;
-
-    /**
      * @ManyToOne(targetEntity="DeviceState")
      * @JoinColumn(name="state_id", referencedColumnName="id",nullable=false)
      **/
@@ -103,6 +98,11 @@ class DeviceSpecimenLog
      **/
     protected $removed;
 
+    public function __construct(){
+        $this->setCreatedAt(new \DateTime());
+        $this->setRemoved(false);
+    }
+
     /**
      * @return mixed
      */
@@ -120,15 +120,14 @@ class DeviceSpecimenLog
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
-    }
-
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        return $this->id=$id;
     }
 
     public function setDevice($device)
@@ -162,17 +161,6 @@ class DeviceSpecimenLog
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**
@@ -307,13 +295,5 @@ class DeviceSpecimenLog
     public function __toString()
     {
         return $this->getSerialNumber();
-    }
-
-    /**
-     * @PreUpdate
-     */
-    public function postUpdate()
-    {
-        $this->setUpdatedAt(new \DateTime());
     }
 }

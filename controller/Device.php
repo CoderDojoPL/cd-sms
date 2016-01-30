@@ -175,6 +175,8 @@ class Device extends Controller
             $this->saveSpecimenEntity($deviceEntity,$specimenEntity, $data, $serialNumber[$i]);
         }
 
+        $this->flush();        
+
         $conn->commit();
 
     }
@@ -250,6 +252,7 @@ class Device extends Controller
             $prefix = $deviceType->getSymbolPrefix();
             $specimenEntity->setSymbol($prefix . ++$current);
             $deviceType->setCurrent($current);
+            $specimenEntity->setHireExpirationDate(new \DateTime("now+14 days"));
         }
 
         if (isset($data['user']) && $data['user']) {
@@ -305,6 +308,15 @@ class Device extends Controller
     private function createGridIndex()
     {
 
+        $actions=array();
+        if($this->isAllow(2)){
+            $actions[]='edit';
+        }
+
+        if($this->isAllow(3)){
+            $actions[]='remove';
+        }
+
         $builder = $this->getService('grid')->create($this->getRequest());
         $builder->setFormatter(new BasicGridFormatter('device', $this->isAllow(1)));
         $builder->setDataManager(new BasicDataManager(
@@ -318,7 +330,7 @@ class Device extends Controller
         $builder->addColumn(new Column('photo','Photo', new ImageColumnFormatter(),array()));
         $builder->addColumn(new Column('name','Name'));
         $builder->addColumn(new Column('type','Type'));
-        $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('device', array('edit', 'remove')),array()));
+        $builder->addColumn(new Column('id','Action', new ActionColumnFormatter('device', $actions),array()));
         return $builder;
     }
 
