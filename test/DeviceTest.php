@@ -17,6 +17,7 @@ use Entity\Location;
 use Entity\Device;
 use Entity\DeviceTag;
 use Entity\DeviceState;
+use Entity\DeviceSpecimen;
 use Entity\User;
 use Entity\Order;
 
@@ -259,21 +260,9 @@ class DeviceTest extends WebTestCaseHelper
 
     public function testAdd()
     {
-
         $em = $this->getService('doctrine')->getEntityManager();
 
-        $location = new Location();
-        $location->setName('Location name');
-        $location->setCity('Location city');
-        $location->setStreet('Location street');
-        $location->setNumber('Location number');
-        $location->setApartment('Location apartment');
-        $location->setPostal('00-000');
-        $location->setPhone('+48100000000');
-        $location->setEmail('email@email.pl');
-        $this->persist($location);
-
-        $this->flush();
+        list($location)=$this->prepareData();
 
         $session = $this->createSession();
         $session->set('user.id', $this->user->getId());
@@ -436,9 +425,8 @@ class DeviceTest extends WebTestCaseHelper
 
     public function testEdit()
     {
-
         $em = $this->getService('doctrine')->getEntityManager();
-
+        //prepare data
         $location = new Location();
         $location->setName('Location name');
         $location->setCity('Location city');
@@ -460,18 +448,21 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
-        $device->setPurchaseDate(new \DateTime('2014-01-01'));
-        $device->setPrice(12.05);
         $device->setNote('Note');
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol('REF1');
-
+        $device->setPrice(12.05);
         $this->persist($device);
 
-
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
+        $deviceSpecimen->setPurchaseDate(new \DateTime('2014-01-01'));
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol('REF1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+            
         $this->flush();
 
 
@@ -481,86 +472,76 @@ class DeviceTest extends WebTestCaseHelper
         $client = $this->createClient($session);
         $client->loadPage('/device/edit/' . $device->getId());
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+        $this->assertUrl($client,'/device/edit/'.$device->getId());
 
         $form = $client->getElement('form');
-        $fields = $form->getFields();
+        $fields = $form->getFields(true);
 
-        $this->assertCount(9, $fields, 'Invalid number fields');
+        $this->assertFieldsData($fields,array(
+            'name'=>'Device name'
+            ,'price'=>'12.05'
+            ,'photo'=>''
+            ,'tags'=>'DeviceTag name'
+            ,'note'=>'Note'
+            ));
 
-
-        $this->assertEquals('Device name', $fields[0]->getData(), 'Invalid value for name');
-        $this->assertEquals('2015-01-01', $fields[1]->getData(), 'Invalid value for warranty expiration date');
-        $this->assertEquals('2014-01-01',$fields[2]->getData(), 'Invalid value for purchase date');
-        $this->assertEquals('12.05', $fields[3]->getData(), 'Invalid value for price');
-        $this->assertEquals('', $fields[4]->getData(), 'Invalid value for photo');
-        $this->assertEquals('DeviceTag name', $fields[5]->getData(), 'Invalid value for tags');
-        $this->assertEquals('Device serial number', $fields[6]->getData(), 'Invalid value for serial number');
-        $this->assertEquals('Note', $fields[7]->getData(), 'Invalid value for note');
-        $this->assertEquals('1', $fields[8]->getData(), 'Invalid value for type');
-
-
-        $fields[0]->setData('');
-        $fields[1]->setData('');
-        $fields[2]->setData('');
-        $fields[3]->setData('');
-        $fields[4]->setData('');
-        $fields[5]->setData('');
-        $fields[6]->setData('');
-        $fields[7]->setData('');
-        $fields[8]->setData('');
+        $fields['name']->setData('');
+        $fields['price']->setData('');
+        $fields['photo']->setData('');
+        $fields['tags']->setData('');
+        $fields['note']->setData('');
         $form->submit();
 
 
         $form = $client->getElement('form');
-        $fields = $form->getFields();
+        $fields = $form->getFields(true);
 
+        $this->assertFields($fields,array(
+            'name'=>'Value can not empty'
+            ,'tags'=>'Value can not empty'
+            ,'price'=>null
+            ,'photo'=>null
+            ,'note'=>null
+        ));
 
-        $this->assertCount(9, $fields, 'Invalid number fields');
-        $this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for name');
-
-        $this->assertFalse($fields[1]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');
-        $this->assertFalse($fields[2]->getParent()->hasElement('label'), 'Redundant error message for warranty expiration date');
-        $this->assertFalse($fields[3]->getParent()->hasElement('label'), 'Redundant error message for price');
-        $this->assertFalse($fields[4]->getParent()->hasElement('label'), 'Redundant error message for photo');
-        $this->assertEquals('Value can not empty', $fields[5]->getParent()->getElement('label')->getText(), 'Invalid error message for tags');
-        $this->assertEquals('Value can not empty', $fields[6]->getParent()->getElement('label')->getText(), 'Invalid error message for serial number');
-
-        $this->assertFalse($fields[7]->getParent()->hasElement('label'), 'Redundant error message for note');
-        $this->assertEquals('Value can not empty', $fields[8]->getParent()->getElement('label')->getText(), 'Invalid error message for type');
-
-        $fields[0]->setData('Name edit');
-        $fields[1]->setData('2016-01-01');
-        $fields[2]->setData('2015-01-01');
-        $fields[3]->setData('5.32');
-        $fields[5]->setData('tag 1,tag 2');
-        $fields[6]->setData('serial number');
-        $fields[7]->setData('note edit');
-        $fields[8]->setData('2');
+        $fields['name']->setData('Name edit');
+        $fields['price']->setData('5.32');
+        $fields['tags']->setData('tag 1,tag 2');
+        $fields['note']->setData('note edit');
 
         $form->submit();
 
-        $this->assertEquals('/device', $client->getUrl(), 'Invalid url form after submit');
+        $this->assertUrl($client,'/device');
 
+        //check data
         $em->clear();
         $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
 
         $this->assertEquals('Name edit', $device->getName(), 'Invalid device name');
-        $this->assertEquals('2016-01-01', $device->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
-        $this->assertEquals('2015-01-01', $device->getPurchaseDate()->format('Y-m-d'), 'Invalid device purchase date');
         $this->assertEquals(5.32, $device->getPrice(), 'Invalid device price');
         $this->assertEquals('note edit', $device->getNote(), 'Invalid device note');
-        $this->assertEquals(2, $device->getType()->getId(), 'Invalid device type');
-        $this->assertEquals($location->getId(), $device->getLocation()->getId(), 'Invalid device location');
         $tags = $device->getTags();
         $this->assertCount(2, $tags, 'Invalid count device tags');
 
         $this->assertTrue(in_array('tag 1', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 1 name');
         $this->assertTrue(in_array('tag 2', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 2 name');
 
+    }
 
-        $this->assertEquals('serial number', $device->getSerialNumber(), 'Invalid device serial number');
+    public function prepareData(){
 
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+        $this->flush();
+        return array($location);
     }
 
 }

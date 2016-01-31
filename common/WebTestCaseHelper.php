@@ -134,7 +134,7 @@ class WebTestCaseHelper extends WebTestCase{
 	}
 
 	/**
-	 * Assert each field
+	 * Assert each field for validate labels
 	 *
 	 * @param array $fields
 	 * @param array $config list with error message
@@ -155,6 +155,8 @@ class WebTestCaseHelper extends WebTestCase{
 			}
 		}
 
+        $this->assertCount(count($config), $fields, 'Invalid number fields');
+
 	}
 
 	/**
@@ -166,6 +168,26 @@ class WebTestCaseHelper extends WebTestCase{
 	protected function assertUrl($client,$url){
 		$this->assertEquals(200,$client->getResponse()->getStatusCode(),'Invalid status code for url '.$client->getUrl().'. Content'.$client->getResponse()->getContent());
         $this->assertEquals($url, $client->getUrl(), 'Invalid url for '.$client->getUrl());
+	}
+
+	/**
+	 * Assert each field by data
+	 *
+	 * @param array $fields
+	 * @param array $config list with error message
+	 */
+	protected function assertFieldsData($fields,$config){
+		foreach($config as $fName=>$fMessage){
+			if(!isset($fields[$fName])){
+				$this->assertTrue(false,'Field '.$fName.' not found.');
+			}
+			$field=$fields[$fName];
+
+	        $this->assertEquals($fMessage,$field->getData(), 'Invalid data for field '.$fName);
+		}
+
+        $this->assertCount(count($config), $fields, 'Invalid number fields');
+
 	}
 
 }

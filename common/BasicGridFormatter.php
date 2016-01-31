@@ -130,17 +130,15 @@ class BasicGridFormatter implements GridFormatter{
 						</nav>
 					</td>
 					</tr>';
-					if($this->addAction){
-						$html.='<tr>
-						  		<td colspan="'.$colspan.'">';
+						$html.='<tr><td colspan="'.$colspan.'">';
+							if($this->addAction){
+								$html.='<a href="/'.$this->prefix.'/add" class="btn btn-primary">Add</a>';
+							}
 
-						  		$html.='<a href="/'.$this->prefix.'/add" class="btn btn-primary">Add</a>';
-						  foreach($this->extendButtons as $button){
-						  		$html.='<a href="/'.$button['url'].'" class="btn btn-default">'.$button['label'].'</a></td>';
-						  }
+							foreach($this->extendButtons as $button){
+									$html.='<a href="/'.$button['url'].'" class="btn btn-primary">'.$button['label'].'</a></td>';
+							}
 						$html.='  	</td></tr>';
-
-					}
 			$html.='	</tfoot>
 			</table>';
 

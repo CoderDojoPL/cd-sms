@@ -80,6 +80,28 @@ class Device extends Controller
     }
 
     /**
+     * Save new device specimen to database
+     *
+     * @return Response|array
+     */
+    public function addSpecimen($device)
+    {
+        $form = $this->createSpecimenForm();
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $data['type']=$device->getType()->getId();
+            $specimen=new \Entity\DeviceSpecimen();
+            $this->saveSpecimenEntity($device,$specimen,$data);
+            $this->flush();
+
+            return $this->redirect('/device/edit/'.$device->getId());
+
+        }
+        return compact('form','device');
+    }
+
+    /**
      * Saving uploaded photo to cache file
      *
      * @param $photo
@@ -168,11 +190,13 @@ class Device extends Controller
     {
         $conn = $this->getDoctrine()->getEntityManager()->getConnection();
         $conn->beginTransaction();
-        $deviceEntity = $this->createEntity($data);
+        $deviceEntity=new \Entity\Device();
+        $this->saveEntity($deviceEntity,$data);
 
         for ($i = 0; $i < $data['count']; $i++) {
             $specimenEntity=new \Entity\DeviceSpecimen();
-            $this->saveSpecimenEntity($deviceEntity,$specimenEntity, $data, $serialNumber[$i]);
+            $data['serialNumber']=$serialNumber[$i];
+            $this->saveSpecimenEntity($deviceEntity,$specimenEntity, $data);
         }
 
         $this->flush();        
@@ -182,17 +206,18 @@ class Device extends Controller
     }
 
     /**
-     * Create device entity
+     * Fill device entity about current data
      *
+     * @param \Entity\Device $deviceEntity
      * @param mixed $data
      * @return \Entity\Device
      */
-    private function createEntity($data){
-        $entity=new \Entity\Device();
-        $deviceType = $this->cast('Mapper\DeviceType', $data['type']);
-        /* @var $deviceType \Entity\DeviceType */
+    private function saveEntity($entity,$data){
+        if(isset($data['type'])){
+            $entity->setType($this->cast('Mapper\DeviceType', $data['type']));
+        }
+
         $entity->setName($data['name']);
-        $entity->setType($deviceType);
         $entity->setNote($data['note']);
         $entity->setPrice($data['price'] ? $data['price'] : NULL);
 
@@ -237,10 +262,10 @@ class Device extends Controller
      * @param $serialNumber
      * @param null $state
      */
-    private function saveSpecimenEntity($deviceEntity,$specimenEntity, $data, $serialNumber)
+    private function saveSpecimenEntity($deviceEntity,$specimenEntity, $data)
     {
         $specimenEntity->setDevice($deviceEntity);
-        $specimenEntity->setSerialNumber($serialNumber);
+        $specimenEntity->setSerialNumber($data['serialNumber']);
         $specimenEntity->setWarrantyExpirationDate($data['warrantyExpirationDate'] ? new \DateTime($data['warrantyExpirationDate']) : NULL);
         $specimenEntity->setPurchaseDate($data['purchaseDate'] ? new \DateTime($data['purchaseDate']) : NULL);
 
@@ -282,9 +307,7 @@ class Device extends Controller
                 $data['tmpPhoto'] = $this->saveTmpPhoto($data['photo']);
             }
 
-            $device->setName($data['name']);
-            $device->setNote($data['note']);
-            $device->setPrice($data['price'] ? $data['price'] : NULL);
+            $this->saveEntity($device,$data);
 
             $this->flush();
             $conn->commit();
@@ -344,7 +367,11 @@ class Device extends Controller
     {
 
         $builder = $this->getService('grid')->create($this->getRequest());
-        $builder->setFormatter(new BasicGridFormatter('device/edit/'.$deviceEntity->getId(), $this->isAllow(1)));
+        $builder->setFormatter(new BasicGridFormatter('device/edit/'.$deviceEntity->getId()
+            ,false
+            , ($this->isAllow(1)?array(array('url'=>'device/specimen/add/'.$deviceEntity->getId(),'label'=>'Add')):array())
+            ));
+
         $builder->setDataManager(new BasicDataManager(
             $this->getDoctrine()->getEntityManager()
             , 'Entity\DeviceSpecimen'
@@ -392,16 +419,6 @@ class Device extends Controller
             ,'required'=>true
         )));
 
-        $builder->addField(new SelectField(array(
-            'name' => 'type'
-            ,'label' => 'Type'
-            ,'required' => true
-            ,'collection'=>DoctrineDesigner::entityToCollection(
-                $this->getDoctrine()->getEntityManager()->getRepository('Entity\DeviceType')->findAll()
-                ,true
-            )
-        )));
-
         $builder->addField(new TextField(array(
             'name' => 'tags'
         , 'label' => 'Tags'
@@ -410,6 +427,16 @@ class Device extends Controller
         )));
 
         if (!$entity) {
+
+            $builder->addField(new SelectField(array(
+                'name' => 'type'
+                ,'label' => 'Type'
+                ,'required' => true
+                ,'collection'=>DoctrineDesigner::entityToCollection(
+                    $this->getDoctrine()->getEntityManager()->getRepository('Entity\DeviceType')->findAll()
+                    ,true
+                )
+            )));
 
             $builder->addField(new SelectField(array(
                 'name' => 'location'
@@ -479,6 +506,37 @@ class Device extends Controller
             $builder->setData($data);
 
 
+        }
+
+        $builder->submit($this->getRequest());
+
+        return $builder;
+
+    }
+
+    /**
+     * Creates form for Add / Edit Device specimen
+     *
+     * @param null|\Entity\DeviceSpecimen $entity
+     * @return \Arbor\Component\Form\FormBuilder
+     * @throws \Arbor\Exception\ServiceNotFoundException
+     */
+    private function createSpecimenForm($entity = null)
+    {
+        $builder = $this->createFormBuilder();
+        $builder->setDesigner(new DoctrineDesigner($this->getDoctrine(), 'Entity\DeviceSpecimen'));
+        $builder->removeField('createdAt');
+        $builder->removeField('updatedAt');
+        $builder->removeField('state');
+        $builder->removeField('symbol');
+        $builder->removeField('device');
+
+
+        if ($entity) {
+
+            $helper = $this->getService('form.helper');
+            $data = $helper->entityToArray($entity);
+            $builder->setData($data);
         }
 
         $builder->submit($this->getRequest());

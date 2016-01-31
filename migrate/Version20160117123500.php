@@ -101,6 +101,21 @@ class Version20160117123500 extends MigrateHelper
 		$deviceSpecimens->addNamedForeignKeyConstraint('FK_CE79258F64D218E',$locations, array('location_id'),array('id'));
 		$deviceSpecimens->addNamedForeignKeyConstraint('FK_CE79258FA76ED395',$users, array('user_id'),array('id'));
 
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>23
+		,'name'=>'Add device specimen.'
+		));
+
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>24
+		,'name'=>'Edit device specimen.'
+		));
+
+		$this->executeQuery("INSERT INTO log_actions(id,name) VALUES(:id,:name)",array(
+			'id'=>25
+			,'name'=>'Remove device specimen.'
+		));
+
 		$this->updateSchema($schema);
  
 		$this->commitTransaction();
@@ -157,6 +172,19 @@ class Version20160117123500 extends MigrateHelper
 		$schema->dropTable('device_specimens');
 
 		$this->updateSchema($schema);
+
+		$this->executeQuery("DELETE FROM log_actions WHERE id=:id",array(
+			'id'=>23
+		));
+
+		$this->executeQuery("DELETE FROM log_actions WHERE id=:id",array(
+			'id'=>24
+		));
+
+		$this->executeQuery("DELETE FROM log_actions WHERE id=:id",array(
+			'id'=>25
+		));
+
 		$this->commitTransaction();
 	}
 
