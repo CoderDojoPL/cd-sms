@@ -65,10 +65,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol('REF1');
         $this->persist($device);
 
 
@@ -87,16 +83,13 @@ class DeviceTest extends WebTestCaseHelper
 
         $td = $tr[0]->findElements('td');
 
-        $this->assertCount(8, $td, 'Invalid number columns in grid');
+        $this->assertCount(5, $td, 'Invalid number columns in grid');
         $this->assertEquals($device->getId(), $td[0]->getText(), 'Invalid data columns id');
         $this->assertEquals('', $td[1]->getText(), 'Invalid data columns photo');
         $this->assertEquals($device->getName(), $td[2]->getText(), 'Invalid data columns name');
-        $this->assertEquals($device->getSerialNumber(), $td[3]->getText(), 'Invalid data columns serial number');
-        $this->assertEquals($device->getType()->getName(), $td[4]->getText(), 'Invalid data columns type');
-        $this->assertEquals($device->getSymbol(), $td[5]->getText(), 'Invalid data columns symbol');
-        $this->assertEquals($device->getLocation()->getName(), $td[6]->getText(), 'Invalid data columns location');
+        $this->assertEquals($device->getType()->getName(), $td[3]->getText(), 'Invalid data columns type');
 
-        $actionButtons = $td[7]->findElements('a');
+        $actionButtons = $td[4]->findElements('a');
 
         $footerTr = $client->getElement('table')->getElement('tfoot')->findElements('tr');
         $addButton = $footerTr[1]->getElement('a');
@@ -146,11 +139,7 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol('REF1');
-
+   
         $this->persist($device);
 
 
@@ -189,10 +178,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol('REF1');
 
         $this->persist($device);
 
@@ -318,6 +303,9 @@ class DeviceTest extends WebTestCaseHelper
 
         $form = $client->getElement('form');
         $fields = $form->getFields(true);
+
+        $this->assertEquals($fields['count']->getParent()->getElement('label')->getText(),'Value is too small','Invalid value count.');
+
         $this->assertFields($fields,array('count'=>'Value is too small.'));
 
         $fields['count']->setData('2');
@@ -405,10 +393,6 @@ class DeviceTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol('REF1');
 
         $this->persist($device);
 
@@ -526,6 +510,411 @@ class DeviceTest extends WebTestCaseHelper
         $this->assertTrue(in_array('tag 1', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 1 name');
         $this->assertTrue(in_array('tag 2', array($tags[0]->getName(), $tags[1]->getName())), 'Invalid device tag 2 name');
 
+    }
+
+    public function testAddSpecimenUnautheticate()
+    {
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setNote('Note');
+        $device->setPrice(12.05);
+        $this->persist($device);
+
+        $this->flush();
+
+        $client = $this->createClient();
+        $url = $client->loadPage('/device/specimen/add/'.$device->getId())->getUrl();
+
+        $this->assertEquals('/login', $url);
+
+    }
+
+    public function testAddSpecimenAdd()
+    {
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setNote('Note');
+        $device->setPrice(12.05);
+        $this->persist($device);
+
+        $this->flush();
+
+        $session = $this->createSession();
+        $session->set('user.id', $this->user->getId());
+
+        $client = $this->createClient($session);
+        $client->loadPage('/device/specimen/add/'.$device->getId());
+
+        $this->assertUrl($client,'/device/specimen/add/'.$device->getId());
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields(true);
+
+        $this->assertFieldsData($fields,array(
+            'serialNumber'=>''
+            ,'warrantyExpirationDate'=>''
+            ,'purchaseDate'=>''
+            ,'location'=>''
+            ,'user'=>''
+            ));
+
+        //check required fields
+        $form->submit();
+
+        $this->assertUrl($client,'/device/specimen/add/'.$device->getId());
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields(true);
+
+        $this->assertFields($fields,array(
+            'serialNumber'=>'Value can not empty'
+            ,'warrantyExpirationDate'=>null
+            ,'purchaseDate'=>null
+            ,'location'=>'Value can not empty'
+            ,'user'=>null
+            ));
+
+
+        $fields['serialNumber']->setData('serial number');
+        $fields['warrantyExpirationDate']->setData('2015-01-01');
+        $fields['purchaseDate']->setData('2014-01-01');
+        $fields['location']->setData($location->getId());
+
+        $form->submit();
+        //count = 0
+        $this->assertUrl($client,'/device/edit/'.$device->getId());
+
+        $deviceSpecimen = $em->getRepository('Entity\DeviceSpecimen')->findAll();
+        $this->assertCount(1, $deviceSpecimen, 'Invalid number device specimens');
+
+        $deviceSpecimen=$deviceSpecimen[0];
+
+        $this->assertEquals('2015-01-01', $deviceSpecimen->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
+        $this->assertEquals('serial number', $deviceSpecimen->getSerialNumber(), 'Invalid serial number');
+        $this->assertEquals('2014-01-01', $deviceSpecimen->getPurchaseDate()->format('Y-m-d'), 'Invalid device purchase date');
+        $this->assertEquals($location->getId(), $deviceSpecimen->getLocation()->getId(), 'Invalid device location');
+        $this->assertEquals('REF1', $deviceSpecimen->getSymbol(), 'Invalid device symbol');
+
+    }
+
+
+
+
+
+
+
+    public function testEditSpecimenUnautheticate()
+    {
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setNote('Note');
+        $device->setPrice(12.05);
+        $this->persist($device);
+
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
+        $deviceSpecimen->setPurchaseDate(new \DateTime('2014-01-01'));
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol('REF1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+
+        $this->flush();
+
+        $client = $this->createClient();
+        $url = $client->loadPage('/device/specimen/edit/'.$deviceSpecimen->getId())->getUrl();
+
+        $this->assertEquals('/login', $url);
+
+    }
+
+    public function testEditSpecimen()
+    {
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setNote('Note');
+        $device->setPrice(12.05);
+        $this->persist($device);
+
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
+        $deviceSpecimen->setPurchaseDate(new \DateTime('2014-01-01'));
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol('REF1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+
+        $this->flush();
+
+        $session = $this->createSession();
+        $session->set('user.id', $this->user->getId());
+
+        $client = $this->createClient($session);
+        $client->loadPage('/device/specimen/edit/'.$deviceSpecimen->getId());
+
+        $this->assertUrl($client,'/device/specimen/edit/'.$deviceSpecimen->getId());
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields(true);
+
+        $this->assertFieldsData($fields,array(
+            'serialNumber'=>'Device serial number'
+            ,'warrantyExpirationDate'=>'2015-01-01'
+            ,'purchaseDate'=>'2014-01-01'
+            ));
+
+        //check required fields
+        $fields['serialNumber']->setData('');
+        $fields['warrantyExpirationDate']->setData('');
+        $fields['purchaseDate']->setData('');
+
+        $form->submit();
+
+        $form = $client->getElement('form');
+        $fields = $form->getFields(true);
+
+        $this->assertFields($fields,array(
+            'serialNumber'=>'Value can not empty'
+            ,'warrantyExpirationDate'=>null
+            ,'purchaseDate'=>null
+            ));
+
+
+        $fields['serialNumber']->setData('serial number edit');
+        $fields['warrantyExpirationDate']->setData('2016-01-01');
+        $fields['purchaseDate']->setData('2013-01-01');
+
+        $form->submit();
+        $this->assertUrl($client,'/device/edit/'.$device->getId());
+
+        $em->clear();
+        $deviceSpecimen = $em->getRepository('Entity\DeviceSpecimen')->findAll();
+        $this->assertCount(1, $deviceSpecimen, 'Invalid number device specimens');
+
+        $deviceSpecimen=$deviceSpecimen[0];
+
+        $this->assertEquals('2016-01-01', $deviceSpecimen->getWarrantyExpirationDate()->format('Y-m-d'), 'Invalid device warranty expiration date');
+        $this->assertEquals('serial number edit', $deviceSpecimen->getSerialNumber(), 'Invalid serial number');
+        $this->assertEquals('2013-01-01', $deviceSpecimen->getPurchaseDate()->format('Y-m-d'), 'Invalid device purchase date');
+        $this->assertEquals($location->getId(), $deviceSpecimen->getLocation()->getId(), 'Invalid device location');
+        $this->assertEquals('REF1', $deviceSpecimen->getSymbol(), 'Invalid device symbol');
+
+    }
+
+    public function testRemoveSpecimenUnautheticate()
+    {
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setNote('Note');
+        $device->setPrice(12.05);
+        $this->persist($device);
+
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
+        $deviceSpecimen->setPurchaseDate(new \DateTime('2014-01-01'));
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol('REF1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+
+        $this->flush();
+
+        $client = $this->createClient();
+        $url = $client->loadPage('/device/specimen/remove/'.$deviceSpecimen->getId())->getUrl();
+
+        $this->assertEquals('/login', $url);
+
+
+    }
+
+    public function testRemoveSpecimen()
+    {
+
+        $em = $this->getService('doctrine')->getEntityManager();
+
+        $location = new Location();
+        $location->setName('Location name');
+        $location->setCity('Location city');
+        $location->setStreet('Location street');
+        $location->setNumber('Location number');
+        $location->setApartment('Location apartment');
+        $location->setPostal('00-000');
+        $location->setPhone('+48100000000');
+        $location->setEmail('email@email.pl');
+        $this->persist($location);
+
+
+        $deviceTag = new DeviceTag();
+        $deviceTag->setName('DeviceTag name');
+        $this->persist($deviceTag);
+
+        $device = new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $device->setNote('Note');
+        $device->setPrice(12.05);
+        $this->persist($device);
+
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setWarrantyExpirationDate(new \DateTime('2015-01-01'));
+        $deviceSpecimen->setPurchaseDate(new \DateTime('2014-01-01'));
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol('REF1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+
+
+        $this->flush();
+
+        $session = $this->createSession();
+        $session->set('user.id', $this->user->getId());
+
+        $client = $this->createClient($session);
+        $client->loadPage('/device/specimen/remove/' . $deviceSpecimen->getId());
+
+        $this->assertUrl($client,'/device/specimen/remove/' . $deviceSpecimen->getId());
+
+        $panelBody = $client->getElement('.panel-body');
+        $buttons = $panelBody->findElements('a');
+
+
+        $this->assertCount(2, $buttons, 'Invalid number buttons');
+
+        $this->assertEquals('Yes', $buttons[0]->getText(), 'Invalid text button YES');
+
+        $this->assertEquals('No', $buttons[1]->getText(), 'Invalid text button NO');
+
+
+        $buttons[1]->click();
+
+        $this->assertEquals('/device/edit/'.$device->getId(), $client->getUrl(), 'Invalid url button NO.');
+
+        $buttons[0]->click();
+
+        $this->assertEquals('/device/edit/'.$device->getId(), $client->getUrl(), 'Invalid url button YES.');
+
+
+        //check removed in database
+        $this->assertCount(0, $em->getRepository('Entity\DeviceSpecimen')->findAll());
     }
 
     public function prepareData(){

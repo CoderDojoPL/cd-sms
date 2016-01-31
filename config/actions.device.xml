@@ -57,8 +57,34 @@
 		<authenticate redirect="/login" />
 		<argument storage="url" name="id" pattern="^\/device\/specimen\/add\/([0-9]+)$" mapper="Mapper\Device" />
 		<presenter class="Library\Twig\Presenter\Twig" />
-		<permission functionality="1" />
+		<permission functionality="2" />
 		<log action="23" />
+	</action>
+
+	<action controller="Device" method="editSpecimen" >
+		<route pattern="\/device\/specimen\/edit\/([0-9]+)" />
+		<authenticate redirect="/login" />
+		<argument storage="url" name="id" pattern="^\/device\/specimen\/edit\/([0-9]+)$" mapper="Mapper\DeviceSpecimen" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+		<permission functionality="2" />
+		<log action="24" />
+	</action>
+
+	<action controller="Device" method="removeSpecimenConfirm" >
+		<route pattern="^\/device\/specimen\/remove\/([0-9]+)$" />
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+		<argument storage="url" name="id" pattern="^\/device\/specimen\/remove\/([0-9]+)$" mapper="Mapper\DeviceSpecimen" />
+		<permission functionality="2" />
+	</action>
+
+	<action controller="Device" method="removeSpecimen" >
+		<route pattern="^\/device\/specimen\/remove\/([0-9]+)\/yes$" />
+		<authenticate redirect="/login" />
+		<presenter class="Library\Twig\Presenter\Twig" />
+		<argument storage="url" name="id" pattern="^\/device\/specimen\/remove\/([0-9]+)\/yes$" mapper="Mapper\DeviceSpecimen" />
+		<log action="25" type="GET" />
+		<permission functionality="2" />
 	</action>
 
 	<action controller="Device" method="prolongation" >

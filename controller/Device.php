@@ -102,6 +102,27 @@ class Device extends Controller
     }
 
     /**
+     * Edit device specimen
+     *
+     * @param Entity\DeviceSpecimen $deviceSpecimen
+     * @return Response|array
+     */
+    public function editSpecimen($deviceSpecimen)
+    {
+        $form = $this->createSpecimenForm($deviceSpecimen);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $this->saveSpecimenEntity($deviceSpecimen->getDevice(),$deviceSpecimen,$data);
+            $this->flush();
+
+            return $this->redirect('/device/edit/'.$deviceSpecimen->getDevice()->getId());
+
+        }
+        return compact('form','deviceSpecimen');
+    }
+
+    /**
      * Saving uploaded photo to cache file
      *
      * @param $photo
@@ -141,6 +162,32 @@ class Device extends Controller
         $response->redirect('/device');
         return $response;
 
+    }
+
+    /**
+     * Method for create PHP confirm remove screen
+     *
+     * @param \Entity\Device $entity
+     * @return array
+     */
+    public function removeSpecimenConfirm($entity)
+    {
+        return compact('entity');
+    }
+
+    /**
+     * Removing device specimen from database
+     *
+     * @param \Entity\Device $entity
+     * @return Response
+     */
+    public function removeSpecimen($entity)
+    {
+        $device=$entity->getDevice();
+        $this->getDoctrine()->getEntityManager()->remove($entity);
+        $this->flush();
+
+        return $this->redirect('/device/edit/'.$device->getId());
     }
 
     /**
@@ -530,9 +577,12 @@ class Device extends Controller
         $builder->removeField('state');
         $builder->removeField('symbol');
         $builder->removeField('device');
+        $builder->removeField('hireExpirationDate');
 
 
         if ($entity) {
+            $builder->removeField('location');
+            $builder->removeField('user');
 
             $helper = $this->getService('form.helper');
             $data = $helper->entityToArray($entity);
