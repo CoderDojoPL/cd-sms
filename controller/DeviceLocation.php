@@ -45,7 +45,7 @@ class DeviceLocation extends Controller
     /**
      * Method for create PHP confirm free screen
      *
-     * @param \Entity\Device $entity
+     * @param \Entity\DeviceSpecimen $entity
      * @return array
      */
     public function freeConfirm($entity)
@@ -56,7 +56,7 @@ class DeviceLocation extends Controller
     /**
      * Set free status
      *
-     * @param \Entity\Device $entity
+     * @param \Entity\DeviceSpecimen $entity
      * @return Response
      */
     public function free($entity)
@@ -82,7 +82,7 @@ class DeviceLocation extends Controller
     /**
      * View with form config for assign device
      *
-     * @param \Entity\Device $entity
+     * @param \Entity\DeviceSpecimen $entity
      * @return array
      */
     public function assignConfirm($entity)
@@ -93,7 +93,7 @@ class DeviceLocation extends Controller
     /**
      * Assign device to me
      *
-     * @param \Entity\Device $entity
+     * @param \Entity\DeviceSpecimen $entity
      * @return Response
      */
     public function assign($entity)
@@ -129,8 +129,8 @@ class DeviceLocation extends Controller
         $builder->setFormatter(new BasicGridFormatter('device/location',false));
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
-            ,'SELECT i.id,i.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\Device i JOIN i.state s  JOIN i.type t WHERE i.location=:location and i.user is null'
-            ,'SELECT count(i) as c FROM Entity\Device i WHERE i.location=:location and i.user is null'
+            ,'SELECT i.id,d.name,i.serialNumber,t.name as type , s.name state,s.id as stateId FROM Entity\DeviceSpecimen i JOIN i.state s JOIN i.device d JOIN d.type t WHERE i.location=:location and i.user is null'
+            ,'SELECT count(i) as c FROM Entity\DeviceSpecimen i WHERE i.location=:location and i.user is null'
             ,array('location'=>$this->getUser()->getLocation())
         ));
 

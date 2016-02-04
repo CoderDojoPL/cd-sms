@@ -16,6 +16,7 @@ use Common\WebTestCaseHelper;
 use Entity\User;
 use Entity\Device;
 use Entity\DeviceTag;
+use Entity\DeviceSpecimen;
 
 /**
  * @package Test
@@ -53,43 +54,46 @@ class DeviceMyTest extends WebTestCaseHelper
         $otherUser->setRole($this->user->getRole());
         $this->persist($otherUser);
 
+
+        $device=new Device();
+        $device->setName('Device name');
+        $device->setPhoto('Device.photo.jpg');
+        $device->getTags()->add($deviceTag);
+        $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+        $this->persist($device);
+
         $devices=array();
 
-        $devices[0] = new Device();
-        $devices[0]->setName('Device name');
-        $devices[0]->setPhoto('Device.photo.jpg');
-        $devices[0]->getTags()->add($deviceTag);
-        $devices[0]->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $devices[0]->setSerialNumber('Device serial number');
+        $devices[0] = new DeviceSpecimen();
+        $devices[0]->setDevice($device);
+        $devices[0]->setSerialNumber('Device serial number 1');
         $devices[0]->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
         $devices[0]->setUser($this->user);
         $devices[0]->setSymbol('ABC');
         $devices[0]->setLocation($this->user->getLocation());
+        $devices[0]->setHireExpirationDate(new \DateTime());
 
         $this->persist($devices[0]);
-        $devices[1] = new Device();
-        $devices[1]->setName('Device name2');
-        $devices[1]->setPhoto('Device.photo.jpg');
-        $devices[1]->getTags()->add($deviceTag);
-        $devices[1]->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $devices[1]->setSerialNumber('Device serial number');
+
+        $devices[1] = new DeviceSpecimen();
+        $devices[1]->setDevice($device);
+        $devices[1]->setSerialNumber('Device serial number 2');
         $devices[1]->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $devices[1]->setUser($this->user);
         $devices[1]->setSymbol('ABC');
         $devices[1]->setLocation($this->user->getLocation());
+        $devices[1]->setHireExpirationDate(new \DateTime());
 
         $this->persist($devices[1]);
 
-        $device3 = new Device();
-        $device3->setName('Device name other');
-        $device3->setPhoto('Device.photo.jpg');
-        $device3->getTags()->add($deviceTag);
-        $device3->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device3->setSerialNumber('Device serial number');
+        $device3 = new DeviceSpecimen();
+        $device3->setDevice($device);
+        $device3->setSerialNumber('Device serial number 3');
         $device3->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
         $device3->setUser($otherUser);
         $device3->setSymbol('ABC');
         $device3->setLocation($otherUser->getLocation());
+        $device3->setHireExpirationDate(new \DateTime());
 
         $this->persist($device3);
 
@@ -104,7 +108,7 @@ class DeviceMyTest extends WebTestCaseHelper
         //check loading page
         $client->loadPage('/device/my');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+        $this->assertUrl($client,'/device/my');
 
         //check valid rows grid
         $tr = $client->getElement('table')->getElement('tbody')->findElements('tr');
@@ -116,9 +120,9 @@ class DeviceMyTest extends WebTestCaseHelper
             $this->assertCount(6, $td, 'Invalid number columns in grid');
 
             $this->assertEquals($device->getId(), $td[0]->getText(), 'Invalid data columns id');
-            $this->assertEquals($device->getName(), $td[1]->getText(), 'Invalid data columns name');
+            $this->assertEquals($device->getDevice()->getName(), $td[1]->getText(), 'Invalid data columns name');
             $this->assertEquals($device->getSerialNumber(), $td[2]->getText(), 'Invalid data columns serial number');
-            $this->assertEquals($device->getType()->getName(), $td[3]->getText(), 'Invalid data columns type');
+            $this->assertEquals($device->getDevice()->getType()->getName(), $td[3]->getText(), 'Invalid data columns type');
             $this->assertEquals($device->getState()->getName(), $td[4]->getText(), 'Invalid data columns state');
 
         }
@@ -136,7 +140,7 @@ class DeviceMyTest extends WebTestCaseHelper
 
         $assignButton->click();
 
-        $this->assertEquals('/device/my/assign/'.$devices[0]->getId(), $client->getUrl(), 'Invalid assign device url');
+        $this->assertUrl($client,'/device/my/assign/'.$devices[0]->getId());
 
         //for record 2
         $td = $tr[1]->findElements('td');
@@ -151,11 +155,11 @@ class DeviceMyTest extends WebTestCaseHelper
 
         $freeButton->click();
 
-        $this->assertEquals('/device/my/free/'.$devices[1]->getId(), $client->getUrl(), 'Invalid free device url');
+        $this->assertUrl($client,'/device/my/free/'.$devices[1]->getId());
 
         $assignButton->click();
 
-        $this->assertEquals('/device/my/assign/'.$devices[1]->getId(), $client->getUrl(), 'Invalid assign device url');
+        $this->assertUrl($client,'/device/my/assign/'.$devices[1]->getId());
 
     }
 
@@ -174,18 +178,23 @@ class DeviceMyTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-        $device->setUser($this->user);
-        $device->setSymbol('abc');
-        $device->setLocation($this->user->getLocation());
-
         $this->persist($device);
+        
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $deviceSpecimen->setUser($this->user);
+        $deviceSpecimen->setSymbol('abc');
+        $deviceSpecimen->setLocation($this->user->getLocation());
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+
         $this->flush();
         $client = $this->createClient();
-        $url = $client->loadPage('/device/my/free/' . $device->getId())->getUrl();
+        $client->loadPage('/device/my/free/' . $device->getId());
 
-        $this->assertEquals('/login', $url);
+        $this->assertUrl($client,'/login');
 
     }
 
@@ -203,22 +212,27 @@ class DeviceMyTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-        $device->setUser($this->user);
-        $device->setSymbol('ABC');
-        $device->setLocation($this->user->getLocation());
-
         $this->persist($device);
+        
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $deviceSpecimen->setUser($this->user);
+        $deviceSpecimen->setSymbol('abc');
+        $deviceSpecimen->setLocation($this->user->getLocation());
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
+
         $this->flush();
 
         $session = $this->createSession();
         $session->set('user.id', $this->user->getId());
 
         $client = $this->createClient($session);
-        $client->loadPage('/device/my/free/' . $device->getId());
+        $client->loadPage('/device/my/free/' . $deviceSpecimen->getId());
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+        $this->assertUrl($client,'/device/my/free/' . $deviceSpecimen->getId());
 
         $panelBody = $client->getElement('.panel-body');
         $buttons = $panelBody->findElements('a');
@@ -233,16 +247,16 @@ class DeviceMyTest extends WebTestCaseHelper
 
         $buttons[1]->click();
 
-        $this->assertEquals('/device/my', $client->getUrl(), 'Invalid url button NO.');
+        $this->assertUrl($client,'/device/my', $client->getUrl());
 
         $buttons[0]->click();
 
-        $this->assertEquals('/device/my', $client->getUrl(), 'Invalid url button YES.');
+        $this->assertUrl($client,'/device/my');
 
         $em->clear();
-        $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
+        $deviceSpecimen = $em->getRepository('Entity\DeviceSpecimen')->findOneBy(array('id' => $deviceSpecimen->getId()));
 
-        $this->assertEquals(1,$device->getState()->getId(),'Invalid device state.');
+        $this->assertEquals(1,$deviceSpecimen->getState()->getId(),'Invalid device state.');
     }
 
 
@@ -261,13 +275,17 @@ class DeviceMyTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-        $device->setUser($this->user);
-        $device->setSymbol('abc');
-        $device->setLocation($this->user->getLocation());
-
         $this->persist($device);
+        
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $deviceSpecimen->setUser($this->user);
+        $deviceSpecimen->setSymbol('abc');
+        $deviceSpecimen->setLocation($this->user->getLocation());
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
         $this->flush();
 
         //prepare client
@@ -293,13 +311,17 @@ class DeviceMyTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-        $device->setUser($this->user);
-        $device->setSymbol('ABC');
-        $device->setLocation($this->user->getLocation());
-
         $this->persist($device);
+        
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $deviceSpecimen->setUser($this->user);
+        $deviceSpecimen->setSymbol('abc');
+        $deviceSpecimen->setLocation($this->user->getLocation());
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
         $this->flush();
 
         //prepare client
@@ -307,10 +329,10 @@ class DeviceMyTest extends WebTestCaseHelper
         $session->set('user.id', $this->user->getId());
 
         $client = $this->createClient($session);
-        $client->loadPage('/device/my/assign/' . $device->getId());
+        $client->loadPage('/device/my/assign/' . $deviceSpecimen->getId());
 
         //load page
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+        $this->assertUrl($client,'/device/my/assign/' . $deviceSpecimen->getId());
 
         $panelBody = $client->getElement('.panel-body');
         $buttons = $panelBody->findElements('a');
@@ -325,17 +347,17 @@ class DeviceMyTest extends WebTestCaseHelper
 
         $buttons[1]->click();
 
-        $this->assertEquals('/device/my', $client->getUrl(), 'Invalid url button NO.');
+        $this->assertUrl($client,'/device/my');
 
         $buttons[0]->click();
 
-        $this->assertEquals('/device/my', $client->getUrl(), 'Invalid url button YES.');
+        $this->assertUrl($client,'/device/my');
 
         //check data in database
         $em->clear();
-        $device = $em->getRepository('Entity\Device')->findOneBy(array('id' => $device->getId()));
+        $deviceSpecimen = $em->getRepository('Entity\DeviceSpecimen')->findOneBy(array('id' => $deviceSpecimen->getId()));
 
-        $this->assertNull($device->getUser(),'Invalid device user.');
-        $this->assertEquals($this->user->getLocation()->getId(),$device->getLocation()->getId(),'Invalid location.');
+        $this->assertNull($deviceSpecimen->getUser(),'Invalid device user.');
+        $this->assertEquals($this->user->getLocation()->getId(),$deviceSpecimen->getLocation()->getId(),'Invalid location.');
     }
 }

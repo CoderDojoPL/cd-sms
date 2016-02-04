@@ -304,9 +304,7 @@ class DeviceTest extends WebTestCaseHelper
         $form = $client->getElement('form');
         $fields = $form->getFields(true);
 
-        $this->assertEquals($fields['count']->getParent()->getElement('label')->getText(),'Value is too small','Invalid value count.');
-
-        $this->assertFields($fields,array('count'=>'Value is too small.'));
+        $this->assertEquals($fields['count']->getParent()->getElement('label')->getText(),'Value is too small.','Invalid value count.');
 
         $fields['count']->setData('2');
         $form->submit();

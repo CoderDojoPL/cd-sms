@@ -29,7 +29,7 @@ class DeviceSpecimen
 
     /**
      * @ManyToOne(targetEntity="Device")
-     * @JoinColumn(name="device_id", referencedColumnName="id",nullable=false)
+     * @JoinColumn(name="device_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
      **/
     protected $device;
 

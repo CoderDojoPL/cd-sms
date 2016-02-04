@@ -15,6 +15,7 @@ use Entity\DeviceType;
 use Entity\Location;
 use Entity\Device;
 use Entity\DeviceTag;
+use Entity\DeviceSpecimen;
 
 /**
  * @package Test
@@ -193,12 +194,18 @@ class DeviceTypeTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($deviceType);
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol($deviceType->getSymbolPrefix().'1');
 
         $this->persist($device);
+
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol($deviceType->getSymbolPrefix().'1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+
+        $this->persist($deviceSpecimen);
 
 
         $this->flush();
@@ -241,12 +248,17 @@ class DeviceTypeTest extends WebTestCaseHelper
         $device->setPhoto('Device.photo.jpg');
         $device->getTags()->add($deviceTag);
         $device->setType($deviceType);
-        $device->setSerialNumber('Device serial number');
-        $device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-        $device->setLocation($location);
-        $device->setSymbol($deviceType->getSymbolPrefix().'1');
 
         $this->persist($device);
+
+        $deviceSpecimen=new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setSymbol($deviceType->getSymbolPrefix().'1');
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+        $this->persist($deviceSpecimen);
 
 
 
@@ -273,11 +285,11 @@ class DeviceTypeTest extends WebTestCaseHelper
 
         $buttons[1]->click();
 
-        $this->assertEquals('/devicetype', $client->getUrl(), 'Invalid url button NO.');
+        $this->assertUrl($client,'/devicetype');
 
         $buttons[0]->click();
 
-        $this->assertEquals('/devicetype', $client->getUrl(), 'Invalid url button YES.');
+        $this->assertUrl($client,'/devicetype');
 
 
         //check removed in database

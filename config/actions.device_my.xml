@@ -12,14 +12,14 @@
         <route pattern="^\/device\/my\/free\/([0-9]+)$" />
         <authenticate redirect="/login" />
         <presenter class="Library\Twig\Presenter\Twig" />
-        <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)$" mapper="Mapper\Device" />
+        <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)$" mapper="Mapper\DeviceSpecimen" />
     </action>
 
     <action controller="DeviceMy" method="free" >
         <route pattern="^\/device\/my\/free\/([0-9]+)\/yes$" />
         <authenticate redirect="/login" />
         <presenter class="Library\Twig\Presenter\Twig" />
-        <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)\/yes$" mapper="Mapper\Device" />
+        <argument storage="url" name="id" pattern="^\/device\/my\/free\/([0-9]+)\/yes$" mapper="Mapper\DeviceSpecimen" />
         <log action="17" type="GET" />
     </action>
 
@@ -27,14 +27,14 @@
         <route pattern="^\/device\/my\/assign\/([0-9]+)$" />
         <authenticate redirect="/login" />
         <presenter class="Library\Twig\Presenter\Twig" />
-        <argument storage="url" name="id" pattern="^\/device\/my\/assign\/([0-9]+)$" mapper="Mapper\Device" />
+        <argument storage="url" name="id" pattern="^\/device\/my\/assign\/([0-9]+)$" mapper="Mapper\DeviceSpecimen" />
     </action>
 
     <action controller="DeviceMy" method="assign" >
         <route pattern="^\/device\/my\/assign\/([0-9]+)\/yes$" />
         <authenticate redirect="/login" />
         <presenter class="Library\Twig\Presenter\Twig" />
-        <argument storage="url" name="id" pattern="^\/device\/my\/assign\/([0-9]+)\/yes$" mapper="Mapper\Device" />
+        <argument storage="url" name="id" pattern="^\/device\/my\/assign\/([0-9]+)\/yes$" mapper="Mapper\DeviceSpecimen" />
         <log action="20" type="GET" />
     </action>
 
