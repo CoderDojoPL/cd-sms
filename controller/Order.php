@@ -21,7 +21,8 @@ use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
 use Arbor\Exception\OrderNotFetchedException;
 use Arbor\Component\Grid\Column;
-
+use Common\DqlDataManager;
+use Common\DateColumnFormatter;
 /**
  * Class Order
  *
@@ -39,7 +40,6 @@ class Order extends Controller
 	public function index()
 	{
 		$grid = $this->createGrid();
-		$grid->render();
 		return compact('grid');
 	}
 
@@ -53,10 +53,12 @@ class Order extends Controller
 	{
 		$builder = $this->getService('grid')->create($this->getRequest());
 		$builder->setFormatter(new BasicGridFormatter('order',$this->isAllow(11)));
-		$builder->setDataManager(new BasicDataManager(
-			$this->getDoctrine()->getEntityManager()
-			, 'Entity\Order'
-		));
+
+        $builder->setDataManager(new DqlDataManager(
+            $this->getDoctrine()->getEntityManager()
+            ,'SELECT i.id,d.name as device ,concat(o.firstName,concat(\' \',o.lastName)) as owner,s.name as state,i.createdAt FROM Entity\Order i JOIN i.deviceSpecimen ds JOIN i.owner o JOIN i.state s JOIN ds.device d'
+            ,'SELECT count(i) as c FROM Entity\Order i'
+        ));
 
 		$builder->setLimit(10);
 
@@ -64,7 +66,7 @@ class Order extends Controller
 		$builder->addColumn(new Column('device','Device'));
 		$builder->addColumn(new Column('owner','Owner'));
 		$builder->addColumn(new Column('state','State'));
-		$builder->addColumn(new Column('createdAt','Date'));
+		$builder->addColumn(new Column('createdAt','Date',new DateColumnFormatter()));
 
 		$builder->addColumn(new Column('id','Action', new ActionColumnFormatter('order', array('show')),array()));
 		return $builder;
@@ -257,16 +259,15 @@ class Order extends Controller
 		$helper = $this->getService('form.helper');
 		/* @var $helper \Service\FormHelper */
 
-		$query = $this->getDoctrine()->getEntityManager()->createQuery('SELECT d FROM Entity\Device d WHERE d.state = 1 and d.location != :id');
+		$query = $this->getDoctrine()->getEntityManager()->createQuery('SELECT ds.id as id,concat(d.name,concat(\' (\',concat(ds.serialNumber,\')\')) as name FROM Entity\DeviceSpecimen ds JOIN ds.device d  WHERE ds.state = 1 and ds.location != :id');
 		$query->setParameter('id',$this->getUser()->getLocation());
 
 		$devices = $query->getResult();
-
 		$builder->addField(new SelectField(array(
 				'name' => 'device'
 			, 'label' => 'Device'
 			, 'required' => true
-			, 'collection' => $helper->entityToCollection(
+			, 'collection' => $helper->arrayToCollection(
 					$devices, array(array('', 'Select...'))
 				))
 		));

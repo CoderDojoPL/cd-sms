@@ -68,10 +68,11 @@ abstract class MigrateHelper{
         $schemaDiff = $comparator->compare($fromSchema, $schema);
         $platform=$manager->getConnection()->getDatabasePlatform();
         $sqls=$schemaDiff->toSql($platform);
+
     	foreach($sqls as $sql){
+    		echo $sql.";\n";
 			$manager->getConnection()->exec($sql);
     	}
-
 
 	}
 

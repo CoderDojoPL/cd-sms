@@ -25,4 +25,4 @@ if(file_exists(__DIR__.'/../dev')){
 	$debug=true;
 }
 $root=new Arbor\Root($autoloader,$debug,true,$env);
-$root->executeCommand($argv);
+exit $root->executeCommand($argv);

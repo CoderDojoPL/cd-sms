@@ -20,6 +20,7 @@ use Entity\DeviceTag;
 use Entity\User;
 use Entity\Order;
 use Entity\Role;
+use Entity\DeviceSpecimen;
 
 /**
  * @package Test
@@ -64,12 +65,18 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setSymbol('?');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setLocation($location);
-
 		$this->persist($device);
+
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number 1');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setUser($this->user);
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
+
 
 		$role=new Role();
 		$role->setName('Admin');
@@ -90,7 +97,7 @@ class OrderTest extends WebTestCaseHelper
 		$order = new Order();
 		$order->setOwner($user);
 		$order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
-		$order->setDevice($device);
+		$order->setDeviceSpecimen($deviceSpecimen);
 
 		$this->persist($order);
 
@@ -102,7 +109,7 @@ class OrderTest extends WebTestCaseHelper
 		$client = $this->createClient($session);
 		$client->loadPage('/order');
 
-		$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+		$this->assertUrl($client,'/order');
 
 		$tr = $client->getElement('table')->getElement('tbody')->findElements('tr');
 		$this->assertCount(1, $tr, 'Invalid number records in grid');
@@ -111,12 +118,13 @@ class OrderTest extends WebTestCaseHelper
 
 		$this->assertCount(6, $td, 'Invalid number columns in grid');
 		$this->assertEquals($order->getId(), $td[0]->getText(), 'Invalid data columns id');
-		$this->assertEquals($order->getDevice()->__toString(), $td[1]->getText(), 'Invalid data columns device');
-		$this->assertEquals($order->getOwner()->__toString(), $td[2]->getText(), 'Invalid data columns owner');
-		$this->assertEquals($order->getState()->getName(), $td[3]->getText(), 'Invalid data columns state');
-		$this->assertEquals($device->getCreatedAt()->format('Y-m-d H:i:s'), $td[4]->getText(), 'Invalid data columns date');
+		$this->assertEquals($order->getDeviceSpecimen()->getDevice()->__toString(), $td[1]->getText(), 'Invalid data columns device');
+		$this->assertEquals($order->getDeviceSpecimen()->__toString(), $td[2]->getText(), 'Invalid data columns specimen');
+		$this->assertEquals($order->getOwner()->__toString(), $td[3]->getText(), 'Invalid data columns owner');
+		$this->assertEquals($order->getState()->getName(), $td[4]->getText(), 'Invalid data columns state');
+		$this->assertEquals($device->getCreatedAt()->format('Y-m-d H:i:s'), $td[5]->getText(), 'Invalid data columns date');
 
-		$actionButtons = $td[5]->findElements('a');
+		$actionButtons = $td[6]->findElements('a');
 
 		$footerTr = $client->getElement('table')->getElement('tfoot')->findElements('tr');
 		$addButton = $footerTr[1]->getElement('a');

@@ -24,7 +24,6 @@ class Version20150711112810 extends MigrateHelper{
 	 * {@inheritdoc}
 	 */
 	public function update(Container $container){
-		$this->beginTransaction();
 		$schema=$this->createSchema();
 
 		$deviceTags=$schema->createTable('device_tags');
@@ -165,8 +164,6 @@ class Version20150711112810 extends MigrateHelper{
 			'id'=>3
 			,'name'=>'Closed'
 		));
-
-		$this->commitTransaction();
 
 	}
 

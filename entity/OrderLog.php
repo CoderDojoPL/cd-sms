@@ -30,9 +30,9 @@ class OrderLog{
 	protected $owner;
 
 	/** 
-	 * @Column(name="device_id",type="integer",nullable=false)
+	 * @Column(name="device_specimen_id",type="integer",nullable=false)
 	 **/
-	protected $device;
+	protected $deviceSpecimen;
 
 	/**
 	 * @ManyToOne(targetEntity="OrderState")
@@ -108,16 +108,16 @@ class OrderLog{
 		return $this->owner;
 	}
 
-	public function setDevice($device){
-        if($device){
-            $device=$device->getId();
+	public function setDeviceSpecimen($deviceSpecimen){
+        if($deviceSpecimen){
+            $deviceSpecimen=$deviceSpecimen->getId();
         }
 
-		$this->device=$device;
+		$this->deviceSpecimen=$deviceSpecimen;
 		return $this;
 	}
 
-	public function getDevice(){
+	public function getDeviceSpecimen(){
 		return $this->device;
 	}
 

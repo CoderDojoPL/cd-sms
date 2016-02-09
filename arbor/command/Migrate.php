@@ -60,8 +60,7 @@ class Migrate extends Command{
 
 			}
 			catch(\Exception $e){
-				$this->writeLn("Error in version ".$migrateFile."(".$e->getLine()."): ".$e->getMessage());
-				return;
+				throw new \Exception("Error in version ".$migrateFile."(".$e->getLine().") [update]: ".$e->getMessage());
 			}
 		}
 
@@ -102,8 +101,7 @@ class Migrate extends Command{
 
 			}
 			catch(\Exception $e){
-				$this->writeLn("Error in version ".$migrateFile.": ".$e->getMessage());
-				return;
+				throw new \Exception("Error in version ".$migrateFile."(".$e->getLine().") [downgrade]: ".$e->getMessage());
 			}
 		}
 

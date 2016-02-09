@@ -43,7 +43,7 @@ use Arbor\Exception\ServiceNotFoundException;
  *
  * @author Michal Tomczak (michal.tomczak@arborphp.com)
  * @since 0.1.0
- * @version 0.21.0
+ * @version 0.22.0
  */
 class Root{
 	
@@ -70,6 +70,7 @@ class Root{
 
 
 	public function executeCommand($command){
+		$sigint=0;
 		try{
 			$this->executeResources->registerUrl($command[0]);
 			array_shift($command);
@@ -78,8 +79,11 @@ class Root{
 
 		}
 		catch(\Exception $e){
-			$this->errorHandler->exception($e);
+			echo $e->getMessage();
+			$sigint=1;
 		}
+
+		return $sigint;
 
 	}
 

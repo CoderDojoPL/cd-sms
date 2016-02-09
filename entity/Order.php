@@ -34,10 +34,10 @@ class Order{
 	protected $owner;
 
 	/**
-	 * @ManyToOne(targetEntity="Device")
-	 * @JoinColumn(name="device_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
+	 * @ManyToOne(targetEntity="DeviceSpecimen")
+	 * @JoinColumn(name="device_specimen_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
 	 **/
-	protected $device;
+	protected $deviceSpecimen;
 
 	/**
 	 * @ManyToOne(targetEntity="OrderState")
@@ -90,13 +90,13 @@ class Order{
 		return $this->owner;
 	}
 
-	public function setDevice($device){
-		$this->device=$device;
+	public function setDeviceSpecimen($deviceSpecimen){
+		$this->deviceSpecimen=$deviceSpecimen;
 		return $this;
 	}
 
-	public function getDevice(){
-		return $this->device;
+	public function getDeviceSpecimen(){
+		return $this->deviceSpecimen;
 	}
 
 	public function setState($state){

@@ -70,15 +70,16 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase{
 	/**
 	 * Execute project command
 	 *
-	 * @return string result command
+	 * @return array sigint and result command
 	 * @since 0.1.0
 	 */
 	protected function executeCommand(){
 		ob_start();
-		$this->root->executeCommand(func_get_args());
+		$sigint=$this->root->executeCommand(func_get_args());
 		$result=ob_get_clean();
 		ob_flush();
-		return $result;
+
+		return array($sigint,$result);
 	}
 
 	/**
