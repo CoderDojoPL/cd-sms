@@ -190,7 +190,13 @@ class Version20160117123500 extends MigrateHelper
 
 		$schema = $this->createSchema();
 
-		$tmpDeviceId=$this->executeQuery('SELECT id FROM devices LIMIT 1',array(),true)[0]['id'];
+		$tmpDeviceId=$this->executeQuery('SELECT id FROM devices LIMIT 1',array(),true);
+		if(count($tmpDeviceId)){
+			$tmpDeviceId=$tmpDeviceId[0]['id'];
+		}
+		else{
+			$tmpDeviceId=null;
+		}
 
 		$deviceStates=$schema->getTable('device_states');
 		$locations=$schema->getTable('locations');

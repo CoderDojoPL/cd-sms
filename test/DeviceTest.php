@@ -19,7 +19,6 @@ use Entity\DeviceTag;
 use Entity\DeviceState;
 use Entity\DeviceSpecimen;
 use Entity\User;
-use Entity\Order;
 
 /**
  * @package Test
@@ -188,14 +187,6 @@ class DeviceTest extends WebTestCaseHelper
         $user->setLocation($location);
 
         $this->persist($user);
-
-        $order = new Order();
-        $order->setOwner($user);
-        $order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
-        $order->setDevice($device);
-
-        $this->persist($order);
-
 
         $this->flush();
 

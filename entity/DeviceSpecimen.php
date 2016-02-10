@@ -256,7 +256,7 @@ class DeviceSpecimen
 
     public function __toString()
     {
-        return $this->getSerialNumber();
+        return $this->getDevice()->getName().' ('.$this->getSerialNumber().')';
     }
 
     /**

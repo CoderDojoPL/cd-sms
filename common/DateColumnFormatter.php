@@ -24,7 +24,7 @@ class DateColumnFormatter implements ColumnFormatter{
 	 * {@inheritdoc}
 	 */
 	public function render($data){
-		return $data[0]->format('y-m-d');
+		return $data[0]->format('Y-m-d');
 	}
 
 }

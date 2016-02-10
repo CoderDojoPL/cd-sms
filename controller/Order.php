@@ -56,7 +56,7 @@ class Order extends Controller
 
         $builder->setDataManager(new DqlDataManager(
             $this->getDoctrine()->getEntityManager()
-            ,'SELECT i.id,d.name as device ,concat(o.firstName,concat(\' \',o.lastName)) as owner,s.name as state,i.createdAt FROM Entity\Order i JOIN i.deviceSpecimen ds JOIN i.owner o JOIN i.state s JOIN ds.device d'
+            ,'SELECT i.id,d.name as device,ds.serialNumber as specimen ,concat(o.firstName,concat(\' \',o.lastName)) as owner,s.name as state,i.createdAt FROM Entity\Order i JOIN i.deviceSpecimen ds JOIN i.owner o JOIN i.state s JOIN ds.device d'
             ,'SELECT count(i) as c FROM Entity\Order i'
         ));
 
@@ -64,6 +64,7 @@ class Order extends Controller
 
 		$builder->addColumn(new Column('id','#'));
 		$builder->addColumn(new Column('device','Device'));
+		$builder->addColumn(new Column('specimen','Specimen'));
 		$builder->addColumn(new Column('owner','Owner'));
 		$builder->addColumn(new Column('state','State'));
 		$builder->addColumn(new Column('createdAt','Date',new DateColumnFormatter()));
@@ -103,7 +104,7 @@ class Order extends Controller
 	{
 		$data = $this->getRequest()->getSession()->get('order.info');
 
-		$device = $this->cast('Mapper\Device', $data['device']);
+		$device = $this->cast('Mapper\DeviceSpecimen', $data['device']);
 		/* @var $device Device */
 		$location = $device->getLocation();
 		/* @var $location Location */
@@ -118,7 +119,7 @@ class Order extends Controller
 
 			$entity = new \Entity\Order();
 			$entity->setOwner($this->getUser());
-			$entity->setDevice($device);
+			$entity->setDeviceSpecimen($device);
 			$entity->setState($this->cast('Mapper\OrderState', 1));
 			$this->persist($entity);
 
@@ -183,20 +184,20 @@ class Order extends Controller
 		$entity->setClosedAt(new \DateTime());
 
 		//set new location on device
-		$entity->getDevice()->setLocation($this->getUser()->getLocation());
+		$entity->getDeviceSpecimen()->setLocation($entity->getOwner()->getLocation());
+		$expirationDate=new \DateTime();
+		$expirationDate->add(new \DateInterval('P14D'));
 
 		if($bind=='me'){
-			$expirationDate=new \DateTime();
-			$expirationDate->add(new \DateInterval('P14D'));
 
-			$entity->getDevice()->setUser($this->getUser());
-			$entity->getDevice()->setHireExpirationDate($expirationDate);
+			$entity->getDeviceSpecimen()->setUser($entity->getOwner());
 		}
 		else{
-			$entity->getDevice()->setUser(null);
-			$entity->getDevice()->setHireExpirationDate(null);
+			$entity->getDeviceSpecimen()->setUser(null);
 		}
-		$entity->getDevice()->setState($this->cast('Mapper\DeviceState', 2));
+		$entity->getDeviceSpecimen()->setHireExpirationDate($expirationDate);
+
+		$entity->getDeviceSpecimen()->setState($this->cast('Mapper\DeviceState', 2));
 
 		$this->flush();
 

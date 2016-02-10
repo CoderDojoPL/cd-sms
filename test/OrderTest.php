@@ -116,13 +116,13 @@ class OrderTest extends WebTestCaseHelper
 
 		$td = $tr[0]->findElements('td');
 
-		$this->assertCount(6, $td, 'Invalid number columns in grid');
+		$this->assertCount(7, $td, 'Invalid number columns in grid');
 		$this->assertEquals($order->getId(), $td[0]->getText(), 'Invalid data columns id');
 		$this->assertEquals($order->getDeviceSpecimen()->getDevice()->__toString(), $td[1]->getText(), 'Invalid data columns device');
-		$this->assertEquals($order->getDeviceSpecimen()->__toString(), $td[2]->getText(), 'Invalid data columns specimen');
+		$this->assertEquals($order->getDeviceSpecimen()->getSerialNumber(), $td[2]->getText(), 'Invalid data columns specimen');
 		$this->assertEquals($order->getOwner()->__toString(), $td[3]->getText(), 'Invalid data columns owner');
 		$this->assertEquals($order->getState()->getName(), $td[4]->getText(), 'Invalid data columns state');
-		$this->assertEquals($device->getCreatedAt()->format('Y-m-d H:i:s'), $td[5]->getText(), 'Invalid data columns date');
+		$this->assertEquals($device->getCreatedAt()->format('Y-m-d'), $td[5]->getText(), 'Invalid data columns date');
 
 		$actionButtons = $td[6]->findElements('a');
 
@@ -193,27 +193,28 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSymbol('?');
-		$device->setLocation($location);
 
 		$this->persist($device);
 
-		//device on other location
-		$deviceOtherLocation = new Device();
-		$deviceOtherLocation->setName('Device name');
-		$deviceOtherLocation->setPhoto('Device.photo.jpg');
-		$deviceOtherLocation->getTags()->add($deviceTag);
-		$deviceOtherLocation->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$deviceOtherLocation->setSerialNumber('Device serial number');
-		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$deviceOtherLocation->setSymbol('?');
-		$deviceOtherLocation->setLocation($otherLocation);
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
 
-		$this->persist($deviceOtherLocation);
+		//device on other location
+        $deviceSpecimenOther = new DeviceSpecimen();
+        $deviceSpecimenOther->setDevice($device);
+        $deviceSpecimenOther->setSerialNumber('Device serial number');
+        $deviceSpecimenOther->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimenOther->setSymbol('ABC');
+        $deviceSpecimenOther->setLocation($otherLocation);
+        $deviceSpecimenOther->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimenOther);
+
 
 		$role=new Role();
 		$role->setName('Admin');
@@ -241,35 +242,35 @@ class OrderTest extends WebTestCaseHelper
 		$client = $this->createClient($session);
 		$client->loadPage('/order/add');
 
-		$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+		$this->assertUrl($client, '/order/add');
 
 		$form = $client->getElement('form');
-		$fields = $form->getFields();
+		$fields = $form->getFields(true);
 
 		$this->assertCount(1, $fields, 'Invalid number fields');
 
-		$selectOptions = $fields[0]->findElements('option');
+		$selectOptions = $fields['device']->findElements('option');
 		$this->assertCount(2, $selectOptions, 'Invalid number of devices');
-		$this->assertEquals($deviceOtherLocation->getId(), $selectOptions[1]->getAttribute('value'), 'Wrong device ID');
+		$this->assertEquals($deviceSpecimenOther->getId(), $selectOptions[1]->getAttribute('value'), 'Wrong device ID');
 
 		//check required fields
 		$form->submit();
 
-		$this->assertEquals('/order/add', $client->getUrl(), 'Invalid url form incorrect submit form');
+		$this->assertUrl($client,'/order/add');
 
 			//other location
 		$form = $client->getElement('form');
-		$fields = $form->getFields();
+		$fields = $form->getFields(true);
 
+		$this->assertFields($fields,array(
+			'device'=>'Value can not empty'
+			));
 
-		$this->assertCount(1, $fields, 'Invalid number fields');
-		$this->assertEquals('Value can not empty', $fields[0]->getParent()->getElement('label')->getText(), 'Invalid error message for device');
-
-		$fields[0]->setData($deviceOtherLocation->getId());//device in other location
+		$fields['device']->setData($deviceSpecimenOther->getId());//device in other location
 
 		$form->submit();
 
-		$this->assertEquals('/order/add/addapply', $client->getUrl(), 'Invalid url form after submited');
+		$this->assertUrl($client,'/order/add/addapply');
 
 		$panelBody = $client->getElement('.panel-body');
 		$locationLabel = $panelBody->getElement('strong');
@@ -285,23 +286,23 @@ class OrderTest extends WebTestCaseHelper
 		$this->assertEquals($location->getEmail(), $aContacts[1]->getHtml(), 'Invalid email button');
 
 		$client->getElement('form')->submit();
-		$this->assertEquals('/order', $client->getUrl(), 'Invalid url form after submited');
+		$this->assertUrl($client,'/order');
 
 		$em->clear();
 		$orders = $em->getRepository('Entity\Order')->findAll();
 		$this->assertCount(1, $orders, 'Invalid number orders');
 		$order = $orders[0];
 		$this->assertEquals('first name last name', $order->getOwner()->__toString(), 'Invalid owner');
-		$this->assertEquals('Device name (Device serial number)', $order->getDevice()->__toString(), 'Invalid device');
+		$this->assertEquals('Device name (Device serial number)', $order->getDeviceSpecimen()->__toString(), 'Invalid device');
 		$this->assertEquals(1, $order->getState()->getId(), 'Invalid state');
 		$this->assertNull($order->getPerformer(), 'Invalid performer');
 
-		$orderedDevice = $em->getRepository('Entity\Device')->findOneById($deviceOtherLocation->getId());
+		$orderedDevice = $em->getRepository('Entity\DeviceSpecimen')->findOneById($deviceSpecimenOther->getId());
 		$this->assertEquals(2, $orderedDevice->getState()->getId(), 'Invalid device state');
 
 	}
 
-	public function testAddDeviceMyLocation()
+	public function testAddApply()
 	{
 
 		$em = $this->getService('doctrine')->getEntityManager();
@@ -341,27 +342,28 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSymbol('?');
-		$device->setLocation($location);
 
 		$this->persist($device);
 
-		//device on other location
-		$deviceOtherLocation = new Device();
-		$deviceOtherLocation->setName('Device name');
-		$deviceOtherLocation->setPhoto('Device.photo.jpg');
-		$deviceOtherLocation->getTags()->add($deviceTag);
-		$deviceOtherLocation->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$deviceOtherLocation->setSerialNumber('Device serial number');
-		$deviceOtherLocation->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$deviceOtherLocation->setSymbol('?');
-		$deviceOtherLocation->setLocation($otherLocation);
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
 
-		$this->persist($deviceOtherLocation);
+		//device on other location
+        $deviceSpecimenOther = new DeviceSpecimen();
+        $deviceSpecimenOther->setDevice($device);
+        $deviceSpecimenOther->setSerialNumber('Device serial number');
+        $deviceSpecimenOther->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimenOther->setSymbol('ABC');
+        $deviceSpecimenOther->setLocation($otherLocation);
+        $deviceSpecimenOther->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimenOther);
+
 
 		$role=new Role();
 		$role->setName('Admin');
@@ -388,6 +390,8 @@ class OrderTest extends WebTestCaseHelper
 		$client = $this->createClient($session);
 		$client->loadPage('/order/add');
 
+		$this->assertUrl($client,'/order/add');
+
 		//other location
 		$form = $client->getElement('form');
 		$fields = $form->getFields();
@@ -396,7 +400,7 @@ class OrderTest extends WebTestCaseHelper
 
 		$form->submit();
 
-		$this->assertEquals('/order/add/addapply', $client->getUrl(), 'Invalid url form after submited');
+		$this->assertUrl($client,'/order/add/addapply');
 
 		$client->getElement('form')->submit();
 		$this->assertEquals(500, $client->getResponse()->getStatusCode(), 'Invalid request status code');
@@ -428,13 +432,17 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSymbol('?');
-		$device->setLocation($location);
 
 		$this->persist($device);
+
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
 
 		$role=new Role();
 		$role->setName('Admin');
@@ -463,7 +471,7 @@ class OrderTest extends WebTestCaseHelper
 		$order = new Order();
 		$order->setOwner($owner);
 		$order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
-		$order->setDevice($device);
+		$order->setDeviceSpecimen($deviceSpecimen);
 
 		$this->persist($order);
 
@@ -490,7 +498,7 @@ class OrderTest extends WebTestCaseHelper
 		$now = new \DateTime();
 		$order = $em->getRepository('Entity\Order')->findOneById($order->getId());
 		$this->assertEquals('first name last name', $order->getOwner()->__toString(), 'Invalid owner');
-		$this->assertEquals('Device name (Device serial number)', $order->getDevice()->__toString(), 'Invalid device');
+		$this->assertEquals('Device name (Device serial number)', $order->getDeviceSpecimen()->__toString(), 'Invalid device');
 		$this->assertEquals(2, $order->getState()->getId(), 'Invalid state');
 		$this->assertEquals($performer->getId(), $order->getPerformer()->getId(), 'Invalid performer');
 		$this->assertEquals($now->format('Y-m-d'), $order->getFetchedAt()->format('Y-m-d'), 'Invalid fetched at');
@@ -512,18 +520,22 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSymbol('?');
-		$device->setLocation($this->user->getLocation());
 
 		$this->persist($device);
+
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($this->user->getLocation());
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
 
 		$order = new Order();
 		$order->setOwner($this->user);
 		$order->setState($em->getRepository('Entity\OrderState')->findOneById(1));
-		$order->setDevice($device);
+		$order->setDeviceSpecimen($deviceSpecimen);
 
 		$this->persist($order);
 
@@ -575,13 +587,18 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-		$device->setSymbol('?');
-		$device->setLocation($location);
 
 		$this->persist($device);
+
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($location);
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
+
 
 		$role=new Role();
 		$role->setName('Admin');
@@ -610,7 +627,7 @@ class OrderTest extends WebTestCaseHelper
 		$order = new Order();
 		$order->setOwner($owner);
 		$order->setState($em->getRepository('Entity\OrderState')->findOneById(2));
-		$order->setDevice($device);
+		$order->setDeviceSpecimen($deviceSpecimen);
 		$order->setPerformer($performer);
 		$order->setFetchedAt(new \DateTime());
 
@@ -636,7 +653,8 @@ class OrderTest extends WebTestCaseHelper
 
 	}
 
-	private function prepareCloseByOwner(){
+	public function testCloseByOwnerBindMe()
+	{
 		$em = $this->getService('doctrine')->getEntityManager();
 
 		$location1 = new Location();
@@ -695,26 +713,28 @@ class OrderTest extends WebTestCaseHelper
 		$device->setPhoto('Device.photo.jpg');
 		$device->getTags()->add($deviceTag);
 		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(1));
-		$device->setSerialNumber('Device serial number');
-		$device->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
-		$device->setSymbol('?');
-		$device->setLocation($location1);
-		$device->setUser($performer);
 
 		$this->persist($device);
+
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($location1);
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
 
 		$order = new Order();
 		$order->setOwner($owner);
 		$order->setState($em->getRepository('Entity\OrderState')->findOneById(2));
-		$order->setDevice($device);
+		$order->setDeviceSpecimen($deviceSpecimen);
 		$order->setPerformer($performer);
 		$order->setFetchedAt(new \DateTime());
 
 		$this->persist($order);
 
 		$this->flush();
-
 
 		$session = $this->createSession();
 		$session->set('user.id', $owner->getId());
@@ -733,17 +753,9 @@ class OrderTest extends WebTestCaseHelper
 		$this->assertEquals('Me',$buttons[0]->getHtml(),'Invalid Me label');
 		$this->assertEquals('My location',$buttons[1]->getHtml(),'Invalid Location label');
 
-		return array($buttons,$order,$performer,$device,$location2,$client,$owner);
-	}
-
-	public function testCloseByOwnerBindMe()
-	{
-		$em = $this->getService('doctrine')->getEntityManager();
-
-		list($buttons,$order,$performer,$device,$location,$client,$owner)=$this->prepareCloseByOwner();
 
 		$buttons[0]->click();
-		$this->assertEquals('/order/show/' . $order->getId(), $client->getUrl(), 'Invalid show url');
+		$this->assertUrl($client,'/order/show/' . $order->getId());
 
 		$em->clear();
 		$now = new \DateTime();
@@ -752,17 +764,17 @@ class OrderTest extends WebTestCaseHelper
 
 		$order = $em->getRepository('Entity\Order')->findOneById($order->getId());
 		$this->assertEquals('first name last name', $order->getOwner()->__toString(), 'Invalid owner');
-		$this->assertEquals('Device name (Device serial number)', $order->getDevice()->__toString(), 'Invalid device');
+		$this->assertEquals('Device name (Device serial number)', $order->getDeviceSpecimen()->__toString(), 'Invalid device');
 		$this->assertEquals(3, $order->getState()->getId(), 'Invalid state');
 		$this->assertEquals($performer->getId(), $order->getPerformer()->getId(), 'Invalid performer');
 		$this->assertEquals($now->format('Y-m-d'), $order->getFetchedAt()->format('Y-m-d'), 'Invalid fetched at');
 		$this->assertEquals($now->format('Y-m-d'), $order->getClosedAt()->format('Y-m-d'), 'Invalid fetched at');
 
-		$device = $em->getRepository('Entity\Device')->findOneById($device->getId());
-		$this->assertEquals(2, $device->getState()->getId(), 'Invalid device state');
-		$this->assertEquals($location->getId(), $device->getLocation()->getId(), 'Invalid device state');
-		$this->assertEquals($expirationDate->format('Y-m-d'), $device->getHireExpirationDate()->format('Y-m-d'), 'Invalid hire expiration date');
-		$this->assertEquals($owner->getId(), $device->getUser()->getId(), 'Invalid owner');
+		$deviceSpecimen = $em->getRepository('Entity\DeviceSpecimen')->findOneById($deviceSpecimen->getId());
+		$this->assertEquals(2, $deviceSpecimen->getState()->getId(), 'Invalid device state');
+		$this->assertEquals($location2->getId(), $deviceSpecimen->getLocation()->getId(), 'Invalid device location');
+		$this->assertEquals($expirationDate->format('Y-m-d'), $deviceSpecimen->getHireExpirationDate()->format('Y-m-d'), 'Invalid hire expiration date');
+		$this->assertEquals($owner->getId(), $deviceSpecimen->getUser()->getId(), 'Invalid owner');
 
 	}
 
@@ -770,10 +782,105 @@ class OrderTest extends WebTestCaseHelper
 	{
 		$em = $this->getService('doctrine')->getEntityManager();
 
-		list($buttons,$order,$performer,$device,$location,$client,$owner)=$this->prepareCloseByOwner();
+		$location1 = new Location();
+		$location1->setName('Location name');
+		$location1->setCity('Location city');
+		$location1->setStreet('Location street');
+		$location1->setNumber('Location number');
+		$location1->setApartment('Location apartment');
+		$location1->setPostal('00-000');
+		$location1->setPhone('+48100000000');
+		$location1->setEmail('email@email.pl');
+		$this->persist($location1);
+
+		$location2 = new Location();
+		$location2->setName('Location name 2');
+		$location2->setCity('Location city');
+		$location2->setStreet('Location street');
+		$location2->setNumber('Location number');
+		$location2->setApartment('Location apartment');
+		$location2->setPostal('00-000');
+		$location2->setPhone('+48100000000');
+		$location2->setEmail('email@email.pl');
+		$this->persist($location2);
+
+
+		$role=new Role();
+		$role->setName('Admin');
+		foreach($em->getRepository('Entity\Functionality')->findAll() as $functionality){
+			$role->getFunctionalities()->add($functionality);
+		}
+
+		$this->persist($role);
+
+		$owner = new User();
+		$owner->setEmail('owner@coderdojo.org.pl');
+		$owner->setFirstName('first name');
+		$owner->setLastName('last name');
+		$owner->setLocation($location2);
+		$owner->setRole($role);
+		$this->persist($owner);
+
+		$performer = new User();
+		$performer->setEmail('owner@coderdojo.org.pl');
+		$performer->setFirstName('first name');
+		$performer->setLastName('last name');
+		$performer->setLocation($location1);
+		$performer->setRole($role);
+		$this->persist($performer);
+
+		$deviceTag = new DeviceTag();
+		$deviceTag->setName('DeviceTag name');
+		$this->persist($deviceTag);
+
+		$device = new Device();
+		$device->setName('Device name');
+		$device->setPhoto('Device.photo.jpg');
+		$device->getTags()->add($deviceTag);
+		$device->setType($em->getRepository('Entity\DeviceType')->findOneById(1));
+
+		$this->persist($device);
+
+        $deviceSpecimen = new DeviceSpecimen();
+        $deviceSpecimen->setDevice($device);
+        $deviceSpecimen->setSerialNumber('Device serial number');
+        $deviceSpecimen->setState($em->getRepository('Entity\DeviceState')->findOneById(2));
+        $deviceSpecimen->setSymbol('ABC');
+        $deviceSpecimen->setLocation($this->user->getLocation());
+        $deviceSpecimen->setHireExpirationDate(new \DateTime());
+		$this->persist($deviceSpecimen);
+
+		$order = new Order();
+		$order->setOwner($owner);
+		$order->setState($em->getRepository('Entity\OrderState')->findOneById(2));
+		$order->setDeviceSpecimen($deviceSpecimen);
+		$order->setPerformer($performer);
+		$order->setFetchedAt(new \DateTime());
+
+		$this->persist($order);
+
+		$this->flush();
+
+		$session = $this->createSession();
+		$session->set('user.id', $owner->getId());
+
+		$client = $this->createClient($session);
+		$client->loadPage('/order/show/' . $order->getId());
+
+		$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Invalid status code.');
+
+		$timeLines = $client->findElements('.timeline-entry');
+
+		$this->assertCount(2, $timeLines, 'Invalid number steps');
+
+		$buttons=$timeLines[1]->findElements('a');
+		$this->assertCount(2,$buttons,'Invalid buttons number');
+		$this->assertEquals('Me',$buttons[0]->getHtml(),'Invalid Me label');
+		$this->assertEquals('My location',$buttons[1]->getHtml(),'Invalid Location label');
+
 
 		$buttons[1]->click();
-		$this->assertEquals('/order/show/' . $order->getId(), $client->getUrl(), 'Invalid show url');
+		$this->assertUrl($client,'/order/show/' . $order->getId());
 
 		$em->clear();
 		$now = new \DateTime();
@@ -782,17 +889,17 @@ class OrderTest extends WebTestCaseHelper
 
 		$order = $em->getRepository('Entity\Order')->findOneById($order->getId());
 		$this->assertEquals('first name last name', $order->getOwner()->__toString(), 'Invalid owner');
-		$this->assertEquals('Device name (Device serial number)', $order->getDevice()->__toString(), 'Invalid device');
+		$this->assertEquals('Device name (Device serial number)', $order->getDeviceSpecimen()->__toString(), 'Invalid device');
 		$this->assertEquals(3, $order->getState()->getId(), 'Invalid state');
 		$this->assertEquals($performer->getId(), $order->getPerformer()->getId(), 'Invalid performer');
 		$this->assertEquals($now->format('Y-m-d'), $order->getFetchedAt()->format('Y-m-d'), 'Invalid fetched at');
 		$this->assertEquals($now->format('Y-m-d'), $order->getClosedAt()->format('Y-m-d'), 'Invalid fetched at');
 
-		$device = $em->getRepository('Entity\Device')->findOneById($device->getId());
-		$this->assertEquals(2, $device->getState()->getId(), 'Invalid device state');
-		$this->assertEquals($location->getId(), $device->getLocation()->getId(), 'Invalid device state');
-		$this->assertNull($device->getHireExpirationDate(), 'Invalid hire expiration date');
-		$this->assertNull($device->getUser(), 'Invalid owner');
+		$deviceSpecimen = $em->getRepository('Entity\DeviceSpecimen')->findOneById($deviceSpecimen->getId());
+		$this->assertEquals(2, $deviceSpecimen->getState()->getId(), 'Invalid device state');
+		$this->assertEquals($location2->getId(), $deviceSpecimen->getLocation()->getId(), 'Invalid device state');
+		$this->assertEquals($expirationDate->format('Y-m-d'), $deviceSpecimen->getHireExpirationDate()->format('Y-m-d'), 'Invalid hire expiration date');
+		$this->assertNull($deviceSpecimen->getUser(), 'Invalid owner');
 
 	}
 }
