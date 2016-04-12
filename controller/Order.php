@@ -126,6 +126,9 @@ class Order extends Controller
 			$device->setState($this->cast('Mapper\DeviceState', 2));
 			$this->flush();
 
+			$mailBody = $this->getService('twig')->render('Mail/NewOrderForDevice.twig', ['user' => $this->getUser(), 'device' => $device]);
+			$this->send($location->getEmail(), 'SMS - New order for device '.$device->getName(), $mailBody);
+
 			$response = new Response();
 			$response->redirect('/order');
 			$this->getRequest()->getSession()->remove('order.info');

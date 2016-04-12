@@ -14,5 +14,6 @@
     <snippet class="Snippet\User" method="getUser" />
     <snippet class="Snippet\User" method="isAllow" />
     <snippet class="Snippet\Route" method="redirect" />
+    <snippet class="Snippet\Mail" method="send" />
 
 </content>

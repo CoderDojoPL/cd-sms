@@ -15,8 +15,10 @@ class QueueEmail extends Command{
 
 	private function sendEmail($email){
 		$mailer=$this->getService('swiftmailer');
+		$config=$this->getService('config');
+		$from=$config->getSenderEmailAddress();
 		$message=$mailer->createMessage($email->getSubject())
-			->setFrom(array('mail@mail' => 'Serwer'))
+			->setFrom(array($from=>$from))
 			->setTo(array($email->getTo()))
 			->setBody($email->getContent());
 		$mailer->send($message);
