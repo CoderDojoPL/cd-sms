@@ -22,6 +22,20 @@ abstract class MigrateHelper{
 	protected $container;
 
 	/**
+	 * Implement migrate rule.
+	 *
+	 * @param Container $container
+	 */
+	abstract public function update(Container $container);
+
+	/**
+	 * Implement migrate rule.
+	 *
+	 * @param Container $container
+	 */
+	abstract public function downgrade(Container $container);
+
+	/**
 	 * Method executed when update project
 	 *
 	 * @param \Arbor\Core\Container $container
