@@ -16,6 +16,7 @@ use Common\ActionColumnFormatter;
 use Common\BasicDataManager;
 use Common\BasicFormFormatter;
 use Common\BasicGridFormatter;
+use Entity\DeviceSpecimen;
 use Exception\OrderBelongToUserException;
 use Exception\OrderWrongLocationException;
 use Arbor\Component\Form\SelectField;
@@ -104,37 +105,37 @@ class Order extends Controller
 	{
 		$data = $this->getRequest()->getSession()->get('order.info');
 
-		$device = $this->cast('Mapper\DeviceSpecimen', $data['device']);
-		/* @var $device Device */
-		$location = $device->getLocation();
+		$deviceSpecimen = $this->cast('Mapper\DeviceSpecimen', $data['device']);
+		/* @var $deviceSpecimen DeviceSpecimen */
+		$location = $deviceSpecimen->getLocation();
 		/* @var $location Location */
 
 		$form = $this->createApplyForm();
 
 		if ($form->isValid()) {
 
-			if ($device->getLocation() == $this->getUser()->getLocation()){
+			if ($deviceSpecimen->getLocation() == $this->getUser()->getLocation()){
 				throw new OrderWrongLocationException();
 			}
 
 			$entity = new \Entity\Order();
 			$entity->setOwner($this->getUser());
-			$entity->setDeviceSpecimen($device);
+			$entity->setDeviceSpecimen($deviceSpecimen);
 			$entity->setState($this->cast('Mapper\OrderState', 1));
 			$this->persist($entity);
 
-			$device->setState($this->cast('Mapper\DeviceState', 2));
+			$deviceSpecimen->setState($this->cast('Mapper\DeviceState', 2));
 			$this->flush();
 
-			$mailBody = $this->getService('twig')->render('Mail/NewOrderForDevice.twig', ['user' => $this->getUser(), 'device' => $device]);
-			$this->send($location->getEmail(), 'SMS - New order for device '.$device->getName(), $mailBody);
+			$mailBody = $this->getService('twig')->render('Mail/NewOrderForDevice.twig', ['user' => $this->getUser(), 'device' => $deviceSpecimen]);
+			$this->send($location->getEmail(), 'SMS - New order for device '.$deviceSpecimen->getDevice()->getName(), $mailBody);
 
 			$response = new Response();
 			$response->redirect('/order');
 			$this->getRequest()->getSession()->remove('order.info');
 			return $response;
 		}
-		return compact('form', 'device', 'location');
+		return compact('form', 'deviceSpecimen', 'location');
 	}
 
 

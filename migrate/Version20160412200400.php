@@ -20,7 +20,7 @@ class Version20160412200400 extends MigrateHelper
 
 		$queueMail= $schema->createTable('queue_emails');
 		$queueMail->addColumn('id','integer',array('autoincrement'=>true));
-		$queueMail->addColumn('to','string');
+		$queueMail->addColumn('email_to','string');
 		$queueMail->addColumn('subject','string');
 		$queueMail->addColumn('content','text');
 		$queueMail->addColumn('sended_at','datetime',array('notnull'=>false));

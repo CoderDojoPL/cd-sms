@@ -9,6 +9,8 @@
 namespace Snippet;
 
 
+use Arbor\Core\Container;
+
 class Mail
 {
 	/**

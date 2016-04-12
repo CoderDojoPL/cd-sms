@@ -120,6 +120,9 @@ class DeviceSpecimen
         return $this;
     }
 
+	/**
+     * @return Device
+     */
     public function getDevice()
     {
         return $this->device;

@@ -88,6 +88,6 @@
 	</service>
 
 	<service name="twig" class="Library\Twig\Service\Twig" />
-	<service name="main" class="Service\Mail" />
+	<service name="mail" class="Service\Mail" />
 
 </content>
