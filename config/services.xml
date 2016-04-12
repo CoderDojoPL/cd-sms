@@ -55,6 +55,7 @@
 	<service name="form" class="Arbor\Service\Form" />
 	<service name="grid" class="Arbor\Service\Grid" />
 	<service name="form.helper" class="Service\FormHelper" />
+
 	<service name="google" class="Library\Google\Service\Google">
 		<config enviorment="dev"
 			clientId="{prod.google.clientId}"
@@ -85,5 +86,7 @@
 				host="{www.host}"
 				senderEmailAddress="{mail.fromAddress}"/>
 	</service>
+
+	<service name="twig" class="Library\Twig\Service\Twig" />
 
 </content>
