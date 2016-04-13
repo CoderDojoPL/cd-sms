@@ -103,7 +103,9 @@ class Version20150901214700 extends MigrateHelper
 
         $this->executeQuery("UPDATE users SET role_id=(SELECT max(id) FROM roles)");
 
-        $this->executeQuery("INSERT INTO roles_functionalities(role_id,functionality_id) VALUES((SELECT MAX(id) FROM roles),9)");
+        $this->executeQuery("INSERT INTO roles_functionalities(role_id,functionality_id)
+            SELECT r.id,f.id
+            FROM functionalities f,(SELECT MAX(id) id FROM roles) r");
 
         $this->commitTransaction();
     }

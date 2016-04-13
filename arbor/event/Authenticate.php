@@ -66,6 +66,11 @@ class Authenticate extends Event{
 
 		try{
 			$session->get('user.id');
+			if(!$this->find('User',array('id'=>$session->get('user.id')))){
+				$session->clear();
+				throw new ValueNotFoundException('session.epoch');
+			}
+
 			if($maxTime>0){
 				
 				if($session->get('session.epoch')<time()){ //deprecated session
